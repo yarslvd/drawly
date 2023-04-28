@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    	"install": "npx husky install",
-  	"lint-fix": "npm run lint-jsx-fix && npm run lint-js-fix && npm run lint-json-fix",
+    "install": "npx husky install",
+    "lint-fix": "npm run lint-js-fix && npm run lint-json-fix",
     "lint-json-fix": "prettier --write \"./[a-zA-Z0-9.]+(?!-lock).json\"",
-    "lint-js-fix": "prettier --write \"./**/*.js\"",
-    "lint-jsx-fix": "prettier --write \"./**/*.jsx\""
+    "lint-js-fix": "prettier --write \"./**/*.js\" \"./**/**/*.js\"",
+    "lint-jsx-fix": "prettier --write \"./**/**/*.jsx\""
   },
   "repository": {
     "type": "git",
@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/yarslvd/drawly#readme",
   "devDependencies": {
-  	"husky": "^7.0.2",
+    "husky": "^7.0.2",
     "prettier": "^2.7.1"
   }
 }

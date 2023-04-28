@@ -7,5 +7,5 @@ function startTokensCleaner(tokens) {
 }
 
 module.exports = {
-  startTokensCleaner
-}
+  startTokensCleaner,
+};
