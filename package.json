@@ -19,5 +19,9 @@
   "bugs": {
     "url": "https://github.com/yarslvd/drawly/issues"
   },
-  "homepage": "https://github.com/yarslvd/drawly#readme"
+  "homepage": "https://github.com/yarslvd/drawly#readme",
+  "devDependencies": {
+  	"husky": "^7.0.2",
+    "prettier": "^2.7.1"
+  }
 }
