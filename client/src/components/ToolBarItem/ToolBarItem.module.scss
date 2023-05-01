@@ -1,0 +1,20 @@
+.button_active {
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+
+  img {
+    padding: 10px;
+  }
+}
+
+.button_inactive {
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
+
+  img {
+    padding: 10px;
+  }
+}
