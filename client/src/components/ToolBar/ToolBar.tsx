@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 
 import styles from './ToolBar.module.scss';
 import { ToolBarItem } from "@/components/ToolBarItem/ToolBarItem";
@@ -45,7 +44,7 @@ export const ToolBar = () => {
         x: 0,
         y: 0,
     });
-    console.log(mousePosition);
+    // console.log(mousePosition);
 
     const handleClick = (index: number) => {
         setTool(index);
