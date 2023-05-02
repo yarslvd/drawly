@@ -23,8 +23,5 @@
   "devDependencies": {
     "husky": "^7.0.2",
     "prettier": "^2.7.1"
-  },
-  "dependencies": {
-    "framer-motion": "^10.12.5"
   }
 }
