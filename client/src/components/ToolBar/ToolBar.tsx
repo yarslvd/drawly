@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, FC } from 'react';
 import { motion } from 'framer-motion';
 
 import styles from './ToolBar.module.scss';
@@ -8,64 +8,43 @@ const tools = [
     {
         name: 'Move',
         icon: '/assets/icons/tools/move.png',
-        cursors: 'default'
+        cursors: '/assets/icons/cursors/move.png'
     },
     {
         name: 'Pen Tool',
         icon: '/assets/icons/tools/pentool.png',
-        cursors: 'default'
+        cursors: '/assets/icons/cursors/pentool.png'
     },
     {
         name: 'Figure',
         icon: '/assets/icons/tools/figure.png',
         cursors: 'crosshair'
-
     },
     {
         name: 'Text',
         icon: '/assets/icons/tools/text.png',
-        cursors: 'crosshair'
+        cursors: 'text'
     },
     {
         name: 'Hand',
         icon: '/assets/icons/tools/hand.png',
-        cursors: 'crosshair'
+        cursors: 'grab'
     },
     {
         name: 'More',
         icon: '/assets/icons/tools/more.png',
-        cursors: 'crosshair'
+        cursors: 'pointer'
     }
 ];
 
-export const ToolBar = () => {
+export const ToolBar: FC = () => {
     const [tool, setTool] = useState(0);
-    const [cursor, setCursor] = useState('default');
-    const [mousePosition, setMousePosition] = useState({
-        x: 0,
-        y: 0,
-    });
-    console.log(mousePosition);
 
     const handleClick = (index: number) => {
         setTool(index);
-
+        console.log((tools[index].cursors).charAt(0));
+        document.body.style.cursor = (tools[index].cursors).charAt(0) == '/' ? `url(${tools[index].cursors}), auto` : `${tools[index].cursors}`;
     }
-
-    useEffect(() => {
-        const setPosition = e => {
-            setMousePosition({
-                x: e.clientX,
-                y: e.clientY
-            })
-        }
-
-        window.addEventListener("mousemove", setPosition);
-
-        return () => {
-            window.removeEventListener("mousemove", setPosition)
-        }
-    }, []);
 
     return(
         <div className={styles.toolbarContainer}>

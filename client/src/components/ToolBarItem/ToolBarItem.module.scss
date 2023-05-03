@@ -1,7 +1,10 @@
 .button_active {
+  box-sizing: border-box;
   border-radius: 8px;
-  border: none;
-  cursor: pointer;
+  border: 1px solid #f0f0f0;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
 
   img {
     padding: 10px;
@@ -9,12 +12,19 @@
 }
 
 .button_inactive {
+  box-sizing: border-box;
   border-radius: 8px;
-  border: none;
-  cursor: pointer;
+  border: 1px solid #fff;
   background-color: transparent;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
 
   img {
     padding: 10px;
   }
+}
+
+.button_inactive:hover {
+  border: 1px solid #eeeeee;
 }

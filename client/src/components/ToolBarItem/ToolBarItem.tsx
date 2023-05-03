@@ -1,4 +1,6 @@
+import { FC } from 'react';
 import Image from 'next/image';
+import { motion } from "framer-motion";
 import {CSSProperties, MouseEventHandler} from "react";
 
 import styles from './ToolBarItem.module.scss';
@@ -11,14 +13,21 @@ interface ToolProps {
     handleClick: MouseEventHandler<HTMLButtonElement> | undefined;
 }
 
-export const ToolBarItem = ({name, icon, current, cursors, handleClick}: ToolProps) => {
+export const ToolBarItem: FC<ToolProps> = ({
+    name,
+    icon,
+    current,
+    handleClick
+}) => {
     return(
-        <button
+        <motion.button
             className={current ? styles.button_active : styles.button_inactive}
-            // style={{ cursor: cursors }}
             onClick={handleClick}
+            whileTap={{
+                scale: 0.8,
+            }}
         >
-            <Image src={icon} alt={name} width={20} height={20}/>
-        </button>
+            <Image src={icon} alt={name} width={20} height={20} draggable="false" />
+        </motion.button>
     )
 }
