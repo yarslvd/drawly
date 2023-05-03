@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import { ToolBar } from "@/components/ToolBar/ToolBar";
-import {MainCanvas} from "@/components/MainCanvas/MainCanvas";
+import { Canvas } from "@/components/Canvas/Canvas";
+import { MainCanvas } from "@/components/MainCanvas/MainCanvas";
 
 export default function Home() {
   return (
@@ -13,7 +14,8 @@ export default function Home() {
       </Head>
       <main style={{ width: '100wh', height: '100vh' }}>
           <ToolBar />
-          <MainCanvas />
+          <Canvas width='1000px' height='700px' />
+          {/*<MainCanvas />*/}
       </main>
     </>
   )

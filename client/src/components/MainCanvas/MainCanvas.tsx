@@ -14,8 +14,9 @@ export const MainCanvas = () => {
 
     const [color, setColor] = useState("#000000");
     const [width, setWidth] = useState(4.5);
+    const [scale, setScale] = useState(1);
 
-    console.log(mouseCoordinates);
+    // console.log(mouseCoordinates);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -56,9 +57,44 @@ export const MainCanvas = () => {
         setWidth(parseFloat(event.target.value));
     };
 
+    useEffect(() => {
+        const handleScaling = (e) => {
+            e.preventDefault();
+            if(e.ctrlKey) {
+                console.log(scale);
+                if(e.deltaY > 0) {
+                    setScale(state => state - 0.1);
+                }
+                else if(e.deltaY < 0) {
+                    setScale(state => state + 0.1);
+                }
+            }
+        }
+
+        window.addEventListener('wheel', handleScaling, { passive: false });
+
+        return () => {
+            window.removeEventListener('keydown', handleScaling);
+        }
+    }, [])
+
+    // const handleScaling = (e) => {
+    //     e.preventDefault();
+    //     if(e.ctrlKey) {
+    //         if(e.deltaY > 0) {
+    //             setScale(state => state - 0.1);
+    //         }
+    //         else if(e.deltaY < 0) {
+    //             setScale(state => state + 0.1);
+    //         }
+    //     }
+    //     //setScale(scale => scale + e.deltaY * 0.01);
+    //     console.log(scale, e.deltaY);
+    // }
+
     return (
         <div>
-            <div>
+            <div style={{ position: 'absolute', zIndex: '100' }}>
                 <span>Slider to chang line width</span>
                 <input
                     type='range'
@@ -69,14 +105,14 @@ export const MainCanvas = () => {
                     value={width}
                 />
             </div>
-            <div>
+            <div style={{ position: 'absolute', zIndex: '100' }}>
                 <span>Colour picker to change line colour</span>
                 <ChromePicker
                     color={color}
                     onChange={(e) => {setColor(e.hex)}}
                 />
             </div>
-            <div>
+            <div style={{ transform: `scale(${scale})` }}>
                 <canvas
                     ref={canvasRef}
                     onMouseEnter={(e :React.MouseEvent<HTMLCanvasElement>) => SetMousePosition(e)}
@@ -86,6 +122,7 @@ export const MainCanvas = () => {
                         Draw(e);
                     }}
                      onMouseDown={(e :React.MouseEvent<HTMLCanvasElement>) => SetMousePosition(e)}
+                    style={{ backgroundColor: '#eee' }}
                 />
             </div>
         </div>

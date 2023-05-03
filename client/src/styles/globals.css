@@ -10,3 +10,11 @@ body {
 /*    background-color: #E8E8E8;*/
 /*    cursor: url('../../public/assets/icons/tools/pentool.png') 16 16, auto;*/
 /*}*/
+
+main {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
