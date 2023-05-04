@@ -31,6 +31,11 @@ const tools = [
         cursors: 'grab'
     },
     {
+        name: 'Eraser',
+        icon: '/assets/icons/tools/eraser.png',
+        cursors: 'crosshair'
+    },
+    {
         name: 'More',
         icon: '/assets/icons/tools/more.png',
         cursors: 'pointer'
