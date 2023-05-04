@@ -1,7 +1,7 @@
 import styles from './Canvas.module.scss';
 import React, {FC, useEffect, useRef, useState} from "react";
 import { useOnDraw } from "@/hooks/useOnDraw";
-import {Brush, Rectangle, Tool} from "@/data/Tools";
+import {Brush, Line, Rectangle, Tool} from "@/data/Tools";
 import {CanvasProps} from "@/data/data";
 
 export const Canvas: FC<CanvasProps> = ({tool, width, height }) => {
@@ -43,7 +43,8 @@ export const Canvas: FC<CanvasProps> = ({tool, width, height }) => {
         //TODO: this map mustn't be here, think about where it can be moved
         let toolTool = new Map<number, Tool>([
             [1, new Brush(canvas)],
-            [2, new Rectangle(canvas)]
+            [2, new Rectangle(canvas)],
+            [3, new Line(canvas)],
         ]);
 
         setSelectedTool(toolTool.get(tool) as Tool);
@@ -156,26 +157,6 @@ export const Canvas: FC<CanvasProps> = ({tool, width, height }) => {
     //             drawLine(point.start, point.end, ctx, point.width, point.color);
     //         })
     //     }
-    //   }
-    //
-    //   const handleWheel = (event) => {
-    //       event.preventDefault();
-    //
-    //       if(event.ctrlKey) {
-    //           if(event.deltaY > 0) {
-    //               console.log(scale);
-    //               if(scale > 0.2) {
-    //                   setScale(prev => prev - 0.1);
-    //               }
-    //           }
-    //           else if(event.deltaY < 0) {
-    //               console.log(scale);
-    //               if(scale < 4) {
-    //                   setScale(prev => prev + 0.1);
-    //               }
-    //               //scale < 4 && setScale(prev => prev + 0.1);
-    //           }
-    //       }
     //   }
     //
     // const handleKeyDown = (event) => {

@@ -50,6 +50,7 @@ export class Brush extends Tool {
     protected onDown(point: Coordinates): void {
         if (!this.context) return
 
+        //TODO: weight and height the same as the lineWidth, remember to upd after adding styles
         this.context.fillRect(point.x,point.y,2,2);
     }
 
@@ -69,9 +70,9 @@ export class Rectangle extends Tool {
         if (!this.start) return
 
 
-        // const width = end.x - start.x;
-        // const height = end.y - start.y;
-        // this.context.strokeRect(start.x, start.y, width, height);
+        // const width = end.x - this.start.x;
+        // const height = end.y - this.start.y;
+        // this.context.strokeRect(this.start.x, this.start.y, width, height);
     }
 
     protected onUp(point: Coordinates): void {
@@ -84,21 +85,27 @@ export class Rectangle extends Tool {
     }
 }
 export class Line extends Tool {
-    protected onMove(start: Coordinates, end: Coordinates): void {
-        if (!this.context) {
-            return;
-        }
-
-        this.context.beginPath();
-        this.context.moveTo(start.x, start.y);
-        this.context.lineTo(end.x, end.y);
-        this.context.stroke();
-    }
+    protected start: Coordinates | null = null;
 
     protected onDown(point: Coordinates): void {
+        if (!this.context) return
+
+        this.start = point
+        this.context.beginPath();
+
+    }
+
+    protected onMove(start: Coordinates, end: Coordinates): void {
+        if (!this.context) return;
     }
 
     protected onUp(point: Coordinates): void {
+        if (!this.context) return
+        if (!this.start) return
+
+        this.context.moveTo(this.start.x, this.start.y);
+        this.context.lineTo(point.x, point.y);
+        this.context.stroke();
     }
 }
 
