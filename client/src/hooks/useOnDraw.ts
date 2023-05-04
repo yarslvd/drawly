@@ -1,14 +1,10 @@
 import {useEffect, useRef} from "react";
-
-interface PointsTypes {
-    x: number;
-    y: number;
-}
+import {Coordinates} from "@/data/data";
 
 export const useOnDraw = (onDraw, mouseDownCallback, mouseUpCallback) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const isDrawingRef = useRef<boolean>(false);
-    const prevPointRef = useRef<PointsTypes | null>(null);
+    const prevPointRef = useRef<Coordinates | null>(null);
 
     const mouseUpListenerRef = useRef<(e: any) => void>(null);
     const mouseMoveListenerRef = useRef<(e: any) => void>(null)
@@ -41,7 +37,7 @@ export const useOnDraw = (onDraw, mouseDownCallback, mouseUpCallback) => {
             window.addEventListener('mousemove', mouseMoveListener);
         }
 
-        const getCanvasPoints = (clientX, clientY): PointsTypes | null => {
+        const getCanvasPoints = (clientX, clientY): Coordinates | null => {
             if(canvasRef.current) {
                 const bounds = canvasRef.current?.getBoundingClientRect();
                 return {
