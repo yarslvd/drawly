@@ -17,5 +17,6 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    cursor: url('../../public/assets/icons/cursors/move.png') 1 2, auto;
+    /*cursor: url('../../public/assets/icons/cursors/move.png') 1 2, auto;*/
+    overflow: hidden;
 }

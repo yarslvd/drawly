@@ -41,7 +41,7 @@ export const useOnDraw = (onDraw, mouseDownCallback, mouseUpCallback) => {
             window.addEventListener('mousemove', mouseMoveListener);
         }
 
-        const getCanvasPoints = (clientX, clientY) => {
+        const getCanvasPoints = (clientX, clientY): PointsTypes | null => {
             if(canvasRef.current) {
                 const bounds = canvasRef.current?.getBoundingClientRect();
                 return {

@@ -1,5 +1,5 @@
 import styles from './Canvas.module.scss';
-import {FC, useEffect, useRef} from "react";
+import {FC, useEffect, useRef, useState} from "react";
 
 import { useOnDraw } from "@/hooks/useOnDraw";
 import Stack from 'ts-data.stack';
@@ -40,14 +40,11 @@ export const Canvas: FC<CanvasProps> = ({ width, height }) => {
 
     // change array to class with draw() method
     let curveLine: any[] = [];
+    const [scale, setScale] = useState<number>(1);
 
     const currentCanvas = canvasRef.current;
 
     function onDraw(ctx, point, prevPoint) {
-        // console.log(ctx);
-        // ctx.fillStyle = '#000';
-        // ctx.arc(point.x, point.y, 2, 0, 2 * Math.PI);
-        // ctx.fill();
         drawLine(prevPoint, point, ctx, '#000', 5);
         curveLine.push({start: prevPoint, end: point, ctx, color: '#000', width: 5});
     }
@@ -59,12 +56,14 @@ export const Canvas: FC<CanvasProps> = ({ width, height }) => {
         color,
         width
     ) {
+        console.log(ctx);
         start = start ?? end;
         ctx.beginPath();
         ctx.lineWidth = width;
         ctx.strokeStyle = color;
         ctx.moveTo(start.x, start.y);
         ctx.lineTo(end.x, end.y);
+        //ctx.quadraticCurveTo((start.x + end.x) / 2, end.x, end.x, end.y);
         ctx.stroke();
         ctx.fillStyle = color;
         ctx.beginPath();
@@ -104,11 +103,31 @@ export const Canvas: FC<CanvasProps> = ({ width, height }) => {
             })
         }
       }
-      
-      useEffect(() => {
-        window.addEventListener('keydown', (event) => {
-            if (event.ctrlKey && (event.key === 'z' || event.code === 'KeyZ')) {
-                if(event.shiftKey) {
+
+      const handleWheel = (event) => {
+          event.preventDefault();
+
+          if(event.ctrlKey) {
+              if(event.deltaY > 0) {
+                  console.log(scale);
+                  if(scale > 0.2) {
+                      setScale(prev => prev - 0.1);
+                  }
+              }
+              else if(event.deltaY < 0) {
+                  console.log(scale);
+                  if(scale < 4) {
+                      setScale(prev => prev + 0.1);
+                  }
+                  //scale < 4 && setScale(prev => prev + 0.1);
+              }
+          }
+      }
+
+    const handleKeyDown = (event) => {
+        switch (event.ctrlKey) {
+            case event.key === 'z' || event.code === 'KeyZ':
+                if(event.shiftKey || event.key === 'y') {
                     console.log("ctrl + shift + z");
                     redoLastLine();
                 }
@@ -116,28 +135,69 @@ export const Canvas: FC<CanvasProps> = ({ width, height }) => {
                     console.log("ctrl + z");
                     undoLastLine();
                 }
+                break;
+            case event.key === 'y' || event.code === 'KeyY':
+                console.log("ctrl + y");
+                redoLastLine();
+                break;
+            case event.code === 'Equal':              // +
+                event.preventDefault();
+                if(scale < 4) {
+                    console.log('zoom in');
+                    setScale((prev) => prev + 0.1);
+                }
+                break;
+            case event.code === 'Minus':              // -
+                event.preventDefault();
+                if(scale > 0.2) {
+                    console.log('zoom out');
+                    setScale((prev) => prev - 0.1);
+                }
+                break;
+            default:
                 return;
-            }
-        });
-        
-        window.addEventListener("mouseup", () => {
-            console.log("draw end");
-            history.push(curveLine);
-        });
+        }
+    }
+      
+      useEffect(() => {
+          const drawEnd = () => {
+              console.log("draw end");
+              history.push(curveLine);
+          }
 
-        window.addEventListener("mousedown", () => {
-            console.log("draw start");
-            curveLine = [];
-        });
+          const drawStart = () => {
+              console.log("draw start");
+              curveLine = [];
+          }
+
+        window.addEventListener('keydown', handleKeyDown);
+        window.addEventListener("mouseup", drawStart);
+        window.addEventListener("mousedown", drawEnd);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+            window.removeEventListener('mouseup', drawStart);
+            window.removeEventListener("mousedown", drawEnd);
+        }
 
       }, []);
-      
-      
+
+      // Scaling handle
+      useEffect(() => {
+          window.addEventListener('keydown', handleKeyDown);
+          window.addEventListener('wheel', handleWheel, { passive: false });
+
+          return () => {
+              window.removeEventListener('keydown', handleKeyDown);
+              window.removeEventListener('wheel', handleWheel);
+          }
+      }, [scale]);
 
     return(
         <canvas
             width={width}
             height={height}
+            style={{ transform: `scale(${scale})` }}
             className={styles.canvas}
             onMouseDown={onCanvasMouseDown}
             ref={setCanvasRef}
