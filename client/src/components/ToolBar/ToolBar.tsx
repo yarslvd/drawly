@@ -1,4 +1,4 @@
-import { useState, useEffect, FC } from 'react';
+import { useState, useEffect, FC, memo } from 'react';
 import { motion } from 'framer-motion';
 
 import styles from './ToolBar.module.scss';
@@ -31,13 +31,18 @@ const tools = [
         cursors: 'grab'
     },
     {
+        name: 'Eraser',
+        icon: '/assets/icons/tools/eraser.png',
+        cursors: 'crosshair'
+    },
+    {
         name: 'More',
         icon: '/assets/icons/tools/more.png',
         cursors: 'pointer'
     }
 ];
 
-export const ToolBar: FC = () => {
+export const ToolBar: FC = memo(() => {
     const [tool, setTool] = useState(0);
 
     const handleClick = (index: number) => {
@@ -58,4 +63,4 @@ export const ToolBar: FC = () => {
             ))}
         </div>
     );
-}
+});

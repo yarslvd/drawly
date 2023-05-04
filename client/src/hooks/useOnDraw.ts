@@ -5,7 +5,7 @@ interface PointsTypes {
     y: number;
 }
 
-export const useOnDraw = (onDraw) => {
+export const useOnDraw = (onDraw, mouseDownCallback, mouseUpCallback) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const isDrawingRef = useRef<boolean>(false);
     const prevPointRef = useRef<PointsTypes | null>(null);
@@ -19,6 +19,7 @@ export const useOnDraw = (onDraw) => {
     }
 
     const onCanvasMouseDown = () => {
+        mouseDownCallback && mouseDownCallback();
         isDrawingRef.current = true;
     }
 
@@ -40,7 +41,7 @@ export const useOnDraw = (onDraw) => {
             window.addEventListener('mousemove', mouseMoveListener);
         }
 
-        const getCanvasPoints = (clientX, clientY) => {
+        const getCanvasPoints = (clientX, clientY): PointsTypes | null => {
             if(canvasRef.current) {
                 const bounds = canvasRef.current?.getBoundingClientRect();
                 return {
@@ -55,6 +56,7 @@ export const useOnDraw = (onDraw) => {
 
         const mouseUpListener = () => {
             const listener = () => {
+                mouseUpCallback && mouseUpCallback();
                 isDrawingRef.current = false;
                 prevPointRef.current = null;
             }
@@ -77,6 +79,8 @@ export const useOnDraw = (onDraw) => {
 
     return {
         setCanvasRef,
-        onCanvasMouseDown
+        onCanvasMouseDown,
+        isDrawingRef,
+        canvasRef
     };
 }
