@@ -2,10 +2,11 @@ import Head from 'next/head'
 import { ToolBar } from "@/components/ToolBar/ToolBar";
 import { Canvas } from "@/components/Canvas/Canvas";
 import {useState} from "react";
-import {Tool} from "@/data/Tools";
+import {Tools} from "@/data/Constants";
 
 export default function Home() {
-  const [tool, setTool] = useState<number>(0)
+    //TODO: think about default tool to set
+  const [tool, setTool] = useState<string>(Tools.BRUSH)
 
   return (
     <>
