@@ -1,15 +1,11 @@
 import Head from 'next/head'
 import { ToolBar } from "@/components/ToolBar/ToolBar";
 import { Canvas } from "@/components/Canvas/Canvas";
-import { MainCanvas } from "@/components/MainCanvas/MainCanvas";
-import {useState, useRef, useEffect} from "react";
+import {useState} from "react";
+import {Tool} from "@/data/Tools";
 
 export default function Home() {
-    const styles = {
-        //transform: `translate(${position.x}px, ${position.y}px)`,
-        width: '100wh',
-        height: '100vh'
-    };
+  const [tool, setTool] = useState<number>(0)
 
   return (
     <>
@@ -19,13 +15,10 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-        <>
-            <ToolBar />
-            <main style={styles}>
-                <Canvas width='1000px' height='700px' />
-                {/*<MainCanvas />*/}
-            </main>
-        </>
+      <main style={{ width: '100wh', height: '100vh' }}>
+          <ToolBar tool={tool} setTool={setTool}/>
+          <Canvas tool={tool} width='1000px' height='700px' />
+      </main>
     </>
   )
 }

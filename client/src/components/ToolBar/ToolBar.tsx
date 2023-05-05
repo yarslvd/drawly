@@ -42,8 +42,7 @@ const tools = [
     }
 ];
 
-export const ToolBar: FC = memo(() => {
-    const [tool, setTool] = useState(0);
+export const ToolBar: FC<any> = memo(({tool, setTool}) => {
 
     const handleClick = (index: number) => {
         setTool(index);
