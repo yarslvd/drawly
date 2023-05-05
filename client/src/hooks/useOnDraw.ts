@@ -29,7 +29,7 @@ export const useOnDraw = (onDraw, mouseDownCallback, mouseUpCallback) => {
                 if(isDrawingRef.current && canvasRef.current) {
                     const point = getCanvasPoints(e.clientX, e.clientY);
                     const ctx = canvasRef.current?.getContext('2d');
-                    //console.log(prevPointRef.current, point)
+                    console.log(prevPointRef.current, point)
                     if(onDraw) {
                         onDraw(ctx, point, prevPointRef.current);
                     }
@@ -44,6 +44,7 @@ export const useOnDraw = (onDraw, mouseDownCallback, mouseUpCallback) => {
         const getCanvasPoints = (clientX, clientY): PointsTypes | null => {
             if(canvasRef.current) {
                 const bounds = canvasRef.current?.getBoundingClientRect();
+                console.log(bounds);
                 return {
                     x: clientX - bounds.left,
                     y: clientY - bounds.top

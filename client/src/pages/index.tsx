@@ -2,8 +2,15 @@ import Head from 'next/head'
 import { ToolBar } from "@/components/ToolBar/ToolBar";
 import { Canvas } from "@/components/Canvas/Canvas";
 import { MainCanvas } from "@/components/MainCanvas/MainCanvas";
+import {useState, useRef, useEffect} from "react";
 
 export default function Home() {
+    const styles = {
+        //transform: `translate(${position.x}px, ${position.y}px)`,
+        width: '100wh',
+        height: '100vh'
+    };
+
   return (
     <>
       <Head>
@@ -12,11 +19,13 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main style={{ width: '100wh', height: '100vh' }}>
-          <ToolBar />
-          <Canvas width='1000px' height='700px' />
-          {/*<MainCanvas />*/}
-      </main>
+        <>
+            <ToolBar />
+            <main style={styles}>
+                <Canvas width='1000px' height='700px' />
+                {/*<MainCanvas />*/}
+            </main>
+        </>
     </>
   )
 }

@@ -41,6 +41,9 @@ export const Canvas: FC<CanvasProps> = ({ width, height }) => {
     // change array to class with draw() method
     let curveLine: any[] = [];
     const [scale, setScale] = useState<number>(1);
+    const [canvasPosition, setCanvasPosition] = useState({ x: 0, y: 0 });
+    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+    const [isMouseDown, setIsMouseDown] = useState<boolean>(false);
 
     const currentCanvas = canvasRef.current;
 
@@ -197,7 +200,7 @@ export const Canvas: FC<CanvasProps> = ({ width, height }) => {
         <canvas
             width={width}
             height={height}
-            style={{ transform: `scale(${scale})` }}
+            style={{ transform: `scale(${scale}) translate(${canvasPosition.x}px, ${canvasPosition.y}px)` }}
             className={styles.canvas}
             onMouseDown={onCanvasMouseDown}
             ref={setCanvasRef}
