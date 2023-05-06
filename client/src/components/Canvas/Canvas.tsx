@@ -1,9 +1,10 @@
 import styles from './Canvas.module.scss';
 import React, {FC, useEffect, useRef, useState} from "react";
+import paper from 'paper';
 import {Tool} from "@/data/ToolsClass";
 import {NameTool} from "@/types/types";
 import {Keyboard} from "@/data/Constants";
-
+import {getCanvasPoints} from "@/utils/getCanvasPoints";
 
 export interface CanvasProps {
     tool: string
@@ -18,13 +19,15 @@ export const Canvas: FC<CanvasProps> = ({tool, width, height }) => {
 
     const handleMouseDown = (event: React.MouseEvent<HTMLCanvasElement>) => {
         if (selectedTool) {
-            selectedTool.onMouseDown({ x: event.clientX, y: event.clientY });
+            const point = getCanvasPoints({ clientX: event.clientX, clientY: event.clientY }, canvasRef, scale);
+            selectedTool.onMouseDown(point);
         }
     };
 
     const handleMouseMove = (event: React.MouseEvent<HTMLCanvasElement>) => {
         if (selectedTool) {
-            selectedTool.onMouseMove({ x: event.clientX, y: event.clientY });
+            const point = getCanvasPoints({ clientX: event.clientX, clientY: event.clientY }, canvasRef, scale);
+            selectedTool.onMouseMove(point);
         }
     };
 
@@ -44,20 +47,28 @@ export const Canvas: FC<CanvasProps> = ({tool, width, height }) => {
         context.lineWidth = 2;
         context.strokeStyle = "#000";
 
-        let currentTool = NameTool.get(tool)
-        if (!currentTool) return
+        let currentTool = NameTool.get(tool);
+        if (!currentTool) return;
 
         setSelectedTool(currentTool(canvas) as Tool);
+
     }, [tool]);
+
 
     const handleWheel = (event :WheelEvent) => {
         event.preventDefault();
 
         if(!event.ctrlKey) return
 
+        const canvas = canvasRef.current;
+
         event.deltaY > 0
             ? handleZoomOut()
             : handleZoomIn()
+        console.log(Math.round(canvasRef.current.clientWidth * scale));
+
+        // canvas.width = Math.round(canvas.clientWidth * scale);
+        // canvas.height = Math.round(canvas.clientHeight * scale);
     };
 
     const handleZoomIn = () => {
@@ -107,7 +118,7 @@ export const Canvas: FC<CanvasProps> = ({tool, width, height }) => {
             width={width}
             height={height}
             className={styles.canvas}
-            style={{ transform: `scale(${scale})` }}
+            style={{ transform: `scale(${scale})`, imageRendering: "pixelated" }}
             ref={canvasRef}
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}

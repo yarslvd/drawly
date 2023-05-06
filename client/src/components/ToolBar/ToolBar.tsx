@@ -44,8 +44,9 @@ const tools = [
 export const ToolBar: FC<any> = memo(({tool, setTool}) => {
 
     const handleClick = (index: number) => {
+        console.log(tools[index].name);
         setTool(tools[index].name);
-        console.log((tools[index].cursors).charAt(0));
+        //console.log((tools[index].cursors).charAt(0));
         document.body.style.cursor = (tools[index].cursors).charAt(0) == '/' ? `url(${tools[index].cursors}), auto` : `${tools[index].cursors}`;
     }
 
@@ -53,8 +54,8 @@ export const ToolBar: FC<any> = memo(({tool, setTool}) => {
         <div className={styles.toolbarContainer}>
             {tools.map((el, index) => (
                 <ToolBarItem
-                    key={index}
-                    current={index === tool}
+                    key={el.name}
+                    current={el.name === tool}
                     handleClick={() => handleClick(index)}
                     {...el}
                 />

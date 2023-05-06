@@ -7,8 +7,8 @@ export const getCanvasPoints = ({clientX, clientY}, canvasRef, scale): Coordinat
         // console.log((bounds.left + clientX) * scale,( bounds.top + clientY) * scale);
         if(scale > 1) {
             return {
-                x: (clientX + bounds.left) * scale,
-                y: (clientY + bounds.top) * scale
+                x: Math.abs(bounds.left - clientX) / scale,
+                y: Math.abs( bounds.top - clientY) /scale
             }
         }
         else if (scale <= 1) {
