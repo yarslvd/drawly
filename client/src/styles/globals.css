@@ -11,12 +11,10 @@ body {
 /*    cursor: url('../../public/assets/icons/tools/pentool.png') 16 16, auto;*/
 /*}*/
 
-main {
-    width: 100vw;
-    height: 100vh;
-    /*display: flex;*/
-    /*justify-content: center;*/
-    /*align-items: center;*/
+.canvas_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     /*cursor: url('../../public/assets/icons/cursors/move.png') 1 2, auto;*/
     overflow: hidden;
 }

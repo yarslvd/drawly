@@ -1,3 +1,5 @@
+import {Brush, Line, Rectangle} from "@/data/Tools";
+import {Tools} from "@/data/Constants";
 
 export interface CanvasProps {
     tool: number
@@ -23,3 +25,15 @@ export interface Coordinates {
     x: number;
     y: number;
 }
+
+export const NameTool = new Map<string, (canvas: HTMLCanvasElement) => Tool>([
+    [Tools.BRUSH, (canvas :HTMLCanvasElement) => {
+        return new Brush(canvas);
+    }],
+    [Tools.RECTANGLE, (canvas :HTMLCanvasElement) => {
+        return new Rectangle(canvas);
+    }],
+    [Tools.LINE, (canvas :HTMLCanvasElement) => {
+        return new Line(canvas);
+    }],
+]);

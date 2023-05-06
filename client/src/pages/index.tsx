@@ -2,10 +2,11 @@ import Head from 'next/head'
 import { ToolBar } from "@/components/ToolBar/ToolBar";
 import { Canvas } from "@/components/Canvas/Canvas";
 import {useState} from "react";
-import {Tool} from "@/data/Tools";
+import {Tools} from "@/data/Constants";
 
 export default function Home() {
-  const [tool, setTool] = useState<number>(0)
+    //TODO: think about default tool to set
+    const [tool, setTool] = useState<string>(Tools.BRUSH)
 
   return (
     <>
@@ -15,9 +16,11 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main style={{ width: '100wh', height: '100vh' }}>
+      <main>
           <ToolBar tool={tool} setTool={setTool}/>
-          <Canvas tool={tool} width='1000px' height='700px' />
+          <div style={{ width: '100wh', height: '100vh' }} className='canvas_container'>
+              <Canvas tool={tool} width='1000px' height='700px'/>
+          </div>
       </main>
     </>
   )

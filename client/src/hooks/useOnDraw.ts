@@ -1,8 +1,8 @@
 import {useEffect, useRef} from "react";
-import {Coordinates} from "@/data/data";
+import {Coordinates} from "@/types/types";
 
 export const useOnDraw = (onDraw, mouseDownCallback, mouseUpCallback) => {
-    const canvasRef = useRef<HTMLCanvasElement>(null);
+    const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const isDrawingRef = useRef<boolean>(false);
     const prevPointRef = useRef<Coordinates | null>(null);
 
@@ -24,7 +24,7 @@ export const useOnDraw = (onDraw, mouseDownCallback, mouseUpCallback) => {
             const mouseMoveListener = (e) => {
                 if(isDrawingRef.current && canvasRef.current) {
                     const point = getCanvasPoints(e.clientX, e.clientY);
-                    const ctx = canvasRef.current?.getContext('2d');
+                    const ctx: CanvasRenderingContext2D | null = canvasRef.current?.getContext('2d');
                     console.log(prevPointRef.current, point)
                     if(onDraw) {
                         onDraw(ctx, point, prevPointRef.current);
@@ -40,7 +40,6 @@ export const useOnDraw = (onDraw, mouseDownCallback, mouseUpCallback) => {
         const getCanvasPoints = (clientX, clientY): Coordinates | null => {
             if(canvasRef.current) {
                 const bounds = canvasRef.current?.getBoundingClientRect();
-                console.log(bounds);
                 return {
                     x: clientX - bounds.left,
                     y: clientY - bounds.top
