@@ -15,7 +15,7 @@ export class Rectangle extends Shape {
     if (ctx == null) {
       return;
     }
-    
+
     ctx.strokeRect(this.start.x, this.start.y, this.width, this.height);
   }
 
@@ -27,15 +27,30 @@ export class Rectangle extends Shape {
     const topBoundary = start.y;
     const bottomBoundary = start.y + this.height;
 
-    const withinLeftBorder = point.x >= leftBoundary && point.x <= leftBoundary + this.borderWidth;
-    const withinRightBorder = point.x >= rightBoundary - this.borderWidth && point.x <= rightBoundary;
-    const withinTopBorder = point.y >= topBoundary && point.y <= topBoundary + this.borderWidth;
-    const withinBottomBorder = point.y >= bottomBoundary - this.borderWidth && point.y <= bottomBoundary;
+    const withinLeftBorder =
+      point.x >= leftBoundary && point.x <= leftBoundary + this.borderWidth;
+    const withinRightBorder =
+      point.x >= rightBoundary - this.borderWidth && point.x <= rightBoundary;
+    const withinTopBorder =
+      point.y >= topBoundary && point.y <= topBoundary + this.borderWidth;
+    const withinBottomBorder =
+      point.y >= bottomBoundary - this.borderWidth && point.y <= bottomBoundary;
 
-    return withinLeftBorder || withinRightBorder || withinTopBorder || withinBottomBorder;
+    return (
+      withinLeftBorder ||
+      withinRightBorder ||
+      withinTopBorder ||
+      withinBottomBorder
+    );
   }
 
-  constructor(canvas: CanvasClass, start: Point, width: number, height: number, borderWidth: number) {
+  constructor(
+    canvas: CanvasClass,
+    start: Point,
+    width: number,
+    height: number,
+    borderWidth: number
+  ) {
     super(canvas);
 
     this.start = start;

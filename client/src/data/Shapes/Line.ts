@@ -11,7 +11,7 @@ export class Line extends Shape {
     if (ctx == null) {
       return;
     }
-    
+
     ctx.beginPath();
     ctx.lineWidth = 5;
     ctx.strokeStyle = "#000";

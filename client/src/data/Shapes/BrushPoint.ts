@@ -12,10 +12,10 @@ export class BrushPoint extends Shape {
     if (ctx == null) {
       return;
     }
-    
+
     ctx.strokeStyle = this.brushColor;
     ctx.beginPath();
-    
+
     ctx.arc(this.point.x, this.point.y, this.brushSize / 2, 0, 2 * Math.PI);
     ctx.fill();
   }

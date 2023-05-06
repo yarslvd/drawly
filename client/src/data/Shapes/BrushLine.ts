@@ -14,14 +14,14 @@ export class BrushLine extends Shape {
       return;
     }
     const points = this.points;
-    
+
     // (new BrushPoint(this.canvas, point, this.brushSize, this.brushColor)).onDraw();
     ctx.strokeStyle = this.brushColor;
     ctx.lineWidth = this.brushSize;
-    
+
     const point = this.points[0];
     ctx.beginPath();
-    ctx.arc(point.x, point.y, this.brushSize/2, 0, 2 * Math.PI);
+    ctx.arc(point.x, point.y, this.brushSize / 2, 0, 2 * Math.PI);
     ctx.fill();
 
     ctx.beginPath();
@@ -33,9 +33,11 @@ export class BrushLine extends Shape {
       ctx.quadraticCurveTo(points[i].x, points[i].y, xc, yc);
     }
 
-    ctx.lineTo(points[this.points.length - 1].x, points[this.points.length - 1].y);
+    ctx.lineTo(
+      points[this.points.length - 1].x,
+      points[this.points.length - 1].y
+    );
     ctx.stroke();
-    
   }
 
   isPointInside(point: Point): boolean {
@@ -55,27 +57,44 @@ export class BrushLine extends Shape {
     return false;
   }
 
-  distanceToLineSegment(point: Point, startPoint: Point, endPoint: Point): number {
+  distanceToLineSegment(
+    point: Point,
+    startPoint: Point,
+    endPoint: Point
+  ): number {
     const dx = endPoint.x - startPoint.x;
     const dy = endPoint.y - startPoint.y;
     const lengthSquared = dx ** 2 + dy ** 2;
 
     if (lengthSquared === 0) {
-      return Math.sqrt((point.x - startPoint.x) ** 2 + (point.y - startPoint.y) ** 2);
+      return Math.sqrt(
+        (point.x - startPoint.x) ** 2 + (point.y - startPoint.y) ** 2
+      );
     }
 
-    const t = ((point.x - startPoint.x) * dx + (point.y - startPoint.y) * dy) / lengthSquared;
+    const t =
+      ((point.x - startPoint.x) * dx + (point.y - startPoint.y) * dy) /
+      lengthSquared;
     const clampedT = Math.max(0, Math.min(1, t));
     const projectedX = startPoint.x + clampedT * dx;
     const projectedY = startPoint.y + clampedT * dy;
 
-    const distanceToLine = Math.sqrt((point.x - projectedX) ** 2 + (point.y - projectedY) ** 2);
-    const distanceToSegment = distanceToLine * Math.sqrt(lengthSquared) / Math.sqrt(lengthSquared + 1);
+    const distanceToLine = Math.sqrt(
+      (point.x - projectedX) ** 2 + (point.y - projectedY) ** 2
+    );
+    const distanceToSegment =
+      (distanceToLine * Math.sqrt(lengthSquared)) /
+      Math.sqrt(lengthSquared + 1);
 
     return distanceToSegment;
   }
 
-  constructor(canvas: CanvasClass, points: Point[], size: number, color: string) {
+  constructor(
+    canvas: CanvasClass,
+    points: Point[],
+    size: number,
+    color: string
+  ) {
     super(canvas);
 
     this.points = points;

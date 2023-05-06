@@ -20,16 +20,16 @@ export class CanvasClass {
       return;
     }
 
-    const ctx = this.canvasHTML.getContext('2d');
+    const ctx = this.canvasHTML.getContext("2d");
     if (this.history.length > 0 && this.canvasHTML && ctx) {
-        // console.log("undo", this.history)
-        this.removedHistory.unshift(this.history[this.history.length - 1]);
-        this.history.pop();
-    
-        ctx.clearRect(0, 0, this.canvasHTML?.width, this.canvasHTML?.height);
-    
-        this.history.forEach((shape: Shape) => {
-          shape.onDraw();
+      // console.log("undo", this.history)
+      this.removedHistory.unshift(this.history[this.history.length - 1]);
+      this.history.pop();
+
+      ctx.clearRect(0, 0, this.canvasHTML?.width, this.canvasHTML?.height);
+
+      this.history.forEach((shape: Shape) => {
+        shape.onDraw();
       });
     }
   }
@@ -39,16 +39,15 @@ export class CanvasClass {
       return;
     }
 
-    const ctx = this.canvasHTML.getContext('2d');
+    const ctx = this.canvasHTML.getContext("2d");
     if (this.removedHistory.length > 0 && this.canvasHTML && ctx) {
       // console.log("redo", this.removedHistory)
       const shape = this.removedHistory[0];
       this.history.push(shape);
       this.removedHistory.shift();
-  
-      shape.onDraw();
-  }
 
+      shape.onDraw();
+    }
   }
 
   constructor(canvasHTML: HTMLCanvasElement) {

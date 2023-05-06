@@ -4,7 +4,7 @@ import { Shape } from "./Shape";
 
 export class CurveLine extends Shape {
   points: Point[];
-  
+
   onDraw(): void {
     const ctx = this.canvas.getContext2D();
     if (this.points.length < 2 || ctx == null) {

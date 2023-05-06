@@ -1,9 +1,9 @@
 import { Point } from "framer-motion";
-import { CanvasClass } from "../Canvas"
+import { CanvasClass } from "../Canvas";
 
 export abstract class Shape {
   canvas: CanvasClass;
-  
+
   abstract onDraw(): void;
 
   abstract isPointInside(point: Point): boolean;

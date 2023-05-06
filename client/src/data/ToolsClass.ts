@@ -1,38 +1,37 @@
-import {Coordinates} from "@/types/types";
+import { Coordinates } from "@/types/types";
 import { CanvasClass } from "./Canvas";
 
 export abstract class Tool {
-    protected canvas: CanvasClass;
-    protected isActing: boolean = false;
-    protected lastPoint: Coordinates | null = null;
+  protected canvas: CanvasClass;
+  protected isActing: boolean = false;
+  protected lastPoint: Coordinates | null = null;
 
-    constructor(canvas: CanvasClass) {
-        this.canvas = canvas;
-    }
+  constructor(canvas: CanvasClass) {
+    this.canvas = canvas;
+  }
 
-    public onMouseDown(point: Coordinates): void {
-        console.log(point);
-        this.isActing = true;
-        this.lastPoint = point;
-        this.onDown(point);
-    }
+  public onMouseDown(point: Coordinates): void {
+    console.log(point);
+    this.isActing = true;
+    this.lastPoint = point;
+    this.onDown(point);
+  }
 
-    public onMouseMove(newPoint: Coordinates): void {
-        if (!this.isActing) return;
-        if (!this.lastPoint) return;
+  public onMouseMove(newPoint: Coordinates): void {
+    if (!this.isActing) return;
+    if (!this.lastPoint) return;
 
-        this.onMove(this.lastPoint, newPoint);
-        this.lastPoint = newPoint;
-    }
+    this.onMove(this.lastPoint, newPoint);
+    this.lastPoint = newPoint;
+  }
 
-    public onMouseUp(): void {
-        this.isActing = false;
-        this.onUp(this.lastPoint!)
-        this.lastPoint = null;
-    }
+  public onMouseUp(): void {
+    this.isActing = false;
+    this.onUp(this.lastPoint!);
+    this.lastPoint = null;
+  }
 
-    protected abstract onMove(start: Coordinates, end: Coordinates): void;
-    protected abstract onUp(point: Coordinates): void;
-    protected abstract onDown(point: Coordinates): void;
+  protected abstract onMove(start: Coordinates, end: Coordinates): void;
+  protected abstract onUp(point: Coordinates): void;
+  protected abstract onDown(point: Coordinates): void;
 }
-

@@ -1,45 +1,45 @@
-import {Coordinates} from "@/types/types";
-import {Tool} from "@/data/ToolsClass";
-import {getCanvasPoints} from "@/utils/getCanvasPoints";
+import { Coordinates } from "@/types/types";
+import { Tool } from "@/data/ToolsClass";
+import { getCanvasPoints } from "@/utils/getCanvasPoints";
 import { Line as LineShape } from "../Shapes/Line";
 import { BrushLine } from "../Shapes/BrushLine";
 
 export class Brush extends Tool {
-    points: Coordinates[] = [];
+  points: Coordinates[] = [];
 
-    protected onMove(start: Coordinates, end: Coordinates): void {
-        if (!this.canvas) return
-        
-        const context = this.canvas.getContext2D();
-        if (!context) return
+  protected onMove(start: Coordinates, end: Coordinates): void {
+    if (!this.canvas) return;
 
-        this.points.push(end);
+    const context = this.canvas.getContext2D();
+    if (!context) return;
 
-        this.canvas.undoShape();
+    this.points.push(end);
 
-        const line = new BrushLine(this.canvas, this.points, 5, "black");
+    this.canvas.undoShape();
 
-        line.onDraw();
+    const line = new BrushLine(this.canvas, this.points, 5, "black");
 
-        this.canvas.pushHistory(line);
-    }
+    line.onDraw();
 
-    protected onDown(point: Coordinates): void {
-        if (!this.canvas) return
-        
-        const context = this.canvas.getContext2D();
-        if (!context) return
+    this.canvas.pushHistory(line);
+  }
 
-        //TODO: weight and height the same as the lineWidth, remember to upd after adding styles
+  protected onDown(point: Coordinates): void {
+    if (!this.canvas) return;
 
-        this.points.push(point);
+    const context = this.canvas.getContext2D();
+    if (!context) return;
 
-        const line = new BrushLine(this.canvas, this.points, 5, "black");
-        line.onDraw();
-        this.canvas.pushHistory(line);
-    }
+    //TODO: weight and height the same as the lineWidth, remember to upd after adding styles
 
-    protected onUp(point: Coordinates): void {
-        this.points = [];
-    }
+    this.points.push(point);
+
+    const line = new BrushLine(this.canvas, this.points, 5, "black");
+    line.onDraw();
+    this.canvas.pushHistory(line);
+  }
+
+  protected onUp(point: Coordinates): void {
+    this.points = [];
+  }
 }
