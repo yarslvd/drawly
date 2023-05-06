@@ -1,14 +1,13 @@
 import {Coordinates} from "@/types/types";
+import { CanvasClass } from "./Canvas";
 
 export abstract class Tool {
-    protected context: CanvasRenderingContext2D | null = null;
-    protected canvas: HTMLCanvasElement | null = null;
+    protected canvas: CanvasClass;
     protected isActing: boolean = false;
     protected lastPoint: Coordinates | null = null;
 
-    constructor(canvas: HTMLCanvasElement) {
+    constructor(canvas: CanvasClass) {
         this.canvas = canvas;
-        this.context = canvas.getContext("2d");
     }
 
     public onMouseDown(point: Coordinates): void {

@@ -1,5 +1,7 @@
-import {Brush, Line, Rectangle} from "@/data/Tools";
+import {Brush, Line, Move, Rectangle} from "@/data/Tools";
 import {Tools} from "@/data/Constants";
+import { CanvasClass } from "@/data/Canvas";
+import { Tool } from "@/data/ToolsClass";
 
 export interface CanvasProps {
     tool: number
@@ -26,14 +28,20 @@ export interface Coordinates {
     y: number;
 }
 
-export const NameTool = new Map<string, (canvas: HTMLCanvasElement) => Tool>([
-    [Tools.BRUSH, (canvas :HTMLCanvasElement) => {
+export const NameTool = new Map<string, (canvas: CanvasClass) => Tool>([
+    [Tools.MOVE, (canvas :CanvasClass) => {
+        console.log("move:", canvas.history)
+        return new Move(canvas);
+    }],
+    [Tools.BRUSH, (canvas :CanvasClass) => {
+        console.log("brush:", canvas.history)
         return new Brush(canvas);
     }],
-    [Tools.RECTANGLE, (canvas :HTMLCanvasElement) => {
+    [Tools.RECTANGLE, (canvas :CanvasClass) => {
+        console.log("rectangle:", canvas.history)
         return new Rectangle(canvas);
     }],
-    [Tools.LINE, (canvas :HTMLCanvasElement) => {
+    [Tools.LINE, (canvas :CanvasClass) => {
         return new Line(canvas);
     }],
 ]);

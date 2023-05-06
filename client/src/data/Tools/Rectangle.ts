@@ -1,30 +1,51 @@
 import {Tool} from "@/data/ToolsClass";
-
+import {Rectangle as RectangleShape} from "../Shapes/Rectangle";
 import {Coordinates} from "@/types/types";
 
 export class Rectangle extends Tool {
     protected start: Coordinates | null = null;
+    
+    borderWidth: number = 5;
 
     protected onDown(point: Coordinates): void {
-        this.start = point
+        this.start = point;
+        const rectangle = new RectangleShape(this.canvas, this.start, 0, 0, 0);
+        this.canvas.pushHistory(rectangle);
     }
 
     protected onMove(start: Coordinates, end: Coordinates): void {
-        if (!this.context) return
+        if (!this.canvas) return
         if (!this.start) return
 
+        const context = this.canvas.getContext2D();
+        if (!context) return
 
-        // const width = end.x - this.start.x;
-        // const height = end.y - this.start.y;
-        // this.context.strokeRect(this.start.x, this.start.y, width, height);
+        const width = end.x - this.start.x;
+        const height = end.y - this.start.y;
+
+        this.canvas.undoShape();
+
+        const rectangle = new RectangleShape(this.canvas, this.start, width, height, this.borderWidth);
+        rectangle.onDraw();
+
+        this.canvas.pushHistory(rectangle);
     }
 
     protected onUp(point: Coordinates): void {
-        if (!this.context) return
+        if (!this.canvas) return
         if (!this.start) return
+
+        const context = this.canvas.getContext2D();
+        if (!context) return
 
         const width = point.x - this.start.x;
         const height = point.y - this.start.y;
-        this.context.strokeRect(this.start.x, this.start.y, width, height);
+
+        this.canvas.undoShape();
+
+        const rectangle = new RectangleShape(this.canvas, this.start, width, height, this.borderWidth);
+        rectangle.onDraw();
+
+        this.canvas.pushHistory(rectangle);
     }
 }

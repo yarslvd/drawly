@@ -5,7 +5,7 @@ import {Tools} from "@/data/Constants";
 
 const tools = [
     {
-        name: 'Move',
+        name: Tools.MOVE,
         icon: '/assets/icons/tools/move.png',
         cursors: '/assets/icons/cursors/move.png'
     },

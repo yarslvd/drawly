@@ -8,6 +8,7 @@ export namespace Keyboard {
 }
 
 export namespace Tools {
+    export const MOVE = "move";
     export const BRUSH = "brush";
     export const RECTANGLE = "rectangle";
     export const LINE = "line";

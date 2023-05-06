@@ -1,16 +1,18 @@
 import styles from './Canvas.module.scss';
 import React, {FC, useEffect, useRef, useState} from "react";
-import paper from 'paper';
 import {Tool} from "@/data/ToolsClass";
 import {NameTool} from "@/types/types";
 import {Keyboard} from "@/data/Constants";
 import {getCanvasPoints} from "@/utils/getCanvasPoints";
+import { CanvasClass } from '@/data/Canvas';
 
 export interface CanvasProps {
     tool: string
     width: string;
     height: string;
 }
+
+let canvas: CanvasClass | null;
 
 export const Canvas: FC<CanvasProps> = ({tool, width, height }) => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -20,14 +22,14 @@ export const Canvas: FC<CanvasProps> = ({tool, width, height }) => {
     const handleMouseDown = (event: React.MouseEvent<HTMLCanvasElement>) => {
         if (selectedTool) {
             const point = getCanvasPoints({ clientX: event.clientX, clientY: event.clientY }, canvasRef, scale);
-            selectedTool.onMouseDown(point);
+            point && selectedTool.onMouseDown(point);
         }
     };
 
     const handleMouseMove = (event: React.MouseEvent<HTMLCanvasElement>) => {
         if (selectedTool) {
             const point = getCanvasPoints({ clientX: event.clientX, clientY: event.clientY }, canvasRef, scale);
-            selectedTool.onMouseMove(point);
+            point && selectedTool.onMouseMove(point);
         }
     };
 
@@ -37,15 +39,42 @@ export const Canvas: FC<CanvasProps> = ({tool, width, height }) => {
         }
     };
 
+    const handleOnClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
+        if (canvas) {
+            const point = getCanvasPoints({ clientX: event.clientX, clientY: event.clientY }, canvasRef, scale);
+
+            for(let i = canvas.history.length - 1; i >= 0; i--) {
+                if (point && canvas.history[i].isPointInside(point)) {
+                    console.log("Selected shape", i);
+                    return;
+                }
+            }
+        }
+    }
+
     useEffect(() => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
+        const canvasHTML = canvasRef.current;
+        if (!canvasHTML) return;
 
-        const context = canvas.getContext("2d");
-        if (!context) return;
+        if(!canvas) {
+            console.log("new canvas 1");
+            canvas = new CanvasClass(canvasHTML);
+        }
+    }, [])
 
-        context.lineWidth = 2;
-        context.strokeStyle = "#000";
+    useEffect(() => {
+        const canvasHTML = canvasRef.current;
+        if (!canvasHTML) return;
+
+        if(!canvas) {
+            console.log("new canvas 2");
+            canvas = new CanvasClass(canvasHTML);
+        }
+        // const context = canvas.getContext("2d");
+        // if (!context) return;
+
+        // context.lineWidth = 2;
+        // context.strokeStyle = "#000";
 
         let currentTool = NameTool.get(tool);
         if (!currentTool) return;
@@ -53,7 +82,6 @@ export const Canvas: FC<CanvasProps> = ({tool, width, height }) => {
         setSelectedTool(currentTool(canvas) as Tool);
 
     }, [tool]);
-
 
     const handleWheel = (event :WheelEvent) => {
         event.preventDefault();
@@ -65,7 +93,7 @@ export const Canvas: FC<CanvasProps> = ({tool, width, height }) => {
         event.deltaY > 0
             ? handleZoomOut()
             : handleZoomIn()
-        console.log(Math.round(canvasRef.current.clientWidth * scale));
+        console.log(canvasRef?.current && Math.round(canvasRef.current.clientWidth * scale));
 
         // canvas.width = Math.round(canvas.clientWidth * scale);
         // canvas.height = Math.round(canvas.clientHeight * scale);
@@ -85,12 +113,12 @@ export const Canvas: FC<CanvasProps> = ({tool, width, height }) => {
         switch (event.ctrlKey) {
             case event.key === Keyboard.Z || event.code === Keyboard.KEY_Z:
                 event.shiftKey
-                    ? console.log("ctrl + shift + z") // redoLastLine();
-                    : console.log("ctrl + z")  // undoLastLine();
+                    ? canvas?.redoShape() // redoLastLine();
+                    : canvas?.undoShape()  // undoLastLine();
                 break;
             case event.key === Keyboard.Y || event.code === Keyboard.KEY_Y:
                 console.log("ctrl + y");
-                // redoLastLine();
+                canvas?.redoShape();
                 break;
             case event.code === Keyboard.EQUAL:              // +
                 handleZoomIn();
@@ -118,11 +146,12 @@ export const Canvas: FC<CanvasProps> = ({tool, width, height }) => {
             width={width}
             height={height}
             className={styles.canvas}
-            style={{ transform: `scale(${scale})`, imageRendering: "pixelated" }}
+            style={{ transform: `scale(${scale})`}}
             ref={canvasRef}
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
+            onClick={handleOnClick}
         />
     );
 }

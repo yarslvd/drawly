@@ -19,7 +19,7 @@ export default function Home() {
       <main>
           <ToolBar tool={tool} setTool={setTool}/>
           <div style={{ width: '100wh', height: '100vh' }} className='canvas_container'>
-              <Canvas tool={tool} width='1000px' height='700px'/>
+              <Canvas tool={tool} width='1920' height='1080'/>
           </div>
       </main>
     </>
