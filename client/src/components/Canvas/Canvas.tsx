@@ -1,6 +1,6 @@
 import styles from './Canvas.module.scss';
 import React, {FC, useEffect, useRef, useState} from "react";
-import paper from 'paper';
+import paper, {Path, Point} from 'paper';
 import {Tool} from "@/data/ToolsClass";
 import {NameTool} from "@/types/types";
 import {Keyboard} from "@/data/Constants";
@@ -104,6 +104,39 @@ export const Canvas: FC<CanvasProps> = ({tool, width, height }) => {
     }
 
     useEffect(() => {
+        const canvas = canvasRef.current;
+        paper.setup(canvas);
+
+        var path = new Path();
+        path.strokeColor = 'black';
+
+        path.add(new Point(30, 50));
+
+        var y = 5;
+        var x = 3;
+
+        for (var i = 0; i < 28; i++) {
+            y *= -1.1;
+            x *= 1.1;
+            path.lineBy(x, y);
+        }
+
+// Create a copy of the path and move it 100 down:
+        var copy = path.clone();
+        copy.position.y += 120;
+
+// Select the path, so we can see its handles:
+        copy.fullySelected = true;
+
+// Smooth the path using centripetal Catmull-Rom splines:
+        copy.smooth({ type: 'catmull-rom', factor: 0.5 });
+
+        return () => {
+            paper.remove();
+        };
+    }, []);
+
+    useEffect(() => {
         window.addEventListener('keydown', handleKeyDown);
         window.addEventListener('wheel', handleWheel, { passive: false });
 
@@ -118,7 +151,7 @@ export const Canvas: FC<CanvasProps> = ({tool, width, height }) => {
             width={width}
             height={height}
             className={styles.canvas}
-            style={{ transform: `scale(${scale})`, imageRendering: "pixelated" }}
+            style={{ transform: `scale(${scale})` }}
             ref={canvasRef}
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
