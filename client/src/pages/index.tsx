@@ -1,12 +1,12 @@
-import Head from 'next/head'
+import Head from "next/head";
 import { useState } from "react";
 import { ToolBar } from "@/components/ToolBar/ToolBar";
 import { Canvas } from "@/components/Canvas/Canvas";
 import { Tools } from "@/data/Constants";
 
 export default function Home() {
-    //TODO: think about default tool to set
-    const [tool, setTool] = useState<string>(Tools.BRUSH);
+  //TODO: think about default tool to set
+  const [tool, setTool] = useState<string>(Tools.BRUSH);
 
   return (
     <>
@@ -17,11 +17,14 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-          <ToolBar tool={tool} setTool={setTool}/>
-          <div style={{ width: '100wh', height: '100vh' }} className='canvas_container'>
-              <Canvas tool={tool} width='1000px' height='700px'/>
-          </div>
+        <ToolBar tool={tool} setTool={setTool} />
+        <div
+          style={{ width: "100wh", height: "100vh" }}
+          className="canvas_container"
+        >
+          <Canvas tool={tool} width="1920" height="1080" />
+        </div>
       </main>
     </>
-  )
+  );
 }

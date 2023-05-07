@@ -1,161 +1,168 @@
-import styles from './Canvas.module.scss';
-import React, {FC, useEffect, useRef, useState} from "react";
-import paper, {Path, Point} from 'paper';
-import {Tool} from "@/data/ToolsClass";
-import {NameTool} from "@/types/types";
-import {Keyboard} from "@/data/Constants";
-import {getCanvasPoints} from "@/utils/getCanvasPoints";
+import styles from "./Canvas.module.scss";
+import React, { FC, useEffect, useRef, useState } from "react";
+import { Tool } from "@/data/ToolsClass";
+import { NameTool } from "@/types/types";
+import { Keyboard } from "@/data/Constants";
+import { getCanvasPoints } from "@/utils/getCanvasPoints";
+import { CanvasClass } from "@/data/Canvas";
 
 export interface CanvasProps {
-    tool: string
-    width: string;
-    height: string;
+  tool: string;
+  width: string;
+  height: string;
 }
 
-export const Canvas: FC<CanvasProps> = ({tool, width, height }) => {
-    const canvasRef = useRef<HTMLCanvasElement | null>(null);
-    const [selectedTool, setSelectedTool] = useState<Tool | null>(null);
-    const [scale, setScale] = useState<number>(1);
+let canvas: CanvasClass | null;
 
-    const handleMouseDown = (event: React.MouseEvent<HTMLCanvasElement>) => {
-        if (selectedTool) {
-            const point = getCanvasPoints({ clientX: event.clientX, clientY: event.clientY }, canvasRef, scale);
-            selectedTool.onMouseDown(point);
-        }
-    };
+export const Canvas: FC<CanvasProps> = ({ tool, width, height }) => {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [selectedTool, setSelectedTool] = useState<Tool | null>(null);
+  const [scale, setScale] = useState<number>(1);
 
-    const handleMouseMove = (event: React.MouseEvent<HTMLCanvasElement>) => {
-        if (selectedTool) {
-            const point = getCanvasPoints({ clientX: event.clientX, clientY: event.clientY }, canvasRef, scale);
-            selectedTool.onMouseMove(point);
-        }
-    };
-
-    const handleMouseUp = () => {
-        if (selectedTool) {
-            selectedTool.onMouseUp();
-        }
-    };
-
-    useEffect(() => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-
-        const context = canvas.getContext("2d");
-        if (!context) return;
-
-        context.lineWidth = 2;
-        context.strokeStyle = "#000";
-
-        let currentTool = NameTool.get(tool);
-        if (!currentTool) return;
-
-        setSelectedTool(currentTool(canvas) as Tool);
-
-    }, [tool]);
-
-
-    const handleWheel = (event :WheelEvent) => {
-        event.preventDefault();
-
-        if(!event.ctrlKey) return
-
-        const canvas = canvasRef.current;
-
-        event.deltaY > 0
-            ? handleZoomOut()
-            : handleZoomIn()
-        console.log(Math.round(canvasRef.current.clientWidth * scale));
-
-        // canvas.width = Math.round(canvas.clientWidth * scale);
-        // canvas.height = Math.round(canvas.clientHeight * scale);
-    };
-
-    const handleZoomIn = () => {
-        const newScale = scale + 0.1;
-        newScale < 4 && setScale((prev) => prev + 0.1);
+  const handleMouseDown = (event: React.MouseEvent<HTMLCanvasElement>) => {
+    if (selectedTool) {
+      const point = getCanvasPoints(
+        { clientX: event.clientX, clientY: event.clientY },
+        canvasRef,
+        scale
+      );
+      point && selectedTool.onMouseDown(point);
     }
+  };
 
-    const handleZoomOut = () => {
-        const newScale = scale - 0.1;
-        newScale > 0.2 && setScale((prev) => prev - 0.1);
+  const handleMouseMove = (event: React.MouseEvent<HTMLCanvasElement>) => {
+    if (selectedTool) {
+      const point = getCanvasPoints(
+        { clientX: event.clientX, clientY: event.clientY },
+        canvasRef,
+        scale
+      );
+      point && selectedTool.onMouseMove(point);
     }
-    const handleKeyDown = (event :KeyboardEvent) => {
-        event.preventDefault();
-        switch (event.ctrlKey) {
-            case event.key === Keyboard.Z || event.code === Keyboard.KEY_Z:
-                event.shiftKey
-                    ? console.log("ctrl + shift + z") // redoLastLine();
-                    : console.log("ctrl + z")  // undoLastLine();
-                break;
-            case event.key === Keyboard.Y || event.code === Keyboard.KEY_Y:
-                console.log("ctrl + y");
-                // redoLastLine();
-                break;
-            case event.code === Keyboard.EQUAL:              // +
-                handleZoomIn();
-                break;
-            case event.code === Keyboard.MINUS:              // -
-                handleZoomOut();
-                break;
-            default:
-                return;
-        }
+  };
+
+  const handleMouseUp = () => {
+    if (selectedTool) {
+      selectedTool.onMouseUp();
     }
+  };
 
-    useEffect(() => {
-        const canvas = canvasRef.current;
-        paper.setup(canvas);
+  const handleOnClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
+    if (canvas) {
+      const point = getCanvasPoints(
+        { clientX: event.clientX, clientY: event.clientY },
+        canvasRef,
+        scale
+      );
 
-        var path = new Path();
-        path.strokeColor = 'black';
-
-        path.add(new Point(30, 50));
-
-        var y = 5;
-        var x = 3;
-
-        for (var i = 0; i < 28; i++) {
-            y *= -1.1;
-            x *= 1.1;
-            path.lineBy(x, y);
+      for (let i = canvas.history.length - 1; i >= 0; i--) {
+        if (point && canvas.history[i].isPointInside(point)) {
+          console.log("Selected shape", i);
+          return;
         }
+      }
+    }
+  };
 
-// Create a copy of the path and move it 100 down:
-        var copy = path.clone();
-        copy.position.y += 120;
+  useEffect(() => {
+    const canvasHTML = canvasRef.current;
+    if (!canvasHTML) return;
 
-// Select the path, so we can see its handles:
-        copy.fullySelected = true;
+    if (!canvas) {
+      console.log("new canvas 1");
+      canvas = new CanvasClass(canvasHTML);
+    }
+  }, []);
 
-// Smooth the path using centripetal Catmull-Rom splines:
-        copy.smooth({ type: 'catmull-rom', factor: 0.5 });
+  useEffect(() => {
+    const canvasHTML = canvasRef.current;
+    if (!canvasHTML) return;
 
-        return () => {
-            paper.remove();
-        };
-    }, []);
+    if (!canvas) {
+      console.log("new canvas 2");
+      canvas = new CanvasClass(canvasHTML);
+    }
+    // const context = canvas.getContext("2d");
+    // if (!context) return;
 
-    useEffect(() => {
-        window.addEventListener('keydown', handleKeyDown);
-        window.addEventListener('wheel', handleWheel, { passive: false });
+    // context.lineWidth = 2;
+    // context.strokeStyle = "#000";
 
-        return () => {
-            window.removeEventListener('keydown', handleKeyDown);
-            window.removeEventListener('wheel', handleWheel);
-        }
-    }, [scale]);
+    let currentTool = NameTool.get(tool);
+    if (!currentTool) return;
 
-    return (
-        <canvas
-            width={width}
-            height={height}
-            className={styles.canvas}
-            style={{ transform: `scale(${scale})` }}
-            ref={canvasRef}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-        />
+    setSelectedTool(currentTool(canvas) as Tool);
+  }, [tool]);
+
+  const handleWheel = (event: WheelEvent) => {
+    event.preventDefault();
+
+    if (!event.ctrlKey) return;
+
+    const canvas = canvasRef.current;
+
+    event.deltaY > 0 ? handleZoomOut() : handleZoomIn();
+    console.log(
+      canvasRef?.current && Math.round(canvasRef.current.clientWidth * scale)
     );
-}
+
+    // canvas.width = Math.round(canvas.clientWidth * scale);
+    // canvas.height = Math.round(canvas.clientHeight * scale);
+  };
+
+  const handleZoomIn = () => {
+    const newScale = scale + 0.1;
+    newScale < 4 && setScale((prev) => prev + 0.1);
+  };
+
+  const handleZoomOut = () => {
+    const newScale = scale - 0.1;
+    newScale > 0.2 && setScale((prev) => prev - 0.1);
+  };
+  const handleKeyDown = (event: KeyboardEvent) => {
+    event.preventDefault();
+    switch (event.ctrlKey) {
+      case event.key === Keyboard.Z || event.code === Keyboard.KEY_Z:
+        event.shiftKey
+          ? canvas?.redoShape() // redoLastLine();
+          : canvas?.undoShape(); // undoLastLine();
+        break;
+      case event.key === Keyboard.Y || event.code === Keyboard.KEY_Y:
+        console.log("ctrl + y");
+        canvas?.redoShape();
+        break;
+      case event.code === Keyboard.EQUAL: // +
+        handleZoomIn();
+        break;
+      case event.code === Keyboard.MINUS: // -
+        handleZoomOut();
+        break;
+      default:
+        return;
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("wheel", handleWheel, { passive: false });
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("wheel", handleWheel);
+    };
+  }, [scale]);
+
+  return (
+    <canvas
+      width={width}
+      height={height}
+      className={styles.canvas}
+      style={{ transform: `scale(${scale})` }}
+      ref={canvasRef}
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onClick={handleOnClick}
+    />
+  );
+};

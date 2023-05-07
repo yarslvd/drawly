@@ -5,10 +5,12 @@
   "main": "index.js",
   "scripts": {
     "install": "npx husky install",
-    "lint-fix": "npm run lint-js-fix && npm run lint-json-fix",
+    "lint-fix": "npm run lint-tsx-fix && npm run lint-ts-fix && npm run lint-js-fix && npm run lint-json-fix",
     "lint-json-fix": "prettier --write \"./[a-zA-Z0-9.]+(?!-lock).json\"",
     "lint-js-fix": "prettier --write \"./**/*.js\" \"./**/**/*.js\"",
-    "lint-jsx-fix": "prettier --write \"./**/**/*.jsx\""
+    "lint-jsx-fix": "prettier --write \"./**/**/*.jsx\"",
+    "lint-ts-fix": "prettier --write \"./**/*.ts\" \"./**/**/*.ts\"",
+    "lint-tsx-fix": "prettier --write \"./**/*.tsx\" \"./**/**/*.tsx\""
   },
   "repository": {
     "type": "git",
