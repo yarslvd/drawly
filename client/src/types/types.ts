@@ -32,27 +32,28 @@ export const NameTool = new Map<string, (canvas: CanvasClass) => Tool>([
   [
     Tools.MOVE,
     (canvas: CanvasClass) => {
-      console.log("move:", canvas.history);
+      console.log("move");
       return new Move(canvas);
     },
   ],
   [
     Tools.BRUSH,
     (canvas: CanvasClass) => {
-      console.log("brush:", canvas.history);
+      console.log("brush");
       return new Brush(canvas);
     },
   ],
   [
     Tools.RECTANGLE,
     (canvas: CanvasClass) => {
-      console.log("rectangle:", canvas.history);
+      console.log("rectangle");
       return new Rectangle(canvas);
     },
   ],
   [
     Tools.LINE,
     (canvas: CanvasClass) => {
+      console.log("line");
       return new Line(canvas);
     },
   ],

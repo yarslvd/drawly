@@ -16,6 +16,7 @@ export class Rectangle extends Shape {
       return;
     }
 
+    ctx.lineWidth = this.borderWidth;
     ctx.strokeRect(this.start.x, this.start.y, this.width, this.height);
   }
 

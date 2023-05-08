@@ -1,4 +1,4 @@
-import {FC, memo, useEffect, useState} from "react";
+import { FC, memo, useEffect, useState } from "react";
 import styles from "./ToolBar.module.scss";
 import { ToolBarItem } from "@/components/ToolBarItem/ToolBarItem";
 import { Tools } from "@/data/Constants";
@@ -22,9 +22,9 @@ const tools = [
         cursors: "crosshair",
       },
       {
-      name: Tools.LINE,
-      icon: "/assets/icons/tools/line.png",
-      cursors: "crosshair",
+        name: Tools.LINE,
+        icon: "/assets/icons/tools/line.png",
+        cursors: "crosshair",
       },
     ],
     multipleOptions: true,
@@ -61,7 +61,9 @@ export const ToolBar: FC<any> = memo(({ tool, setTool }) => {
   }, [shape]);
 
   const handleClick = (index: number) => {
-    tools[index].tools ? setTool(tools[index].tools[shape].name) : setTool(tools[index].name);
+    tools[index].tools
+      ? setTool(tools[index].tools[shape].name)
+      : setTool(tools[index].name);
     // document.body.style.cursor =
     //   tools[index].cursors.charAt(0) == "/"
     //     ? `url(${tools[index].cursors}), auto`
@@ -73,7 +75,11 @@ export const ToolBar: FC<any> = memo(({ tool, setTool }) => {
       {tools.map((el, index) => (
         <ToolBarItem
           key={tools[index].tools ? el.tools[shape].name : el.name}
-          current={tools[index].tools ? el.tools[shape].name === tool : el.name === tool}
+          current={
+            tools[index].tools
+              ? el.tools[shape].name === tool
+              : el.name === tool
+          }
           handleClick={() => handleClick(index)}
           setShape={setShape}
           shape={shape}
