@@ -42,4 +42,8 @@ export class Brush extends Tool {
   protected onUp(point: Coordinates): void {
     this.points = [];
   }
+
+  protected onClick(point: Coordinates): void {
+    // not implemented
+  }
 }

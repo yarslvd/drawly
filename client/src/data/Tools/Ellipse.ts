@@ -1,15 +1,15 @@
 import { Tool } from "@/data/ToolsClass";
-import { Rectangle as RectangleShape } from "../Shapes/Rectangle";
+import { Ellipse as EllipseShape } from "../Shapes/Ellipse";
 import { Coordinates } from "@/types/types";
 
-export class Rectangle extends Tool {
+export class Ellipse extends Tool {
   protected start: Coordinates | null = null;
 
   borderWidth: number = 5;
 
   protected onDown(point: Coordinates): void {
     this.start = point;
-    const rectangle = new RectangleShape(this.canvas, this.start, 0, 0, 0);
+    const rectangle = new EllipseShape(this.canvas, this.start, 0, 0, 0);
     this.canvas.pushHistory(rectangle);
   }
 
@@ -25,7 +25,7 @@ export class Rectangle extends Tool {
 
     this.canvas.undoShape();
 
-    const rectangle = new RectangleShape(
+    const rectangle = new EllipseShape(
       this.canvas,
       this.start,
       width,
@@ -49,7 +49,7 @@ export class Rectangle extends Tool {
 
     this.canvas.undoShape();
 
-    const rectangle = new RectangleShape(
+    const rectangle = new EllipseShape(
       this.canvas,
       this.start,
       width,

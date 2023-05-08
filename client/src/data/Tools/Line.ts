@@ -44,4 +44,8 @@ export class Line extends Tool {
     this.start = null;
     this.end = null;
   }
+
+  protected onClick(point: Coordinates): void {
+    // not implemented
+  }
 }

@@ -22,7 +22,17 @@ const tools = [
         cursors: "crosshair",
       },
       {
+        name: Tools.ELLIPSE,
+        icon: "/assets/icons/tools/figure.png",
+        cursors: "crosshair",
+      },
+      {
         name: Tools.LINE,
+        icon: "/assets/icons/tools/line.png",
+        cursors: "crosshair",
+      },
+      {
+        name: Tools.CURVE_LINE,
         icon: "/assets/icons/tools/line.png",
         cursors: "crosshair",
       },

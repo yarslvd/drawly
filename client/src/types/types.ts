@@ -2,6 +2,8 @@ import { Brush, Line, Move, Rectangle } from "@/data/Tools";
 import { Tools } from "@/data/Constants";
 import { CanvasClass } from "@/data/Canvas";
 import { Tool } from "@/data/ToolsClass";
+import { CurveLine } from "@/data/Tools/CurveLine";
+import { Ellipse } from "@/data/Tools/Ellipse";
 
 export interface CanvasProps {
   tool: number;
@@ -51,10 +53,24 @@ export const NameTool = new Map<string, (canvas: CanvasClass) => Tool>([
     },
   ],
   [
+    Tools.ELLIPSE,
+    (canvas: CanvasClass) => {
+      console.log("ellipse");
+      return new Ellipse(canvas);
+    },
+  ],
+  [
     Tools.LINE,
     (canvas: CanvasClass) => {
       console.log("line");
       return new Line(canvas);
+    },
+  ],
+  [
+    Tools.CURVE_LINE,
+    (canvas: CanvasClass) => {
+      console.log("curve line", canvas.history);
+      return new CurveLine(canvas);
     },
   ],
 ]);

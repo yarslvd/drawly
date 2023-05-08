@@ -11,5 +11,7 @@ export namespace Tools {
   export const MOVE = "move";
   export const BRUSH = "brush";
   export const RECTANGLE = "rectangle";
+  export const ELLIPSE = "ellipse";
   export const LINE = "line";
+  export const CURVE_LINE = "curve_line";
 }

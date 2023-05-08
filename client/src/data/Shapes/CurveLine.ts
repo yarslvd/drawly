@@ -13,6 +13,8 @@ export class CurveLine extends Shape {
 
     const start = this.points[0];
     ctx.beginPath();
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = "#000";
     ctx.moveTo(start.x, start.y);
 
     for (let i = 1; i < this.points.length - 1; i++) {

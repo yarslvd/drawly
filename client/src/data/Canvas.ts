@@ -1,8 +1,8 @@
 import { Shape } from "./Shapes/Shape";
 
 export class CanvasClass {
-  private context: CanvasRenderingContext2D | null = null;
-  private canvasHTML: HTMLCanvasElement | null = null;
+  protected context: CanvasRenderingContext2D | null = null;
+  public canvasHTML: HTMLCanvasElement | null = null;
 
   history: Shape[];
   removedHistory: Shape[];

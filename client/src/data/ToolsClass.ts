@@ -31,7 +31,12 @@ export abstract class Tool {
     this.lastPoint = null;
   }
 
+  public onMouseClick(point: Coordinates): void {
+    this.onClick(point);
+  }
+
   protected abstract onMove(start: Coordinates, end: Coordinates): void;
   protected abstract onUp(point: Coordinates): void;
   protected abstract onDown(point: Coordinates): void;
+  protected abstract onClick(point: Coordinates): void;
 }

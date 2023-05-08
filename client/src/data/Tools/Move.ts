@@ -7,4 +7,6 @@ export class Move extends Tool {
   protected onDown(point: Coordinates): void {}
 
   protected onUp(point: Coordinates): void {}
+
+  protected onClick(point: Coordinates): void {}
 }

@@ -48,20 +48,29 @@ export const Canvas: FC<CanvasProps> = ({ tool, width, height }) => {
   };
 
   const handleOnClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
-    if (canvas) {
+    if (selectedTool) {
       const point = getCanvasPoints(
         { clientX: event.clientX, clientY: event.clientY },
         canvasRef,
         scale
       );
-
-      for (let i = canvas.history.length - 1; i >= 0; i--) {
-        if (point && canvas.history[i].isPointInside(point)) {
-          console.log("Selected shape", i);
-          return;
-        }
-      }
+      point && selectedTool.onMouseClick(point);
     }
+
+    // if (canvas) {
+    //   const point = getCanvasPoints(
+    //     { clientX: event.clientX, clientY: event.clientY },
+    //     canvasRef,
+    //     scale
+    //   );
+
+    //   for (let i = canvas.history.length - 1; i >= 0; i--) {
+    //     if (point && canvas.history[i].isPointInside(point)) {
+    //       console.log("Selected shape", i);
+    //       return;
+    //     }
+    //   }
+    // }
   };
 
   useEffect(() => {
