@@ -1,4 +1,4 @@
-import { FC, memo } from "react";
+import {FC, memo, useEffect, useState} from "react";
 import styles from "./ToolBar.module.scss";
 import { ToolBarItem } from "@/components/ToolBarItem/ToolBarItem";
 import { Tools } from "@/data/Constants";
@@ -15,12 +15,22 @@ const tools = [
     cursors: "/assets/icons/cursors/pentool.png",
   },
   {
-    name: Tools.RECTANGLE,
-    icon: "/assets/icons/tools/figure.png",
-    cursors: "crosshair",
+    tools: [
+      {
+        name: Tools.RECTANGLE,
+        icon: "/assets/icons/tools/figure.png",
+        cursors: "crosshair",
+      },
+      {
+      name: Tools.LINE,
+      icon: "/assets/icons/tools/line.png",
+      cursors: "crosshair",
+      },
+    ],
+    multipleOptions: true,
   },
   {
-    name: Tools.LINE,
+    name: "Text",
     icon: "/assets/icons/tools/text.png",
     cursors: "text",
   },
@@ -41,24 +51,32 @@ const tools = [
   },
 ];
 
+//TODO: Add types ;)))
 export const ToolBar: FC<any> = memo(({ tool, setTool }) => {
+  const [shape, setShape] = useState(0);
+
+  useEffect(() => {
+    // TODO: automatically set this shape on mount, think how to fix it
+    setTool(tools[2].tools[shape].name);
+  }, [shape]);
+
   const handleClick = (index: number) => {
-    console.log(tools[index].name);
-    setTool(tools[index].name);
-    //console.log((tools[index].cursors).charAt(0));
-    document.body.style.cursor =
-      tools[index].cursors.charAt(0) == "/"
-        ? `url(${tools[index].cursors}), auto`
-        : `${tools[index].cursors}`;
+    tools[index].tools ? setTool(tools[index].tools[shape].name) : setTool(tools[index].name);
+    // document.body.style.cursor =
+    //   tools[index].cursors.charAt(0) == "/"
+    //     ? `url(${tools[index].cursors}), auto`
+    //     : `${tools[index].cursors}`;
   };
 
   return (
     <div className={styles.toolbarContainer}>
       {tools.map((el, index) => (
         <ToolBarItem
-          key={el.name}
-          current={el.name === tool}
+          key={tools[index].tools ? el.tools[shape].name : el.name}
+          current={tools[index].tools ? el.tools[shape].name === tool : el.name === tool}
           handleClick={() => handleClick(index)}
+          setShape={setShape}
+          shape={shape}
           {...el}
         />
       ))}

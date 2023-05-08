@@ -6,7 +6,8 @@ import { Tools } from "@/data/Constants";
 
 export default function Home() {
   //TODO: think about default tool to set
-  const [tool, setTool] = useState<string>(Tools.BRUSH);
+  const [tool, setTool] = useState<string>(Tools.MOVE);
+  console.log(tool);
 
   return (
     <>

@@ -1,9 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Arimo:wght@400;500;600;700&display=swap');
+
 * {
     margin: 0;
 }
 
 body {
     background-color: #E8E8E8;
+    font-size: 14px;
+    font-family: "Arimo", sans-serif;
+    font-weight: 400;
 }
 
 /*html {*/

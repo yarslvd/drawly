@@ -1,31 +1,59 @@
-.button_active {
-  box-sizing: border-box;
-  border-radius: 8px;
-  border: 1px solid #f0f0f0;
-  -moz-user-select: none;
-  -khtml-user-select: none;
-  -webkit-user-select: none;
+.container {
+  label .toolContainer{
+    box-sizing: border-box;
+    border-radius: 8px;
+    border: 1px solid #fff;
+    background-color: transparent;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
 
-  img {
-    padding: 10px;
+    .tool {
+      padding: 12px;
+    }
+
+    &:has(.choose) > .tool {
+      padding-right: 0;
+    }
+
+    .choose {
+      border: none;
+      margin: 0;
+      padding: 8px;
+      cursor: pointer;
+      background-color: transparent;
+    }
   }
-}
 
-.button_inactive {
-  box-sizing: border-box;
-  border-radius: 8px;
-  border: 1px solid #fff;
-  background-color: transparent;
-  -moz-user-select: none;
-  -khtml-user-select: none;
-  -webkit-user-select: none;
-  cursor: pointer;
-
-  img {
-    padding: 10px;
+  .toolContainer:hover {
+    border: 1px solid #eeeeee;
   }
-}
 
-.button_inactive:hover {
-  border: 1px solid #eeeeee;
+  input[type=radio] {
+    display: none;
+
+    &:checked + label .toolContainer {
+      background-color: #f0f0f0;
+      box-sizing: border-box;
+      border-radius: 8px;
+      border: 1px solid #fff;
+      -moz-user-select: none;
+      -khtml-user-select: none;
+      -webkit-user-select: none;
+      display: flex;
+      align-items: center;
+      cursor: default;
+
+      .tool {
+        padding: 12px;
+      }
+
+      &:has(.choose) > .tool {
+        padding-right: 0;
+      }
+    }
+  }
 }
