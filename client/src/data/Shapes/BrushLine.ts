@@ -27,16 +27,21 @@ export class BrushLine extends Shape {
     ctx.beginPath();
     ctx.moveTo(points[0].x, points[0].y);
 
+    this.handleBorderPoints(points[0]);
+
     for (let i = 1; i < this.points.length - 2; i++) {
       const xc = (points[i].x + points[i + 1].x) / 2;
       const yc = (points[i].y + points[i + 1].y) / 2;
       ctx.quadraticCurveTo(points[i].x, points[i].y, xc, yc);
+      this.handleBorderPoints(points[i]);
     }
 
     ctx.lineTo(
       points[this.points.length - 1].x,
       points[this.points.length - 1].y
     );
+    this.handleBorderPoints(points[this.points.length - 1]);
+
     ctx.stroke();
   }
 

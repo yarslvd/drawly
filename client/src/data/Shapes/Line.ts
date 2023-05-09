@@ -6,14 +6,19 @@ export class Line extends Shape {
   start: Point;
   end: Point;
 
+  lineWidth: number = 5;
+
   onDraw(): void {
     const ctx = this.canvas.getContext2D();
     if (ctx == null) {
       return;
     }
 
+    this.handleBorderPoints(this.start);
+    this.handleBorderPoints(this.end);
+
     ctx.beginPath();
-    ctx.lineWidth = 5;
+    ctx.lineWidth = this.lineWidth;
     ctx.strokeStyle = "#000";
     ctx.moveTo(this.start.x, this.start.y);
     ctx.lineTo(this.end.x, this.end.y);
@@ -21,7 +26,36 @@ export class Line extends Shape {
   }
 
   isPointInside(point: Point): boolean {
-    return false;
+    const ctx = this.canvas.getContext2D();
+    if (ctx == null) {
+      return false;
+    }
+
+    const distance = this.distanceToPoint(point, this.start, this.end);
+    return distance <= this.lineWidth;
+  }
+
+  distanceToPoint(point: Point, start: Point, end: Point): number {
+    const { x: px, y: py } = point;
+    const { x: x1, y: y1 } = start;
+    const { x: x2, y: y2 } = end;
+
+    const dx = x2 - x1;
+    const dy = y2 - y1;
+
+    const lengthSquared = dx * dx + dy * dy;
+    if (lengthSquared === 0) {
+      return Math.sqrt((px - x1) * (px - x1) + (py - y1) * (py - y1));
+    }
+
+    const t = ((px - x1) * dx + (py - y1) * dy) / lengthSquared;
+    const projectionX = x1 + t * dx;
+    const projectionY = y1 + t * dy;
+
+    return Math.sqrt(
+      (px - projectionX) * (px - projectionX) +
+        (py - projectionY) * (py - projectionY)
+    );
   }
 
   constructor(canvas: CanvasClass, start: Point, end: Point) {
