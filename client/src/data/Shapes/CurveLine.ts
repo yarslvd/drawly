@@ -5,6 +5,9 @@ import { Shape } from "./Shape";
 export class CurveLine extends Shape {
   points: Point[];
 
+  lineWidth: number;
+  lineColor: string;
+
   lineSize: number = 5;
 
   onDraw(): void {
@@ -16,8 +19,8 @@ export class CurveLine extends Shape {
     const start = this.points[0];
     console.log(this.canvas);
     ctx.beginPath();
-    ctx.lineWidth = this.canvas.width;
-    ctx.strokeStyle = this.canvas.color;
+    ctx.lineWidth = this.lineWidth;
+    ctx.strokeStyle = this.lineColor;
     ctx.moveTo(start.x, start.y);
 
     this.handleBorderPoints(start);
@@ -81,9 +84,16 @@ export class CurveLine extends Shape {
     );
   }
 
-  constructor(canvas: CanvasClass, points: Point[]) {
+  constructor(
+    canvas: CanvasClass,
+    points: Point[],
+    lineWidth: number,
+    lineColor: string
+  ) {
     super(canvas);
 
     this.points = points;
+    this.lineWidth = lineWidth;
+    this.lineColor = lineColor;
   }
 }

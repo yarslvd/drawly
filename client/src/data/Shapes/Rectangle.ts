@@ -9,6 +9,7 @@ export class Rectangle extends Shape {
   height: number;
 
   borderWidth: number;
+  color: string;
 
   onDraw(): void {
     const ctx = this.canvas.getContext2D();
@@ -17,7 +18,7 @@ export class Rectangle extends Shape {
     }
 
     ctx.lineWidth = this.borderWidth;
-    ctx.strokeStyle = this.canvas.color;
+    ctx.strokeStyle = this.color;
     ctx.strokeRect(this.start.x, this.start.y, this.width, this.height);
   }
 
@@ -51,7 +52,8 @@ export class Rectangle extends Shape {
     start: Point,
     width: number,
     height: number,
-    borderWidth: number
+    borderWidth: number,
+    color: string
   ) {
     super(canvas);
 
@@ -60,5 +62,6 @@ export class Rectangle extends Shape {
     this.height = height;
 
     this.borderWidth = borderWidth;
+    this.color = color;
   }
 }

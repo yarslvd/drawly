@@ -9,7 +9,14 @@ export class Ellipse extends Tool {
 
   protected onDown(point: Coordinates): void {
     this.start = point;
-    const rectangle = new EllipseShape(this.canvas, this.start, 0, 0, 0);
+    const rectangle = new EllipseShape(
+      this.canvas,
+      this.start,
+      0,
+      0,
+      this.canvas.width,
+      this.canvas.color
+    );
     this.canvas.pushHistory(rectangle);
   }
 
@@ -30,7 +37,8 @@ export class Ellipse extends Tool {
       this.start,
       width,
       height,
-      this.borderWidth
+      this.canvas.width,
+      this.canvas.color
     );
     rectangle.onDraw();
 
@@ -54,7 +62,8 @@ export class Ellipse extends Tool {
       this.start,
       width,
       height,
-      this.borderWidth
+      this.canvas.width,
+      this.canvas.color
     );
     rectangle.onDraw();
 

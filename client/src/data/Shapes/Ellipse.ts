@@ -9,6 +9,7 @@ export class Ellipse extends Shape {
   height: number;
 
   borderWidth: number;
+  color: string;
 
   onDraw(): void {
     const ctx = this.canvas.getContext2D();
@@ -17,6 +18,7 @@ export class Ellipse extends Shape {
     }
 
     ctx.lineWidth = this.borderWidth;
+    ctx.strokeStyle = this.color;
     ctx.beginPath();
     ctx.ellipse(
       this.start.x,
@@ -40,7 +42,8 @@ export class Ellipse extends Shape {
     start: Point,
     width: number,
     height: number,
-    borderWidth: number
+    borderWidth: number,
+    color: string
   ) {
     super(canvas);
 
@@ -49,5 +52,6 @@ export class Ellipse extends Shape {
     this.height = height;
 
     this.borderWidth = borderWidth;
+    this.color = color;
   }
 }

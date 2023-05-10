@@ -41,7 +41,7 @@ export const NameTool = new Map<string, (canvas: CanvasClass) => Tool>([
   [
     Tools.BRUSH,
     (canvas: CanvasClass) => {
-      console.log("brush");
+      console.log("brush", canvas.history);
       return new Brush(canvas);
     },
   ],

@@ -9,7 +9,14 @@ export class Rectangle extends Tool {
 
   protected onDown(point: Coordinates): void {
     this.start = point;
-    const rectangle = new RectangleShape(this.canvas, this.start, 0, 0, this.borderWidth);
+    const rectangle = new RectangleShape(
+      this.canvas,
+      this.start,
+      0,
+      0,
+      this.canvas.width,
+      this.canvas.color
+    );
     this.canvas.pushHistory(rectangle);
   }
 
@@ -30,7 +37,8 @@ export class Rectangle extends Tool {
       this.start,
       width,
       height,
-      this.borderWidth
+      this.canvas.width,
+      this.canvas.color
     );
     rectangle.onDraw();
 
@@ -54,7 +62,8 @@ export class Rectangle extends Tool {
       this.start,
       width,
       height,
-      this.borderWidth
+      this.canvas.width,
+      this.canvas.color
     );
     rectangle.onDraw();
 

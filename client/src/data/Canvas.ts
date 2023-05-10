@@ -7,6 +7,7 @@ export class CanvasClass {
 
   history: Shape[];
   removedHistory: Shape[];
+  selectedShapeIndex: number = -1;
   selectedShape: Shape | null;
   selectedShapeDiv: SelectedShape;
   color: string;
@@ -27,6 +28,8 @@ export class CanvasClass {
     this.history.forEach((shape: Shape) => {
       shape.onDraw();
     });
+
+    this.selectedShapeIndex != -1 && this.selectedShapeDiv?.onDraw();
   }
 
   pushHistory(shape: Shape): void {
@@ -89,8 +92,8 @@ export class CanvasClass {
     this.history = [];
     this.removedHistory = [];
     this.selectedShape = null;
-    this.color = '000';
-    this.width = '5';
+    this.color = "000";
+    this.width = 5;
 
     this.selectedShapeDiv = new SelectedShape(this, 5);
   }

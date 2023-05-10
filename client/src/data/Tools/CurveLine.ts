@@ -1,9 +1,6 @@
 import { Coordinates } from "@/types/types";
 import { Tool } from "@/data/ToolsClass";
-import { getCanvasPoints } from "@/utils/getCanvasPoints";
 import { CurveLine as CurveLineShape } from "../Shapes/CurveLine";
-import { BrushLine } from "../Shapes/BrushLine";
-import { CanvasClass } from "../Canvas";
 
 export class CurveLine extends Tool {
   points: Coordinates[] = [];
@@ -15,9 +12,16 @@ export class CurveLine extends Tool {
     const context = this.canvas.getContext2D();
     if (!context) return;
 
-    this.canvas.undoShape();
+    if (this.points.length > 0) {
+      this.canvas.undoShape();
+    }
 
-    const line = new CurveLineShape(this.canvas, [...this.points, end]);
+    const line = new CurveLineShape(
+      this.canvas,
+      [...this.points, end],
+      this.canvas.width,
+      this.canvas.color
+    );
 
     line.onDraw();
 
@@ -54,7 +58,12 @@ export class CurveLine extends Tool {
       this.canvas.undoShape();
     }
 
-    const curveLine = new CurveLineShape(this.canvas, this.points);
+    const curveLine = new CurveLineShape(
+      this.canvas,
+      this.points,
+      this.canvas.width,
+      this.canvas.color
+    );
     // console.log(this.points);
     curveLine.onDraw();
 

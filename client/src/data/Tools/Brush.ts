@@ -1,7 +1,5 @@
 import { Coordinates } from "@/types/types";
 import { Tool } from "@/data/ToolsClass";
-import { getCanvasPoints } from "@/utils/getCanvasPoints";
-import { Line as LineShape } from "../Shapes/Line";
 import { BrushLine } from "../Shapes/BrushLine";
 
 export class Brush extends Tool {
@@ -17,7 +15,12 @@ export class Brush extends Tool {
 
     this.canvas.undoShape();
 
-    const line = new BrushLine(this.canvas, this.points, 5, this.canvas.color);
+    const line = new BrushLine(
+      this.canvas,
+      this.points,
+      this.canvas.width,
+      this.canvas.color
+    );
 
     line.onDraw();
 

@@ -1,8 +1,6 @@
 import { Coordinates } from "@/types/types";
 import { Tool } from "@/data/ToolsClass";
-import { getCanvasPoints } from "@/utils/getCanvasPoints";
 import { Line as LineShape } from "../Shapes/Line";
-import { BrushLine } from "../Shapes/BrushLine";
 
 export class Line extends Tool {
   start: Coordinates | null = null;
@@ -18,7 +16,13 @@ export class Line extends Tool {
 
     this.canvas.undoShape();
 
-    const line = new LineShape(this.canvas, this.start, this.end);
+    const line = new LineShape(
+      this.canvas,
+      this.start,
+      this.end,
+      this.canvas.width,
+      this.canvas.color
+    );
 
     line.onDraw();
 
@@ -35,7 +39,13 @@ export class Line extends Tool {
 
     this.start = point;
 
-    const line = new LineShape(this.canvas, this.start, this.start);
+    const line = new LineShape(
+      this.canvas,
+      this.start,
+      this.start,
+      this.canvas.width,
+      this.canvas.color
+    );
 
     this.canvas.pushHistory(line);
   }
