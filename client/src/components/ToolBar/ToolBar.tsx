@@ -10,7 +10,7 @@ const tools = [
     cursors: "/assets/icons/cursors/move.png",
   },
   {
-    name: Tools.BRUSH,
+    name: Tools.CURVE_LINE,
     icon: "/assets/icons/tools/pentool.png",
     cursors: "/assets/icons/cursors/pentool.png",
   },
@@ -23,7 +23,7 @@ const tools = [
       },
       {
         name: Tools.ELLIPSE,
-        icon: "/assets/icons/tools/figure.png",
+        icon: "/assets/icons/tools/ellipse.png",
         cursors: "crosshair",
       },
       {
@@ -31,13 +31,13 @@ const tools = [
         icon: "/assets/icons/tools/line.png",
         cursors: "crosshair",
       },
-      {
-        name: Tools.CURVE_LINE,
-        icon: "/assets/icons/tools/line.png",
-        cursors: "crosshair",
-      },
     ],
     multipleOptions: true,
+  },
+  {
+    name: Tools.BRUSH,
+    icon: "/assets/icons/tools/brush.png",
+    cursors: "/assets/icons/cursors/brush.png",
   },
   {
     name: "Text",

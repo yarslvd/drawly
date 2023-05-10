@@ -10,11 +10,12 @@ export interface CanvasProps {
   tool: string;
   width: string;
   height: string;
+  color: string;
 }
 
 let canvas: CanvasClass | null;
 
-export const Canvas: FC<CanvasProps> = ({ tool, width, height }) => {
+export const Canvas: FC<CanvasProps> = ({ tool, width, height , color}) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [selectedTool, setSelectedTool] = useState<Tool | null>(null);
   const [scale, setScale] = useState<number>(1);
@@ -89,7 +90,7 @@ export const Canvas: FC<CanvasProps> = ({ tool, width, height }) => {
 
     if (!canvas) {
       console.log("new canvas 2");
-      canvas = new CanvasClass(canvasHTML);
+      canvas = new CanvasClass(canvasHTML, color);
     }
     // const context = canvas.getContext("2d");
     // if (!context) return;
@@ -128,6 +129,7 @@ export const Canvas: FC<CanvasProps> = ({ tool, width, height }) => {
     const newScale = scale - 0.1;
     newScale > 0.2 && setScale((prev) => prev - 0.1);
   };
+
   const handleKeyDown = (event: KeyboardEvent) => {
     event.preventDefault();
     switch (event.ctrlKey) {
