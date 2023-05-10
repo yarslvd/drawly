@@ -1,3 +1,4 @@
+import { SelectedShape } from "./Shapes/SelectedShape";
 import { Shape } from "./Shapes/Shape";
 
 export class CanvasClass {
@@ -7,8 +8,24 @@ export class CanvasClass {
   history: Shape[];
   removedHistory: Shape[];
 
+  selectedShape: Shape | null;
+  selectedShapeDiv: SelectedShape;
+
   getContext2D(): CanvasRenderingContext2D | null {
     return this.context;
+  }
+
+  redrawCanvas(): void {
+    const ctx = this.context;
+    if (this.canvasHTML == null || ctx == null) {
+      return;
+    }
+
+    ctx.clearRect(0, 0, this.canvasHTML?.width, this.canvasHTML?.height);
+
+    this.history.forEach((shape: Shape) => {
+      shape.onDraw();
+    });
   }
 
   pushHistory(shape: Shape): void {
@@ -62,5 +79,8 @@ export class CanvasClass {
 
     this.history = [];
     this.removedHistory = [];
+    this.selectedShape = null;
+
+    this.selectedShapeDiv = new SelectedShape(this, 5);
   }
 }

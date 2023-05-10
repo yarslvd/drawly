@@ -2,7 +2,7 @@ import styles from "./Canvas.module.scss";
 import React, { FC, useEffect, useRef, useState } from "react";
 import { Tool } from "@/data/ToolsClass";
 import { NameTool } from "@/types/types";
-import { Keyboard } from "@/data/Constants";
+import { Keyboard, Tools } from "@/data/Constants";
 import { getCanvasPoints } from "@/utils/getCanvasPoints";
 import { CanvasClass } from "@/data/Canvas";
 
@@ -49,29 +49,37 @@ export const Canvas: FC<CanvasProps> = ({ tool, width, height , color}) => {
   };
 
   const handleOnClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
-    if (selectedTool) {
+    if (selectedTool && tool == Tools.CURVE_LINE) {
       const point = getCanvasPoints(
         { clientX: event.clientX, clientY: event.clientY },
         canvasRef,
         scale
       );
       point && selectedTool.onMouseClick(point);
+      return;
     }
 
-    // if (canvas) {
-    //   const point = getCanvasPoints(
-    //     { clientX: event.clientX, clientY: event.clientY },
-    //     canvasRef,
-    //     scale
-    //   );
+    if (canvas && tool == Tools.MOVE) {
+      const point = getCanvasPoints(
+        { clientX: event.clientX, clientY: event.clientY },
+        canvasRef,
+        scale
+      );
 
-    //   for (let i = canvas.history.length - 1; i >= 0; i--) {
-    //     if (point && canvas.history[i].isPointInside(point)) {
-    //       console.log("Selected shape", i);
-    //       return;
-    //     }
-    //   }
-    // }
+      console.log("handle select");
+      for (let i = canvas.history.length - 1; i >= 0; i--) {
+        if (point && canvas.history[i].isPointInside(point)) {
+          canvas.redrawCanvas();
+          console.log("Selected shape", i);
+          canvas.selectedShape = canvas.history[i];
+          canvas.selectedShapeDiv.leftTop = canvas.selectedShape.leftTop;
+          canvas.selectedShapeDiv.rightBottom =
+            canvas.selectedShape.rightBottom;
+          canvas.selectedShapeDiv.onDraw();
+          return;
+        }
+      }
+    }
   };
 
   useEffect(() => {
