@@ -17,6 +17,7 @@ export class Rectangle extends Shape {
     }
 
     ctx.lineWidth = this.borderWidth;
+    ctx.strokeStyle = this.canvas.color;
     ctx.strokeRect(this.start.x, this.start.y, this.width, this.height);
   }
 

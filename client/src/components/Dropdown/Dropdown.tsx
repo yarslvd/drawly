@@ -36,6 +36,7 @@ const ListItem: FC = ({ name, icon, setShape, shape, index }) => {
           id={name}
           value={name}
           checked={shape === index}
+          onChange={handleShapeChange}
         />
         <label htmlFor={name}>
           <div className={styles.select}>

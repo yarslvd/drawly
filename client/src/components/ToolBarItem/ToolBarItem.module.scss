@@ -1,5 +1,5 @@
 .container {
-  label .toolContainer{
+  .label .toolContainer{
     box-sizing: border-box;
     border-radius: 8px;
     border: 1px solid #fff;
@@ -32,10 +32,10 @@
     border: 1px solid #eeeeee;
   }
 
-  input[type=radio] {
+  .input[type=radio] {
     display: none;
 
-    &:checked + label .toolContainer {
+    &:checked + .label .toolContainer {
       background-color: #f0f0f0;
       box-sizing: border-box;
       border-radius: 8px;

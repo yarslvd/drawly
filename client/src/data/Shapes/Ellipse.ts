@@ -27,8 +27,8 @@ export class Ellipse extends Shape {
       0,
       2 * Math.PI
     );
-    ctx.fillStyle = "black";
-    ctx.fill();
+    ctx.fillStyle = this.canvas.color;
+    ctx.stroke();
   }
 
   isPointInside(point: Point): boolean {

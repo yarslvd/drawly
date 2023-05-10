@@ -5,7 +5,7 @@ import { Coordinates } from "@/types/types";
 export class Ellipse extends Tool {
   protected start: Coordinates | null = null;
 
-  borderWidth: number = 5;
+  borderWidth: number = this.canvas.width; //???????
 
   protected onDown(point: Coordinates): void {
     this.start = point;

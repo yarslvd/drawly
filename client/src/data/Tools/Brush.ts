@@ -17,7 +17,7 @@ export class Brush extends Tool {
 
     this.canvas.undoShape();
 
-    const line = new BrushLine(this.canvas, this.points, 5, "black");
+    const line = new BrushLine(this.canvas, this.points, 5, this.canvas.color);
 
     line.onDraw();
 

@@ -6,7 +6,7 @@ export class Line extends Shape {
   start: Point;
   end: Point;
 
-  lineWidth: number = 5;
+  lineWidth: number = this.canvas.width;
 
   onDraw(): void {
     const ctx = this.canvas.getContext2D();
@@ -18,8 +18,9 @@ export class Line extends Shape {
     this.handleBorderPoints(this.end);
 
     ctx.beginPath();
+    console.log(this);
     ctx.lineWidth = this.lineWidth;
-    ctx.strokeStyle = "#000";
+    ctx.strokeStyle = this.canvas.color;
     ctx.moveTo(this.start.x, this.start.y);
     ctx.lineTo(this.end.x, this.end.y);
     ctx.stroke();

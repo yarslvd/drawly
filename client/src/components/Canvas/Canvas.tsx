@@ -8,14 +8,15 @@ import { CanvasClass } from "@/data/Canvas";
 
 export interface CanvasProps {
   tool: string;
-  width: string;
-  height: string;
+  widthCanvas: string;
+  heightCanvas: string;
   color: string;
+  width: number;
 }
 
 let canvas: CanvasClass | null;
 
-export const Canvas: FC<CanvasProps> = ({ tool, width, height , color}) => {
+export const Canvas: FC<CanvasProps> = ({ tool, widthCanvas, heightCanvas , color, width}) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [selectedTool, setSelectedTool] = useState<Tool | null>(null);
   const [scale, setScale] = useState<number>(1);
@@ -73,8 +74,7 @@ export const Canvas: FC<CanvasProps> = ({ tool, width, height , color}) => {
           console.log("Selected shape", i);
           canvas.selectedShape = canvas.history[i];
           canvas.selectedShapeDiv.leftTop = canvas.selectedShape.leftTop;
-          canvas.selectedShapeDiv.rightBottom =
-            canvas.selectedShape.rightBottom;
+          canvas.selectedShapeDiv.rightBottom = canvas.selectedShape.rightBottom;
           canvas.selectedShapeDiv.onDraw();
           return;
         }
@@ -89,6 +89,8 @@ export const Canvas: FC<CanvasProps> = ({ tool, width, height , color}) => {
     if (!canvas) {
       console.log("new canvas 1");
       canvas = new CanvasClass(canvasHTML);
+      canvas.setFigureColor(color);
+      canvas.setWidth(width);
     }
   }, []);
 
@@ -97,8 +99,34 @@ export const Canvas: FC<CanvasProps> = ({ tool, width, height , color}) => {
     if (!canvasHTML) return;
 
     if (!canvas) {
+      console.log("new canvas COLOR");
+      canvas = new CanvasClass(canvasHTML);
+      canvas.setFigureColor(color);
+    }
+
+    canvas.setFigureColor(color);
+  }, [color]);
+
+  useEffect(() => {
+    const canvasHTML = canvasRef.current;
+    if (!canvasHTML) return;
+
+    if (!canvas) {
+      console.log("new canvas COLOR");
+      canvas = new CanvasClass(canvasHTML);
+      canvas.setWidth(width);
+    }
+
+    canvas.setWidth(width);
+  }, [width])
+
+  useEffect(() => {
+    const canvasHTML = canvasRef.current;
+    if (!canvasHTML) return;
+
+    if (!canvas) {
       console.log("new canvas 2");
-      canvas = new CanvasClass(canvasHTML, color);
+      canvas = new CanvasClass(canvasHTML);
     }
     // const context = canvas.getContext("2d");
     // if (!context) return;
@@ -120,9 +148,9 @@ export const Canvas: FC<CanvasProps> = ({ tool, width, height , color}) => {
     const canvas = canvasRef.current;
 
     event.deltaY > 0 ? handleZoomOut() : handleZoomIn();
-    console.log(
-      canvasRef?.current && Math.round(canvasRef.current.clientWidth * scale)
-    );
+    // console.log(
+    //   canvasRef?.current && Math.round(canvasRef.current.clientWidth * scale)
+    // );
 
     // canvas.width = Math.round(canvas.clientWidth * scale);
     // canvas.height = Math.round(canvas.clientHeight * scale);
@@ -173,8 +201,8 @@ export const Canvas: FC<CanvasProps> = ({ tool, width, height , color}) => {
 
   return (
     <canvas
-      width={width}
-      height={height}
+      width={widthCanvas}
+      height={heightCanvas}
       className={styles.canvas}
       style={{ transform: `scale(${scale})` }}
       ref={canvasRef}

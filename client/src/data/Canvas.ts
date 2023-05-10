@@ -7,9 +7,10 @@ export class CanvasClass {
 
   history: Shape[];
   removedHistory: Shape[];
-
   selectedShape: Shape | null;
   selectedShapeDiv: SelectedShape;
+  color: string;
+  width: number;
 
   getContext2D(): CanvasRenderingContext2D | null {
     return this.context;
@@ -67,6 +68,14 @@ export class CanvasClass {
     }
   }
 
+  setFigureColor(color): void {
+    this.color = color;
+  }
+
+  setWidth(width): void {
+    this.width = width;
+  }
+
   constructor(canvasHTML: HTMLCanvasElement) {
     this.canvasHTML = canvasHTML;
     this.context = canvasHTML.getContext("2d");
@@ -80,6 +89,8 @@ export class CanvasClass {
     this.history = [];
     this.removedHistory = [];
     this.selectedShape = null;
+    this.color = '000';
+    this.width = '5';
 
     this.selectedShapeDiv = new SelectedShape(this, 5);
   }

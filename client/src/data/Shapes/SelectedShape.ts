@@ -21,6 +21,7 @@ export class SelectedShape extends Shape {
   }
 
   onDraw(): void {
+    console.log(this);
     const ctx = this.canvas.getContext2D();
     if (ctx == null) {
       return;
@@ -32,6 +33,7 @@ export class SelectedShape extends Shape {
     ctx.lineWidth = this.borderWidth;
 
     ctx.strokeRect(this.leftTop.x, this.leftTop.y, this.width, this.height);
+    console.log(this);
 
     this.drawCircle(ctx, { x: this.leftTop.x, y: this.leftTop.y }, 10, "black");
     this.drawCircle(

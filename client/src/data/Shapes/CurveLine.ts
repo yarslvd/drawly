@@ -14,9 +14,10 @@ export class CurveLine extends Shape {
     }
 
     const start = this.points[0];
+    console.log(this.canvas);
     ctx.beginPath();
-    ctx.lineWidth = 5;
-    ctx.strokeStyle = "#000";
+    ctx.lineWidth = this.canvas.width;
+    ctx.strokeStyle = this.canvas.color;
     ctx.moveTo(start.x, start.y);
 
     this.handleBorderPoints(start);

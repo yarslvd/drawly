@@ -18,6 +18,7 @@ interface ToolProps {
   setShape: () => void;
   handleClick: MouseEventHandler<HTMLInputElement | HTMLDivElement> | undefined;
   multipleOptions?: boolean;
+  tools: any;
 }
 type UnionProps = ToolProps[] | ToolProps;
 
@@ -45,7 +46,6 @@ export const ToolBarItem: FC<UnionProps> = (props: ToolProps) => {
     };
 
     document.body.addEventListener("click", closeDropdown);
-
     return () => {
       document.body.removeEventListener("click", closeDropdown);
     };
@@ -66,7 +66,6 @@ export const ToolBarItem: FC<UnionProps> = (props: ToolProps) => {
           id={props.tools ? props.tools[props.shape].name : props.name}
           value={props.tools ? props.tools[props.shape].name : props.name}
           checked={props.current}
-          onClick={props.handleClick}
           onChange={props.handleClick}
           className={styles.input}
         />

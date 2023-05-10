@@ -5,11 +5,11 @@ import { Coordinates } from "@/types/types";
 export class Rectangle extends Tool {
   protected start: Coordinates | null = null;
 
-  borderWidth: number = 5;
+  borderWidth: number = this.canvas.width;
 
   protected onDown(point: Coordinates): void {
     this.start = point;
-    const rectangle = new RectangleShape(this.canvas, this.start, 0, 0, 0);
+    const rectangle = new RectangleShape(this.canvas, this.start, 0, 0, this.borderWidth);
     this.canvas.pushHistory(rectangle);
   }
 
