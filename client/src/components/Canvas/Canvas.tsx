@@ -78,17 +78,20 @@ export const Canvas: FC<CanvasProps> = ({
       console.log("handle select");
       for (let i = canvas.history.length - 1; i >= 0; i--) {
         if (point && canvas.history[i].isPointInside(point)) {
-          canvas.redrawCanvas();
           console.log("Selected shape", i);
           canvas.selectedShapeIndex = i;
           canvas.selectedShape = canvas.history[i];
           canvas.selectedShapeDiv.leftTop = canvas.selectedShape.leftTop;
           canvas.selectedShapeDiv.rightBottom =
             canvas.selectedShape.rightBottom;
-          canvas.selectedShapeDiv.onDraw();
+          // canvas.redrawCanvas();
           return;
         }
       }
+
+      canvas.selectedShapeIndex = -1;
+      canvas.selectedShape = null;
+      // canvas.redrawCanvas();
     }
   };
 
