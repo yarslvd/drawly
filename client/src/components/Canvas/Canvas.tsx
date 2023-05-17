@@ -84,14 +84,14 @@ export const Canvas: FC<CanvasProps> = ({
           canvas.selectedShapeDiv.leftTop = canvas.selectedShape.leftTop;
           canvas.selectedShapeDiv.rightBottom =
             canvas.selectedShape.rightBottom;
-          // canvas.redrawCanvas();
+          canvas.redrawCanvas();
           return;
         }
       }
 
       canvas.selectedShapeIndex = -1;
       canvas.selectedShape = null;
-      // canvas.redrawCanvas();
+      canvas.redrawCanvas();
     }
   };
 

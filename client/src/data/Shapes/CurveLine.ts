@@ -25,15 +25,12 @@ export class CurveLine extends Shape {
     ctx.strokeStyle = this.lineColor;
     ctx.moveTo(start.x, start.y);
 
-    this.handleBorderPoints(start);
-
     for (let i = 1; i < this.points.length - 1; i++) {
       const point = this.points[i];
       const next = this.points[i + 1];
       const controlX = (point.x + next.x) / 2;
       const controlY = (point.y + next.y) / 2;
       ctx.quadraticCurveTo(point.x, point.y, controlX, controlY);
-      this.handleBorderPoints(this.points[i]);
 
       this.curvePoints.push(point);
       this.curvePoints.push({ x: controlX, y: controlY });
@@ -42,11 +39,12 @@ export class CurveLine extends Shape {
 
     const end = this.points[this.points.length - 1];
     ctx.lineTo(end.x, end.y);
-    this.handleBorderPoints(end);
+
     ctx.stroke();
   }
 
   isPointInside(point: Point): boolean {
+    this.calcBoundingBox();
     if (this.points.length < 2) {
       return false;
     }
@@ -96,7 +94,7 @@ export class CurveLine extends Shape {
       // ctx.fillStyle = "black";
       // ctx?.beginPath();
 
-      // ctx?.arc(p0p1.x, p0p1.y, 15 / 2, 0, 2 * Math.PI);
+      // ctx?.arc(p0p1.x, p0p1.y, 20 / 2, 0, 2 * Math.PI);
       // ctx?.fill();
 
       // ctx.closePath();
@@ -215,6 +213,57 @@ export class CurveLine extends Shape {
     );
 
     return distance;
+  }
+
+  calcBoundingBox() {
+    if (this.points.length < 2) {
+      return;
+    }
+    this.handleBorderPoints(this.points[0]);
+
+    const len = this.points.length;
+
+    let p0 = this.points[0];
+    let p1 = this.points[1];
+    let p2 = this.points[2];
+
+    let control = {
+      x: (p2.x + p1.x) / 2,
+      y: (p2.y + p1.y) / 2,
+    };
+
+    this.handleBoundingBoxSegment(p0, p1, control);
+
+    for (let i = 1; i < this.points.length - 2; i++) {
+      const p0 = this.points[i];
+      const p1 = this.points[i + 1];
+      const p2 = this.points[i + 2];
+
+      const p0p1 = { x: (p0.x + p1.x) / 2, y: (p0.y + p1.y) / 2 };
+      const p1p2 = { x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2 };
+
+      this.handleBoundingBoxSegment(p0p1, p1, p1p2);
+    }
+
+    this.handleBorderPoints(this.points[len - 1]);
+  }
+
+  private handleBoundingBoxSegment(p0p1: Point, p1: Point, p1p2: Point) {
+    const precision = 100;
+    const step = 1 / precision;
+
+    for (let t = 0; t <= 1; t += step) {
+      const x =
+        Math.pow(1 - t, 2) * p0p1.x +
+        2 * (1 - t) * t * p1.x +
+        Math.pow(t, 2) * p1p2.x;
+      const y =
+        Math.pow(1 - t, 2) * p0p1.y +
+        2 * (1 - t) * t * p1.y +
+        Math.pow(t, 2) * p1p2.y;
+
+      this.handleBorderPoints({ x, y });
+    }
   }
 
   constructor(
