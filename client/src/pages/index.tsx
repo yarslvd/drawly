@@ -4,6 +4,7 @@ import { ToolBar } from "@/components/ToolBar/ToolBar";
 import { Canvas } from "@/components/Canvas/Canvas";
 import { Settings } from "@/components/Settings/Settings";
 import { Tools } from "@/data/Constants";
+import {Menu} from "@/components/Menu/Menu";
 
 export default function Home() {
   //TODO: think about default tool to set
@@ -21,18 +22,19 @@ export default function Home() {
       </Head>
       <main>
         <ToolBar tool={tool} setTool={setTool} />
-        <Settings
-          color={color}
-          setColor={(newColor) => {
-            setColor(newColor);
-            document.dispatchEvent(new CustomEvent("figure-settings"));
-          }}
-          width={width}
-          setWidth={(newWidth) => {
-            setWidth(newWidth);
-            document.dispatchEvent(new CustomEvent("figure-settings"));
-          }}
-        />
+        <Menu />
+        {/*<Settings*/}
+        {/*  color={color}*/}
+        {/*  setColor={(newColor) => {*/}
+        {/*    setColor(newColor);*/}
+        {/*    document.dispatchEvent(new CustomEvent("figure-settings"));*/}
+        {/*  }}*/}
+        {/*  width={width}*/}
+        {/*  setWidth={(newWidth) => {*/}
+        {/*    setWidth(newWidth);*/}
+        {/*    document.dispatchEvent(new CustomEvent("figure-settings"));*/}
+        {/*  }}*/}
+        {/*/>*/}
         <div
           style={{ width: "100wh", height: "100vh" }}
           className="canvas_container"

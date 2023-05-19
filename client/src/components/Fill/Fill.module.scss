@@ -1,0 +1,142 @@
+.container {
+  h4 {
+    font-size: 16px;
+    color: #b0b0b0;
+    font-weight: 500;
+    margin-bottom: 5px;
+  }
+
+  .options {
+    display: flex;
+    align-items: center;
+
+    .checkboxContainer {
+      display: block;
+      position: relative;
+      cursor: pointer;
+      font-size: 22px;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      align-self: center;
+      margin-top: 6px;
+      z-index: 99;
+
+      .checkbox {
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+      }
+
+      .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 12px;
+        width: 12px;
+        border: 3px solid #363636;
+
+        &:after {
+          content: "";
+          display: none;
+        }
+
+        &:after {
+          position: absolute;
+          display: none;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          border: 4px solid #363636;
+        }
+      }
+
+      /* On mouse-over, add a grey background color */
+      &:hover input ~ .checkmark {
+        background-color: #ccc;
+      }
+
+      /* When the checkbox is checked, add a blue background */
+      input:checked ~ .checkmark:after {
+        display: block;
+      }
+    }
+
+    .colorPickerContainer {
+      display: flex;
+      gap: 5px;
+      max-width: 100%;
+      align-items: center;
+      position: relative;
+
+      .popover {
+        position: absolute;
+        z-index: 100;
+        top: 45px;
+        left: -35px;
+
+        .cover {
+          position: fixed;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+        }
+      }
+
+      .colorPicker {
+        padding: 7px;
+        border: 1px solid #BEBEBE;
+        border-radius: 6px;
+        margin-left: 30px;
+        max-width: 100%;
+        display: flex;
+        gap: 10px;
+
+        .color {
+          width: 25px;
+          height: 25px;
+          border-radius: 3px;
+          background-color: #000;
+          cursor: pointer;
+        }
+
+        input {
+          width: 80px;
+          font-size: 14px;
+          text-align: center;
+          border: none;
+          background-color: transparent;
+
+          &:focus {
+            outline: none;
+          }
+        }
+      }
+
+      .opacity {
+        border: 1px solid #BEBEBE;
+        padding: 7px;
+        border-radius: 6px;
+        width: 70px;
+        height: 25px;
+        display: flex;
+        align-items: center;
+
+        input {
+          max-width: 95%;
+          font-size: 14px;
+          text-align: center;
+          border: none;
+          background-color: transparent;
+
+          &:focus {
+            outline: none;
+          }
+        }
+      }
+    }
+  }
+}

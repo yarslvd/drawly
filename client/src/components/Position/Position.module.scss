@@ -1,0 +1,48 @@
+.container {
+  h4 {
+    font-size: 16px;
+    color: #b0b0b0;
+    font-weight: 500;
+    margin-bottom: 5px;
+  }
+
+  .options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+
+    .inputContainer {
+      padding: 5px 8px;
+      border-radius: 4px;
+      border: 1px solid #BEBEBE;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      width: 100px;
+      -moz-appearance: textfield;
+
+      input {
+        width: 60px;
+        background-color: transparent;
+        border: none;
+        display: flex;
+        justify-content: center;
+        text-align: center;
+
+        &:focus {
+          outline: none;
+        }
+        &::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+      }
+
+      span {
+        font-weight: 600;
+        font-size: 18px;
+        color: #B1B1B1;
+      }
+    }
+  }
+}

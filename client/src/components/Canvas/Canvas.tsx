@@ -7,6 +7,7 @@ import { getCanvasPoints } from "@/utils/getCanvasPoints";
 import { CanvasClass } from "@/data/Canvas";
 
 import Shapes from "@/data/Shapes";
+import {useDispatch, useSelector} from "react-redux";
 
 export interface CanvasProps {
   tool: string;
@@ -28,6 +29,9 @@ export const Canvas: FC<CanvasProps> = ({
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [selectedTool, setSelectedTool] = useState<Tool | null>(null);
   const [scale, setScale] = useState<number>(1);
+
+  const fillColor = useSelector((state) => state.data.fillColor);
+  const strokeColor = useSelector((state) => state.data.strokeColor);
 
   const handleMouseDown = (event: React.MouseEvent<HTMLCanvasElement>) => {
     if (selectedTool) {
@@ -114,11 +118,11 @@ export const Canvas: FC<CanvasProps> = ({
     if (!canvas) {
       console.log("new canvas COLOR");
       canvas = new CanvasClass(canvasHTML);
-      canvas.setFigureColor(color);
+      canvas.setFigureColor(fillColor);
     }
 
-    canvas.setFigureColor(color);
-  }, [color]);
+    canvas.setFigureColor(fillColor);
+  }, [fillColor]);
 
   useEffect(() => {
     const canvasHTML = canvasRef.current;
