@@ -5,16 +5,21 @@ import { Coordinates } from "@/types/types";
 export class Rectangle extends Tool {
   protected start: Coordinates | null = null;
 
+  flag: boolean = false;
+
   protected onDown(point: Coordinates): void {
     this.start = point;
+    this.flag = true;
     const rectangle = new RectangleShape(
       this.canvas,
       this.start,
       0,
       0,
-      this.canvas.options,
+      Object.assign(this.canvas.options),
     );
     this.canvas.pushHistory(rectangle);
+
+    console.log({opt: this.canvas.options});
   }
 
   protected onMove(start: Coordinates, end: Coordinates): void {
@@ -23,6 +28,10 @@ export class Rectangle extends Tool {
 
     const context = this.canvas.getContext2D();
     if (!context) return;
+
+    if(this.flag) {
+      console.log(this.canvas.history);
+    }
 
     const width = end.x - this.start.x;
     const height = end.y - this.start.y;
@@ -33,9 +42,11 @@ export class Rectangle extends Tool {
       this.start,
       width,
       height,
-      this.canvas.options,
+      Object.assign(this.canvas.options),
     );
     rectangle.onDraw();
+
+    this.flag = false;
 
     this.canvas.pushHistory(rectangle);
   }
@@ -57,7 +68,7 @@ export class Rectangle extends Tool {
       this.start,
       width,
       height,
-      this.canvas.options,
+      Object.assign(this.canvas.options),
     );
     rectangle.onDraw();
 

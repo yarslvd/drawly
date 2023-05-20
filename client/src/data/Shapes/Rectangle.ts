@@ -42,6 +42,8 @@ export class Rectangle extends Shape {
       return;
     }
 
+    ctx.beginPath();
+
     if(this.displayStroke) {
       //border opacity
       ctx.globalAlpha = this.strokeOpacity;
@@ -53,9 +55,11 @@ export class Rectangle extends Shape {
     if (this.displayFill) {
       //fill opacity
       ctx.globalAlpha = this.fillOpacity;
-      ctx.fillRect(this.start.x, this.start.y, this.width, this.height);
       ctx.fillStyle = this.fillColor;
+      ctx.fillRect(this.start.x, this.start.y, this.width, this.height);
     }
+
+    ctx.closePath();
   }
 
   isPointInside(point: Point): boolean {
