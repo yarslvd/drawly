@@ -1,0 +1,29 @@
+.container {
+  width: 300px;
+  height: 700px;
+  background-color: #fcfcfc;
+  position: absolute;
+  right: 20px;
+  border-radius: 17px;
+  box-shadow: 0px 4px 4px 1px rgba(0, 0, 0, 0.03);
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 20px;
+  z-index: 100;
+  color: #363636;
+
+  .options {
+    background-color: #F4F4F4;
+    padding: 25px 15px;
+    height: 350px;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    h3 {
+      font-size: 21px;
+      font-weight: 700;
+    }
+  }
+}

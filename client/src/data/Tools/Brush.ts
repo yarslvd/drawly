@@ -18,8 +18,7 @@ export class Brush extends Tool {
     const line = new BrushLine(
       this.canvas,
       this.points,
-      this.canvas.width,
-      this.canvas.color
+      this.canvas.options,
     );
 
     line.onDraw();

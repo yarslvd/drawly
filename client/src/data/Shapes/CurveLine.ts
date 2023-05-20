@@ -1,15 +1,15 @@
 import { Point } from "framer-motion";
 import { CanvasClass } from "../Canvas";
 import { Shape } from "./Shape";
+import {FigurePropsTypes} from "@/components/Canvas/Canvas";
 
 export class CurveLine extends Shape {
   points: Point[];
   curvePoints: Point[] = [];
 
-  lineWidth: number;
-  lineColor: string;
-
-  lineSize: number = 5;
+  borderWidth: number;
+  strokeColor: string;
+  strokeOpacity: number;
 
   onDraw(): void {
     const ctx = this.canvas.getContext2D();
@@ -21,8 +21,9 @@ export class CurveLine extends Shape {
 
     const start = this.points[0];
     ctx.beginPath();
-    ctx.lineWidth = this.lineWidth;
-    ctx.strokeStyle = this.lineColor;
+    ctx.globalAlpha = this.strokeOpacity;
+    ctx.lineWidth = this.borderWidth;
+    ctx.strokeStyle = this.strokeColor;
     ctx.moveTo(start.x, start.y);
 
     for (let i = 1; i < this.points.length - 1; i++) {
@@ -269,13 +270,13 @@ export class CurveLine extends Shape {
   constructor(
     canvas: CanvasClass,
     points: Point[],
-    lineWidth: number,
-    lineColor: string
+    options: FigurePropsTypes,
   ) {
     super(canvas);
 
     this.points = points;
-    this.lineWidth = lineWidth;
-    this.lineColor = lineColor;
+    this.borderWidth = options.borderWidth;
+    this.strokeColor = options.strokeColor;
+    this.strokeOpacity = options.strokeOpacity;
   }
 }

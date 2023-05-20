@@ -1,13 +1,16 @@
 import { Point } from "framer-motion";
 import { CanvasClass } from "../Canvas";
 import { Shape } from "./Shape";
+import {FigurePropsTypes} from "@/components/Canvas/Canvas";
 
 export class Line extends Shape {
   start: Point;
   end: Point;
 
-  lineWidth: number;
-  color: string;
+  borderWidth: number;
+  strokeColor: string;
+  strokeOpacity: number;
+  displayStroke: boolean;
 
   onDraw(): void {
     const ctx = this.canvas.getContext2D();
@@ -18,13 +21,15 @@ export class Line extends Shape {
     this.handleBorderPoints(this.start);
     this.handleBorderPoints(this.end);
 
-    ctx.beginPath();
-    console.log(this);
-    ctx.lineWidth = this.lineWidth;
-    ctx.strokeStyle = this.color;
-    ctx.moveTo(this.start.x, this.start.y);
-    ctx.lineTo(this.end.x, this.end.y);
-    ctx.stroke();
+    if(this.displayStroke) {
+      ctx.beginPath();
+      ctx.globalAlpha = this.strokeOpacity;
+      ctx.lineWidth = this.borderWidth;
+      ctx.strokeStyle = this.strokeColor;
+      ctx.moveTo(this.start.x, this.start.y);
+      ctx.lineTo(this.end.x, this.end.y);
+      ctx.stroke();
+    }
   }
 
   isPointInside(point: Point): boolean {
@@ -34,7 +39,7 @@ export class Line extends Shape {
     }
 
     const distance = this.distanceToPoint(point, this.start, this.end);
-    return distance <= this.lineWidth;
+    return distance <= this.borderWidth;
   }
 
   distanceToPoint(point: Point, start: Point, end: Point): number {
@@ -64,14 +69,16 @@ export class Line extends Shape {
     canvas: CanvasClass,
     start: Point,
     end: Point,
-    lineWidth: number,
-    color: string
+    options: FigurePropsTypes,
   ) {
     super(canvas);
 
     this.start = start;
     this.end = end;
-    this.lineWidth = lineWidth;
-    this.color = color;
+
+    this.borderWidth = options.borderWidth;
+    this.strokeColor = options.strokeColor;
+    this.strokeOpacity = options.strokeOpacity;
+    this.displayStroke = options.displayStroke;
   }
 }

@@ -2,11 +2,14 @@ import { Point } from "framer-motion";
 import { CanvasClass } from "../Canvas";
 import { BrushPoint } from "./BrushPoint";
 import { Shape } from "./Shape";
+import {FigurePropsTypes} from "@/components/Canvas/Canvas";
 
 export class BrushLine extends Shape {
   points: Point[];
-  brushSize: number;
-  brushColor: string;
+
+  borderWidth: number;
+  strokeColor: string;
+  strokeOpacity: number;
 
   onDraw(): void {
     const ctx = this.canvas.getContext2D();
@@ -16,12 +19,13 @@ export class BrushLine extends Shape {
     const points = this.points;
 
     // (new BrushPoint(this.canvas, point, this.brushSize, this.brushColor)).onDraw();
-    ctx.strokeStyle = this.brushColor;
-    ctx.lineWidth = this.brushSize;
+    ctx.globalAlpha = this.strokeOpacity;
+    ctx.strokeStyle = this.strokeColor;
+    ctx.lineWidth = this.borderWidth;
 
     const point = this.points[0];
     ctx.beginPath();
-    ctx.arc(point.x, point.y, this.brushSize / 2, 0, 2 * Math.PI);
+    ctx.arc(point.x, point.y, this.borderWidth / 2, 0, 2 * Math.PI);
     ctx.fill();
 
     ctx.beginPath();
@@ -46,7 +50,7 @@ export class BrushLine extends Shape {
   }
 
   isPointInside(point: Point): boolean {
-    const tolerance = this.brushSize / 2;
+    const tolerance = this.borderWidth / 2;
 
     for (let i = 1; i < this.points.length; i++) {
       const startPoint = this.points[i - 1];
@@ -97,13 +101,13 @@ export class BrushLine extends Shape {
   constructor(
     canvas: CanvasClass,
     points: Point[],
-    size: number,
-    color: string
+    options: FigurePropsTypes,
   ) {
     super(canvas);
 
     this.points = points;
-    this.brushSize = size;
-    this.brushColor = color;
+    this.borderWidth = options.borderWidth;
+    this.strokeColor = options.strokeColor;
+    this.strokeOpacity = options.strokeOpacity;
   }
 }

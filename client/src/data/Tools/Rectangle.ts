@@ -5,8 +5,6 @@ import { Coordinates } from "@/types/types";
 export class Rectangle extends Tool {
   protected start: Coordinates | null = null;
 
-  borderWidth: number = this.canvas.width;
-
   protected onDown(point: Coordinates): void {
     this.start = point;
     const rectangle = new RectangleShape(
@@ -14,8 +12,7 @@ export class Rectangle extends Tool {
       this.start,
       0,
       0,
-      this.canvas.width,
-      this.canvas.color
+      this.canvas.options,
     );
     this.canvas.pushHistory(rectangle);
   }
@@ -31,14 +28,12 @@ export class Rectangle extends Tool {
     const height = end.y - this.start.y;
 
     this.canvas.undoShape();
-
     const rectangle = new RectangleShape(
       this.canvas,
       this.start,
       width,
       height,
-      this.canvas.width,
-      this.canvas.color
+      this.canvas.options,
     );
     rectangle.onDraw();
 
@@ -62,8 +57,7 @@ export class Rectangle extends Tool {
       this.start,
       width,
       height,
-      this.canvas.width,
-      this.canvas.color
+      this.canvas.options,
     );
     rectangle.onDraw();
 
