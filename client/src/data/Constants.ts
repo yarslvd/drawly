@@ -14,4 +14,5 @@ export namespace Tools {
   export const ELLIPSE = "ellipse";
   export const LINE = "line";
   export const CURVE_LINE = "curve_line";
+  export const TEXT = "text";
 }

@@ -8,6 +8,8 @@ import { CanvasClass } from "@/data/Canvas";
 
 import Shapes from "@/data/Shapes";
 import {useSelector} from "react-redux";
+import { Text } from "@/data/Tools";
+import { Text as TextShape} from "@/data/Shapes/Text";
 
 export interface CanvasProps {
   tool: string;
@@ -188,11 +190,33 @@ export const Canvas: FC<CanvasProps> = ({
 
     // context.lineWidth = 2;
     // context.strokeStyle = "#000";
+    // canvas.history = canvas.history.filter((shape) => {
+    //   console.log({shape});
+    //   if(shape instanceof TextShape) {
+    //     const text = shape as TextShape
+    //     return text.text.trim().length > 0;
+    //   }
+
+    //   return true;
+    // });
+
+    if (canvas.history[canvas.history.length - 1] instanceof TextShape) {
+      const text = canvas.history[canvas.history.length - 1] as TextShape
+      if (text.text.trim().length == 0) {
+        canvas.undoShape();
+      }
+      else {
+        text.isFocused = false;
+      }
+    }
+
+    // canvas.redrawCanvas();
 
     let currentTool = NameTool.get(tool);
     if (!currentTool) return;
-
-    setSelectedTool(currentTool(canvas) as Tool);
+    const selectedTool_ = currentTool(canvas);
+    setSelectedTool(selectedTool_);
+    canvas.selectedTool = selectedTool_;
   }, [tool]);
 
   const handleWheel = (event: WheelEvent) => {
@@ -223,6 +247,7 @@ export const Canvas: FC<CanvasProps> = ({
 
   const handleKeyDown = (event: KeyboardEvent) => {
     event.preventDefault();
+    console.log("key down", selectedTool);
     switch (event.ctrlKey) {
       case event.key === Keyboard.Z || event.code === Keyboard.KEY_Z:
         event.shiftKey
@@ -243,6 +268,17 @@ export const Canvas: FC<CanvasProps> = ({
         return;
     }
   };
+
+  const handleTextKeyDown = (event: KeyboardEvent) => {
+    event.preventDefault();
+    // console.log("here 1", canvas?.selectedTool)
+    const tool = canvas?.selectedTool;
+    if(tool instanceof Text) {
+      console.log("here 2")
+      let textTool = (tool as Text);
+      textTool.handleKeyDown(event);
+    }
+  }
 
   const getShapeConstructorArgs = (className: string, instance: any): any[] => {
     switch (className) {
@@ -286,7 +322,7 @@ export const Canvas: FC<CanvasProps> = ({
   };
 
   useEffect(() => {
-    window.addEventListener("keydown", (e) => e.ctrlKey ? handleKeyDown : null);
+    window.addEventListener("keydown", (e) => e.ctrlKey ? handleKeyDown(e) : handleTextKeyDown(e));
     window.addEventListener("wheel", handleWheel, { passive: false });
 
     document.addEventListener("figure-settings", () => {
@@ -310,6 +346,7 @@ export const Canvas: FC<CanvasProps> = ({
 
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keydown", handleTextKeyDown);
       window.removeEventListener("wheel", handleWheel);
     };
   }, [scale]);

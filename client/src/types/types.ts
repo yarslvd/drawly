@@ -1,4 +1,4 @@
-import { Brush, Line, Move, Rectangle } from "@/data/Tools";
+import { Brush, Line, Move, Rectangle, Text } from "@/data/Tools";
 import { Tools } from "@/data/Constants";
 import { CanvasClass } from "@/data/Canvas";
 import { Tool } from "@/data/ToolsClass";
@@ -71,6 +71,13 @@ export const NameTool = new Map<string, (canvas: CanvasClass) => Tool>([
     (canvas: CanvasClass) => {
       console.log("curve line", canvas.history);
       return new CurveLine(canvas);
+    },
+  ],
+  [
+    Tools.TEXT,
+    (canvas: CanvasClass) => {
+      console.log("text", canvas.history);
+      return new Text(canvas);
     },
   ],
 ]);
