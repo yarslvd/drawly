@@ -7,14 +7,24 @@ import { getCanvasPoints } from "@/utils/getCanvasPoints";
 import { CanvasClass } from "@/data/Canvas";
 
 import Shapes from "@/data/Shapes";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 
 export interface CanvasProps {
   tool: string;
   widthCanvas: string;
   heightCanvas: string;
-  color: string;
+  fillColor: string;
   width: number;
+}
+
+export interface FigurePropsTypes {
+  fillColor: string;
+  strokeColor: string;
+  borderWidth: number;
+  strokeOpacity: number;
+  fillOpacity: number;
+  displayStroke: boolean;
+  displayFill: boolean;
 }
 
 let canvas: CanvasClass | null;
@@ -23,7 +33,6 @@ export const Canvas: FC<CanvasProps> = ({
   tool,
   widthCanvas,
   heightCanvas,
-  color,
   width,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -32,6 +41,36 @@ export const Canvas: FC<CanvasProps> = ({
 
   const fillColor = useSelector((state) => state.data.fillColor);
   const strokeColor = useSelector((state) => state.data.strokeColor);
+  const borderWidth = useSelector((state) => state.data.borderWidth);
+  const strokeOpacity = useSelector((state) => state.data.strokeOpacity);
+  const fillOpacity = useSelector((state) => state.data.fillOpacity);
+  const displayFill = useSelector((state) => state.data.displayFill);
+  const displayStroke = useSelector((state) => state.data.displayStroke);
+
+  //OBJECT WITH OPTIONS PROPS
+  const figureProps: FigurePropsTypes = {
+    fillColor,
+    strokeColor,
+    borderWidth,
+    strokeOpacity,
+    fillOpacity,
+    displayStroke,
+    displayFill,
+  };
+
+  //HANDLING OPTIONS CHANGE
+  useEffect(() => {
+    const canvasHTML = canvasRef.current;
+    if (!canvasHTML) return;
+
+    if (!canvas) {
+      console.log("new canvas PROPS");
+      canvas = new CanvasClass(canvasHTML);
+      canvas.setCanvasProps(figureProps);
+    }
+
+    canvas.setCanvasProps(figureProps);
+  }, [figureProps]);
 
   const handleMouseDown = (event: React.MouseEvent<HTMLCanvasElement>) => {
     if (selectedTool) {
@@ -106,36 +145,35 @@ export const Canvas: FC<CanvasProps> = ({
     if (!canvas) {
       console.log("new canvas 1");
       canvas = new CanvasClass(canvasHTML);
-      canvas.setFigureColor(color);
-      canvas.setWidth(width);
+      canvas.setCanvasProps(figureProps);
     }
   }, []);
 
-  useEffect(() => {
-    const canvasHTML = canvasRef.current;
-    if (!canvasHTML) return;
-
-    if (!canvas) {
-      console.log("new canvas COLOR");
-      canvas = new CanvasClass(canvasHTML);
-      canvas.setFigureColor(fillColor);
-    }
-
-    canvas.setFigureColor(fillColor);
-  }, [fillColor]);
-
-  useEffect(() => {
-    const canvasHTML = canvasRef.current;
-    if (!canvasHTML) return;
-
-    if (!canvas) {
-      console.log("new canvas COLOR");
-      canvas = new CanvasClass(canvasHTML);
-      canvas.setWidth(width);
-    }
-
-    canvas.setWidth(width);
-  }, [width]);
+  // useEffect(() => {
+  //   const canvasHTML = canvasRef.current;
+  //   if (!canvasHTML) return;
+  //
+  //   if (!canvas) {
+  //     console.log("new canvas COLOR");
+  //     canvas = new CanvasClass(canvasHTML);
+  //     canvas.setFigureColor(fillColor);
+  //   }
+  //
+  //   canvas.setFigureColor(fillColor);
+  // }, [fillColor]);
+  //
+  // useEffect(() => {
+  //   const canvasHTML = canvasRef.current;
+  //   if (!canvasHTML) return;
+  //
+  //   if (!canvas) {
+  //     console.log("new canvas COLOR");
+  //     canvas = new CanvasClass(canvasHTML);
+  //     canvas.setWidth(width);
+  //   }
+  //
+  //   canvas.setWidth(width);
+  // }, [width]);
 
   useEffect(() => {
     const canvasHTML = canvasRef.current;
@@ -209,10 +247,10 @@ export const Canvas: FC<CanvasProps> = ({
   const getShapeConstructorArgs = (className: string, instance: any): any[] => {
     switch (className) {
       case "BrushLine": {
-        return [canvas, instance.points, canvas?.width, canvas?.color];
+        return [canvas, instance.points, canvas?.width, canvas?.fillColor];
       }
       case "CurveLine": {
-        return [canvas, instance.points, canvas?.width, canvas?.color];
+        return [canvas, instance.points, canvas?.width, canvas?.fillColor];
       }
       case "Line": {
         return [
@@ -220,7 +258,7 @@ export const Canvas: FC<CanvasProps> = ({
           instance.start,
           instance.end,
           canvas?.width,
-          canvas?.color,
+          canvas?.fillColor,
         ];
       }
       case "Rectangle": {
@@ -230,7 +268,7 @@ export const Canvas: FC<CanvasProps> = ({
           instance.width,
           instance.height,
           canvas?.width,
-          canvas?.color,
+          canvas?.fillColor,
         ];
       }
       case "Ellipse": {
@@ -240,7 +278,7 @@ export const Canvas: FC<CanvasProps> = ({
           instance.width,
           instance.height,
           canvas?.width,
-          canvas?.color,
+          canvas?.fillColor,
         ];
       }
     }
@@ -248,7 +286,7 @@ export const Canvas: FC<CanvasProps> = ({
   };
 
   useEffect(() => {
-    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keydown", (e) => e.ctrlKey ? handleKeyDown : null);
     window.addEventListener("wheel", handleWheel, { passive: false });
 
     document.addEventListener("figure-settings", () => {

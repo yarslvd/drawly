@@ -20,8 +20,7 @@ export class Line extends Tool {
       this.canvas,
       this.start,
       this.end,
-      this.canvas.width,
-      this.canvas.color
+      this.canvas.options,
     );
 
     line.onDraw();
@@ -43,8 +42,7 @@ export class Line extends Tool {
       this.canvas,
       this.start,
       this.start,
-      this.canvas.width,
-      this.canvas.color
+      this.canvas.options,
     );
 
     this.canvas.pushHistory(line);

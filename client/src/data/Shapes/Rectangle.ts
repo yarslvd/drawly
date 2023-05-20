@@ -2,6 +2,8 @@ import { Point } from "framer-motion";
 import { CanvasClass } from "../Canvas";
 import { Shape } from "./Shape";
 
+import {FigurePropsTypes} from "@/components/Canvas/Canvas";
+
 export class Rectangle extends Shape {
   start: Point;
 
@@ -9,11 +11,14 @@ export class Rectangle extends Shape {
   height: number;
 
   borderWidth: number;
-  color: string;
+  strokeColor: string;
+  fillColor: string;
+  strokeOpacity: number;
+  fillOpacity: number;
+  displayFill: boolean;
+  displayStroke: boolean;
 
-  isFilled: boolean;
-
-  radius: number = 50;
+  radius: number = 0;
 
   onDraw(): void {
     const ctx = this.canvas.getContext2D();
@@ -37,17 +42,24 @@ export class Rectangle extends Shape {
       return;
     }
 
-    ctx.lineWidth = this.borderWidth;
-    ctx.strokeStyle = this.color;
-    ctx.strokeRect(this.start.x, this.start.y, this.width, this.height);
+    if(this.displayStroke) {
+      //border opacity
+      ctx.globalAlpha = this.strokeOpacity;
+      ctx.lineWidth = this.borderWidth;
+      ctx.strokeStyle = this.strokeColor;
+      ctx.strokeRect(this.start.x, this.start.y, this.width, this.height);
+    }
 
-    if (this.isFilled) {
+    if (this.displayFill) {
+      //fill opacity
+      ctx.globalAlpha = this.fillOpacity;
       ctx.fillRect(this.start.x, this.start.y, this.width, this.height);
+      ctx.fillStyle = this.fillColor;
     }
   }
 
   isPointInside(point: Point): boolean {
-    if (!this.isFilled) {
+    if (!this.displayFill) {
       return this.isPointInsideBorder(point);
     }
 
@@ -100,8 +112,7 @@ export class Rectangle extends Shape {
     start: Point,
     width: number,
     height: number,
-    borderWidth: number,
-    color: string
+    options: FigurePropsTypes,
   ) {
     super(canvas);
 
@@ -109,12 +120,15 @@ export class Rectangle extends Shape {
     this.width = width;
     this.height = height;
 
-    this.borderWidth = borderWidth;
-    this.color = color;
+    this.borderWidth = options.borderWidth;
+    this.fillColor = options.fillColor;
+    this.strokeColor = options.strokeColor;
+    this.strokeOpacity = options.strokeOpacity;
+    this.fillOpacity = options.fillOpacity;
+    this.displayFill = options.displayFill;
+    this.displayStroke = options.displayStroke;
 
     this.leftTop = start;
     this.rightBottom = { x: start.x + width, y: start.y + height };
-
-    this.isFilled = true;
   }
 }

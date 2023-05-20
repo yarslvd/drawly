@@ -1,6 +1,7 @@
 import { Point } from "framer-motion";
 import { CanvasClass } from "../Canvas";
 import { Shape } from "./Shape";
+import {FigurePropsTypes} from "@/components/Canvas/Canvas";
 
 export class Ellipse extends Shape {
   start: Point;
@@ -9,7 +10,12 @@ export class Ellipse extends Shape {
   height: number;
 
   borderWidth: number;
-  color: string;
+  strokeColor: string;
+  fillColor: string;
+  strokeOpacity: number;
+  fillOpacity: number;
+  displayFill: boolean;
+  displayStroke: boolean;
 
   isFilled: boolean;
 
@@ -19,21 +25,29 @@ export class Ellipse extends Shape {
       return;
     }
 
-    ctx.lineWidth = 20;
-    ctx.strokeStyle = this.color;
     ctx.beginPath();
     ctx.ellipse(
-      this.start.x,
-      this.start.y,
-      Math.abs(this.width),
-      Math.abs(this.height),
-      0,
-      0,
-      2 * Math.PI
+        this.start.x,
+        this.start.y,
+        Math.abs(this.width),
+        Math.abs(this.height),
+        0,
+        0,
+        2 * Math.PI
     );
-    ctx.fillStyle = this.canvas.color;
-    ctx.stroke();
-    if (this.isFilled) {
+
+    if(this.displayStroke) {
+      //border opacity
+      ctx.globalAlpha = this.strokeOpacity;
+      ctx.lineWidth = this.borderWidth;
+      ctx.strokeStyle = this.strokeColor;
+      ctx.stroke();
+    }
+
+    if (this.displayFill) {
+      //border opacity
+      ctx.globalAlpha = this.fillOpacity;
+      ctx.fillStyle = this.fillColor;
       ctx.fill();
     }
     ctx.closePath();
@@ -79,7 +93,7 @@ export class Ellipse extends Shape {
       Math.pow(x - start.x, 2) / Math.pow(rx, 2) +
       Math.pow(y - start.y, 2) / Math.pow(ry, 2);
 
-    const scaledBorderWidth = Math.abs(borderWidth) * 2;
+    const scaledBorderWidth = Math.abs(this.borderWidth) * 2;
 
     let innerArea = Math.abs(
       (rx - scaledBorderWidth) * (ry - scaledBorderWidth) * Math.PI
@@ -106,8 +120,7 @@ export class Ellipse extends Shape {
     start: Point,
     width: number,
     height: number,
-    borderWidth: number,
-    color: string
+    options: FigurePropsTypes,
   ) {
     super(canvas);
 
@@ -115,10 +128,15 @@ export class Ellipse extends Shape {
     this.width = Math.abs(width);
     this.height = Math.abs(height);
 
-    this.borderWidth = borderWidth;
-    this.color = color;
+    this.borderWidth = options.borderWidth;
+    this.fillColor = options.fillColor;
+    this.strokeColor = options.strokeColor;
+    this.strokeOpacity = options.strokeOpacity;
+    this.fillOpacity = options.fillOpacity;
+    this.displayFill = options.displayFill;
+    this.displayStroke = options.displayStroke;
 
-    const borderOffset = borderWidth * 2;
+    const borderOffset = this.borderWidth * 2;
 
     this.leftTop = {
       x: start.x - this.width - borderOffset,
@@ -128,7 +146,5 @@ export class Ellipse extends Shape {
       x: start.x + this.width + borderOffset,
       y: start.y + this.height + borderOffset,
     };
-
-    this.isFilled = true;
   }
 }

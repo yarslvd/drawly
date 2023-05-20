@@ -20,7 +20,7 @@
       -ms-user-select: none;
       user-select: none;
       align-self: center;
-      margin-top: 6px;
+      margin-top: -45px;
       z-index: 99;
 
       .checkbox {
@@ -64,7 +64,40 @@
       }
     }
 
-    .colorPickerContainer {
+    .down {
+      display: flex;
+      align-items: center;
+      margin-left: 33px;
+      margin-top: 10px;
+      gap: 24px;
+
+      h5 {
+        font-size: 15px;
+        font-weight: 500;
+        color: #afafaf;
+      }
+
+      .inputContainer {
+        padding: 11px;
+        border: 1px solid #BEBEBE;
+        border-radius: 6px;
+        max-width: 100%;
+
+        .inputWidth {
+          width: 80px;
+          font-size: 14px;
+          text-align: center;
+          border: none;
+          background-color: transparent;
+
+          &:focus {
+            outline: none;
+          }
+        }
+      }
+    }
+
+    .up {
       display: flex;
       gap: 5px;
       max-width: 100%;

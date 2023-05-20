@@ -1,11 +1,14 @@
 import { Point } from "framer-motion";
 import { CanvasClass } from "../Canvas";
 import { Shape } from "./Shape";
+import {FigurePropsTypes} from "@/components/Canvas/Canvas";
 
 export class BrushPoint extends Shape {
   point: Point;
-  brushSize: number;
-  brushColor: string;
+
+  borderWidth: number;
+  strokeColor: string;
+  strokeOpacity: number;
 
   onDraw(): void {
     const ctx = this.canvas.getContext2D();
@@ -13,10 +16,11 @@ export class BrushPoint extends Shape {
       return;
     }
 
-    ctx.strokeStyle = this.brushColor;
+    ctx.strokeStyle = this.strokeColor;
+    ctx.globalAlpha = this.strokeOpacity;
     ctx.beginPath();
 
-    ctx.arc(this.point.x, this.point.y, this.brushSize / 2, 0, 2 * Math.PI);
+    ctx.arc(this.point.x, this.point.y, this.borderWidth / 2, 0, 2 * Math.PI);
     ctx.fill();
   }
 
@@ -24,11 +28,16 @@ export class BrushPoint extends Shape {
     return false;
   }
 
-  constructor(canvas: CanvasClass, point: Point, size: number, color: string) {
+  constructor(
+      canvas: CanvasClass,
+      point: Point,
+      options: FigurePropsTypes,
+  ) {
     super(canvas);
 
     this.point = point;
-    this.brushSize = size;
-    this.brushColor = color;
+    this.borderWidth = options.borderWidth;
+    this.strokeColor = options.strokeColor;
+    this.strokeOpacity = options.strokeOpacity;
   }
 }

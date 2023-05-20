@@ -1,5 +1,6 @@
 import { SelectedShape } from "./Shapes/SelectedShape";
 import { Shape } from "./Shapes/Shape";
+import {FigurePropsTypes} from "@/components/Canvas/Canvas";
 
 export class CanvasClass {
   protected context: CanvasRenderingContext2D | null = null;
@@ -10,8 +11,9 @@ export class CanvasClass {
   selectedShapeIndex: number = -1;
   selectedShape: Shape | null;
   selectedShapeDiv: SelectedShape;
-  color: string;
-  width: number;
+
+  //options
+  options: FigurePropsTypes;
 
   getContext2D(): CanvasRenderingContext2D | null {
     return this.context;
@@ -71,12 +73,8 @@ export class CanvasClass {
     }
   }
 
-  setFigureColor(color): void {
-    this.color = color;
-  }
-
-  setWidth(width): void {
-    this.width = width;
+  setCanvasProps(obj): void {
+    this.options = obj;
   }
 
   constructor(canvasHTML: HTMLCanvasElement) {
@@ -92,8 +90,6 @@ export class CanvasClass {
     this.history = [];
     this.removedHistory = [];
     this.selectedShape = null;
-    this.color = "000";
-    this.width = 5;
 
     this.selectedShapeDiv = new SelectedShape(this, 5);
   }
