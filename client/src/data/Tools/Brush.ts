@@ -1,5 +1,5 @@
 import { Coordinates } from "@/types/types";
-import { Tool } from "@/data/ToolsClass";
+import { Tool } from "../ToolsClass";
 import { BrushLine } from "../Shapes/BrushLine";
 
 export class Brush extends Tool {
