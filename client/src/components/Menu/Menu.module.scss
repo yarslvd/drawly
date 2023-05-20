@@ -26,4 +26,21 @@
       font-weight: 700;
     }
   }
+
+  .image {
+    margin-top: 25px;
+    background-color: #F4F4F4;
+    padding: 25px 15px;
+    height: 200px;
+    overflow: auto;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    h3 {
+      font-size: 21px;
+      font-weight: 700;
+    }
+  }
 }

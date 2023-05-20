@@ -1,7 +1,7 @@
 import { Point } from "framer-motion";
 import { CanvasClass } from "../Canvas";
 import { Shape } from "./Shape";
-import {FigurePropsTypes} from "@/components/Canvas/Canvas";
+import { FigurePropsTypes } from "@/components/Canvas/Canvas";
 
 export class CurveLine extends Shape {
   points: Point[];
@@ -267,11 +267,7 @@ export class CurveLine extends Shape {
     }
   }
 
-  constructor(
-    canvas: CanvasClass,
-    points: Point[],
-    options: FigurePropsTypes,
-  ) {
+  constructor(canvas: CanvasClass, points: Point[], options: FigurePropsTypes) {
     super(canvas);
 
     this.points = points;

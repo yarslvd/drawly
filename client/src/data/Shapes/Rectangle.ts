@@ -2,7 +2,7 @@ import { Point } from "framer-motion";
 import { CanvasClass } from "../Canvas";
 import { Shape } from "./Shape";
 
-import {FigurePropsTypes} from "@/components/Canvas/Canvas";
+import { FigurePropsTypes } from "@/components/Canvas/Canvas";
 
 export class Rectangle extends Shape {
   start: Point;
@@ -42,7 +42,7 @@ export class Rectangle extends Shape {
       return;
     }
 
-    if(this.displayStroke) {
+    if (this.displayStroke) {
       //border opacity
       ctx.globalAlpha = this.strokeOpacity;
       ctx.lineWidth = this.borderWidth;
@@ -112,7 +112,7 @@ export class Rectangle extends Shape {
     start: Point,
     width: number,
     height: number,
-    options: FigurePropsTypes,
+    options: FigurePropsTypes
   ) {
     super(canvas);
 

@@ -7,7 +7,7 @@ import { getCanvasPoints } from "@/utils/getCanvasPoints";
 import { CanvasClass } from "@/data/Canvas";
 
 import Shapes from "@/data/Shapes";
-import {useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 
 export interface CanvasProps {
   tool: string;
@@ -286,7 +286,9 @@ export const Canvas: FC<CanvasProps> = ({
   };
 
   useEffect(() => {
-    window.addEventListener("keydown", (e) => e.ctrlKey ? handleKeyDown : null);
+    window.addEventListener("keydown", (e) =>
+      e.ctrlKey ? handleKeyDown : null
+    );
     window.addEventListener("wheel", handleWheel, { passive: false });
 
     document.addEventListener("figure-settings", () => {

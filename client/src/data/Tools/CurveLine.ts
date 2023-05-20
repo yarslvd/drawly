@@ -19,7 +19,7 @@ export class CurveLine extends Tool {
     const line = new CurveLineShape(
       this.canvas,
       [...this.points, end],
-      this.canvas.options,
+      this.canvas.options
     );
 
     line.onDraw();
@@ -60,7 +60,7 @@ export class CurveLine extends Tool {
     const curveLine = new CurveLineShape(
       this.canvas,
       this.points,
-      this.canvas.options,
+      this.canvas.options
     );
     // console.log(this.points);
     curveLine.onDraw();

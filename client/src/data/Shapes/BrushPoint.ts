@@ -1,7 +1,7 @@
 import { Point } from "framer-motion";
 import { CanvasClass } from "../Canvas";
 import { Shape } from "./Shape";
-import {FigurePropsTypes} from "@/components/Canvas/Canvas";
+import { FigurePropsTypes } from "@/components/Canvas/Canvas";
 
 export class BrushPoint extends Shape {
   point: Point;
@@ -28,11 +28,7 @@ export class BrushPoint extends Shape {
     return false;
   }
 
-  constructor(
-      canvas: CanvasClass,
-      point: Point,
-      options: FigurePropsTypes,
-  ) {
+  constructor(canvas: CanvasClass, point: Point, options: FigurePropsTypes) {
     super(canvas);
 
     this.point = point;

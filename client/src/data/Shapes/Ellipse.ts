@@ -1,7 +1,7 @@
 import { Point } from "framer-motion";
 import { CanvasClass } from "../Canvas";
 import { Shape } from "./Shape";
-import {FigurePropsTypes} from "@/components/Canvas/Canvas";
+import { FigurePropsTypes } from "@/components/Canvas/Canvas";
 
 export class Ellipse extends Shape {
   start: Point;
@@ -27,16 +27,16 @@ export class Ellipse extends Shape {
 
     ctx.beginPath();
     ctx.ellipse(
-        this.start.x,
-        this.start.y,
-        Math.abs(this.width),
-        Math.abs(this.height),
-        0,
-        0,
-        2 * Math.PI
+      this.start.x,
+      this.start.y,
+      Math.abs(this.width),
+      Math.abs(this.height),
+      0,
+      0,
+      2 * Math.PI
     );
 
-    if(this.displayStroke) {
+    if (this.displayStroke) {
       //border opacity
       ctx.globalAlpha = this.strokeOpacity;
       ctx.lineWidth = this.borderWidth;
@@ -120,7 +120,7 @@ export class Ellipse extends Shape {
     start: Point,
     width: number,
     height: number,
-    options: FigurePropsTypes,
+    options: FigurePropsTypes
   ) {
     super(canvas);
 

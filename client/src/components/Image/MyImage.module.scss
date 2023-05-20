@@ -1,0 +1,29 @@
+.container {
+  display: flex;
+  flex-direction: column;
+
+  h4{
+    font-size: 16px;
+    color: #b0b0b0;
+    font-weight: 500;
+    margin-bottom: 5px;
+  }
+  .header{
+    color: #363636;
+    font-size: 21px;
+    font-weight: 700;
+  }
+
+  .inputText {
+    padding: 11px;
+    border: 1px solid #BEBEBE;
+    border-radius: 6px;
+    max-width: 100%;
+    background-color: transparent;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+}

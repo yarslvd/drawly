@@ -1,7 +1,7 @@
 import { Point } from "framer-motion";
 import { CanvasClass } from "../Canvas";
 import { Shape } from "./Shape";
-import {FigurePropsTypes} from "@/components/Canvas/Canvas";
+import { FigurePropsTypes } from "@/components/Canvas/Canvas";
 
 export class Line extends Shape {
   start: Point;
@@ -21,7 +21,7 @@ export class Line extends Shape {
     this.handleBorderPoints(this.start);
     this.handleBorderPoints(this.end);
 
-    if(this.displayStroke) {
+    if (this.displayStroke) {
       ctx.beginPath();
       ctx.globalAlpha = this.strokeOpacity;
       ctx.lineWidth = this.borderWidth;
@@ -69,7 +69,7 @@ export class Line extends Shape {
     canvas: CanvasClass,
     start: Point,
     end: Point,
-    options: FigurePropsTypes,
+    options: FigurePropsTypes
   ) {
     super(canvas);
 

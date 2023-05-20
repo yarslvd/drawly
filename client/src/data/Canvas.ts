@@ -1,6 +1,6 @@
 import { SelectedShape } from "./Shapes/SelectedShape";
 import { Shape } from "./Shapes/Shape";
-import {FigurePropsTypes} from "@/components/Canvas/Canvas";
+import { FigurePropsTypes } from "@/components/Canvas/Canvas";
 
 export class CanvasClass {
   protected context: CanvasRenderingContext2D | null = null;

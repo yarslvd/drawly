@@ -12,7 +12,7 @@ export class Rectangle extends Tool {
       this.start,
       0,
       0,
-      this.canvas.options,
+      this.canvas.options
     );
     this.canvas.pushHistory(rectangle);
   }
@@ -33,7 +33,7 @@ export class Rectangle extends Tool {
       this.start,
       width,
       height,
-      this.canvas.options,
+      this.canvas.options
     );
     rectangle.onDraw();
 
@@ -57,7 +57,7 @@ export class Rectangle extends Tool {
       this.start,
       width,
       height,
-      this.canvas.options,
+      this.canvas.options
     );
     rectangle.onDraw();
 

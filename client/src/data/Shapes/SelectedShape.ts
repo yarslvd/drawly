@@ -5,7 +5,7 @@ import { Shape } from "./Shape";
 export class SelectedShape extends Shape {
   private width: number = 0;
   private height: number = 0;
-  private color: string = '#72bac2';
+  private color: string = "#72bac2";
 
   borderWidth: number;
 
@@ -37,24 +37,29 @@ export class SelectedShape extends Shape {
     ctx.strokeStyle = this.color;
     console.log(this);
 
-    this.drawCircle(ctx, { x: this.leftTop.x, y: this.leftTop.y }, 4, this.color);
+    this.drawCircle(
+      ctx,
+      { x: this.leftTop.x, y: this.leftTop.y },
+      4,
+      this.color
+    );
     this.drawCircle(
       ctx,
       { x: this.rightBottom.x, y: this.leftTop.y },
       4,
-        this.color
+      this.color
     );
     this.drawCircle(
       ctx,
       { x: this.rightBottom.x, y: this.rightBottom.y },
       4,
-        this.color
+      this.color
     );
     this.drawCircle(
       ctx,
       { x: this.leftTop.x, y: this.rightBottom.y },
       4,
-        this.color
+      this.color
     );
   }
 

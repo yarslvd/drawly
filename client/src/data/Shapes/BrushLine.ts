@@ -2,7 +2,7 @@ import { Point } from "framer-motion";
 import { CanvasClass } from "../Canvas";
 import { BrushPoint } from "./BrushPoint";
 import { Shape } from "./Shape";
-import {FigurePropsTypes} from "@/components/Canvas/Canvas";
+import { FigurePropsTypes } from "@/components/Canvas/Canvas";
 
 export class BrushLine extends Shape {
   points: Point[];
@@ -98,11 +98,7 @@ export class BrushLine extends Shape {
     return distanceToSegment;
   }
 
-  constructor(
-    canvas: CanvasClass,
-    points: Point[],
-    options: FigurePropsTypes,
-  ) {
+  constructor(canvas: CanvasClass, points: Point[], options: FigurePropsTypes) {
     super(canvas);
 
     this.points = points;

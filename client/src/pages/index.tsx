@@ -4,7 +4,7 @@ import { ToolBar } from "@/components/ToolBar/ToolBar";
 import { Canvas } from "@/components/Canvas/Canvas";
 import { Settings } from "@/components/Settings/Settings";
 import { Tools } from "@/data/Constants";
-import {Menu} from "@/components/Menu/Menu";
+import { Menu } from "@/components/Menu/Menu";
 
 export default function Home() {
   //TODO: think about default tool to set
