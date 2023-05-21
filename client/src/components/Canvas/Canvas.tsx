@@ -75,28 +75,43 @@ export const Canvas: FC<CanvasProps> = ({
   }, [figureProps]);
 
   const handleMouseDown = (event: React.MouseEvent<HTMLCanvasElement>) => {
-    if (selectedTool) {
-      const point = getCanvasPoints(
-        { clientX: event.clientX, clientY: event.clientY },
-        canvasRef,
-        scale
-      );
-      point && selectedTool.onMouseDown(point);
+    const point = getCanvasPoints(
+      { clientX: event.clientX, clientY: event.clientY },
+      canvasRef,
+      scale
+    );
+    if(canvas?.selectedShape) {
+      if(point && canvas.selectedShapeDiv.isPointOnCircle(point) == -1) {
+        canvas.selectedShape = null;
+        canvas.redrawCanvas();
+        return;
+      }
+    }
+    if (selectedTool && point) {
+      selectedTool.onMouseDown(point);
     }
   };
 
   const handleMouseMove = (event: React.MouseEvent<HTMLCanvasElement>) => {
-    if (selectedTool) {
-      const point = getCanvasPoints(
-        { clientX: event.clientX, clientY: event.clientY },
-        canvasRef,
-        scale
-      );
-      point && selectedTool.onMouseMove(point);
+    const point = getCanvasPoints(
+      { clientX: event.clientX, clientY: event.clientY },
+      canvasRef,
+      scale
+    );
+    if(canvas?.selectedShape && point) {
+      canvas.selectedShapeDiv.handleResize(point);
+      return;
+    }
+    if (selectedTool && point) {
+      selectedTool.onMouseMove(point);
     }
   };
 
   const handleMouseUp = () => {
+    if(canvas?.selectedShape) {
+      canvas.selectedShapeDiv.onMouseUp();
+      return;
+    }
     if (selectedTool) {
       selectedTool.onMouseUp();
     }
@@ -322,7 +337,7 @@ export const Canvas: FC<CanvasProps> = ({
   };
 
   useEffect(() => {
-    window.addEventListener("keydown", (e) => e.ctrlKey ? handleKeyDown(e) : handleTextKeyDown(e));
+    window.addEventListener("keydown", (e) => e.ctrlKey ? handleKeyDown(e) : canvas?.selectedTool instanceof Text ? handleTextKeyDown(e) : null);
     window.addEventListener("wheel", handleWheel, { passive: false });
 
     document.addEventListener("figure-settings", () => {

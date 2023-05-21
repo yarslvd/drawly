@@ -17,8 +17,6 @@ export class Ellipse extends Shape {
   displayFill: boolean;
   displayStroke: boolean;
 
-  isFilled: boolean;
-
   onDraw(): void {
     const ctx = this.canvas.getContext2D();
     if (ctx == null) {
@@ -62,7 +60,7 @@ export class Ellipse extends Shape {
   }
 
   isPointInside(point: Point): boolean {
-    if (!this.isFilled) {
+    if (!this.displayFill) {
       return this.isPointOnBorder(point);
     }
     const rx = Math.abs(this.width);
