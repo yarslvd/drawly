@@ -4,36 +4,27 @@ import { Shape } from "./Shape";
 
 export class Text extends Shape {
   start: Point;
+  borderWidth: number = 2;
+  borderColor: string = "black";
 
   width: number = 20;
   height: number = 20;
 
   text: string;
   fontWeight: number;
+  fontSize: number;
   color: string;
 
   isFocused: boolean = false;
-  // Input field properties
-  inputField = {
-    x: 100,
-    y: 100,
-    width: 200,
-    height: 30,
-    border: {
-      color: "black",
-      width: 2,
-    },
-    isFocused: false,
-  };
 
   // Event listeners
   handleMouseDown = (event) => {
     const { offsetX, offsetY } = event;
     if (
       offsetX >= this.start.x &&
-      offsetX <= this.start.x + this.inputField.width &&
+      offsetX <= this.start.x + this.width &&
       offsetY >= this.start.y &&
-      offsetY <= this.start.y + this.inputField.height
+      offsetY <= this.start.y + this.height
     ) {
       this.isFocused = true;
       this.onDraw();
@@ -68,36 +59,70 @@ export class Text extends Shape {
       return;
     }
 
-    // Clear canvas
-    ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    // Calculate input field width based on text size
+    // const textWidth = ctx.measureText(this.text).width;
+    // this.width = textWidth + 10;
 
-    // Draw input field border
-    ctx.lineWidth = 5;
-    ctx.strokeStyle = "black";
-    ctx.strokeRect(
-      this.start.x,
-      this.start.y,
-      this.inputField.width,
-      this.inputField.height
-    );
+    // this.height = this.fontSize + 10;
 
-    // Draw input text
-    ctx.font = `${this.fontWeight} 16px Arial`;
+    // // Draw input field border
+    // ctx.lineWidth = this.borderWidth;
+    // ctx.strokeStyle = this.borderColor;
+    // ctx.strokeRect(
+    //   this.start.x,
+    //   this.start.y,
+    //   this.width,
+    //   this.height
+    // );
+
+    // // Draw input text
+    // ctx.font = `${this.fontWeight} ${this.fontSize}px Arial`;
+    // ctx.fillStyle = this.color;
+    // ctx.fillText(
+    //   this.text,
+    //   this.start.x + 5,
+    //   this.start.y + this.height / 2 + 5
+    // );
+
+    // // Draw cursor if focused
+    // if (this.isFocused) {
+    //   const cursorX =
+    //     this.start.x + textWidth + 5;
+    //   const cursorY = this.start.y + 5;
+    //   ctx.beginPath();
+    //   ctx.moveTo(cursorX, cursorY);
+    //   ctx.lineTo(cursorX, cursorY + this.height - 10);
+    //   ctx.stroke();
+    // }
+
+    const lines = this.text.split("\n");
+    const lineHeight = this.fontSize;
+    const startY = this.start.y;
+
+    ctx.font = `${this.fontSize}px sans-serif`;
     ctx.fillStyle = this.color;
-    ctx.fillText(
-      this.text,
-      this.start.x + 5,
-      this.start.y + this.inputField.height / 2 + 5
-    );
 
-    // Draw cursor if focused
+    let maxLineWidth = 0;
+
+    lines.forEach((line, index) => {
+      const lineY = startY + index * lineHeight;
+      ctx.fillText(line, this.start.x, lineY);
+      const lineWidth = ctx.measureText(line).width;
+      if (lineWidth > maxLineWidth) {
+        maxLineWidth = lineWidth;
+      }
+    });
+
     if (this.isFocused) {
-      const cursorX = this.start.x + ctx.measureText(this.text).width + 5;
-      const cursorY = this.start.y + 5;
-      ctx.beginPath();
-      ctx.moveTo(cursorX, cursorY);
-      ctx.lineTo(cursorX, cursorY + this.inputField.height - 10);
-      ctx.stroke();
+      const borderHeight = lines.length * lineHeight;
+      ctx.strokeStyle = this.color;
+      ctx.lineWidth = this.borderWidth;
+      ctx.strokeRect(
+        this.start.x,
+        startY - lineHeight,
+        maxLineWidth,
+        borderHeight
+      );
     }
   }
 
@@ -110,6 +135,7 @@ export class Text extends Shape {
     start: Point,
     text: string,
     fontWeight: number,
+    fontSize: number,
     color: string
   ) {
     super(canvas);
@@ -119,10 +145,8 @@ export class Text extends Shape {
     this.text = text;
     this.fontWeight = fontWeight;
     this.color = color;
+    this.fontSize = fontSize;
 
     // Add event listeners
-    // canvas.addEventListener("mousedown", this.handleMouseDown);
-    // canvas.addEventListener("keydown", this.handleKeyDown);
-    // canvas.addEventListener("textInput", this.handleTextInput);
   }
 }

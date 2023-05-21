@@ -40,7 +40,7 @@ const tools = [
     cursors: "/assets/icons/cursors/brush.png",
   },
   {
-    name: "Text",
+    name: Tools.TEXT,
     icon: "/assets/icons/tools/text.png",
     cursors: "text",
   },

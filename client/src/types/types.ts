@@ -49,8 +49,7 @@ export const NameTool = new Map<string, (canvas: CanvasClass) => Tool>([
     Tools.RECTANGLE,
     (canvas: CanvasClass) => {
       console.log("rectangle");
-      // return new Rectangle(canvas);
-      return new Img(canvas);
+      return new Rectangle(canvas);
     },
   ],
   [
@@ -72,6 +71,20 @@ export const NameTool = new Map<string, (canvas: CanvasClass) => Tool>([
     (canvas: CanvasClass) => {
       console.log("curve line", canvas.history);
       return new CurveLine(canvas);
+    },
+  ],
+  [
+    Tools.TEXT,
+    (canvas: CanvasClass) => {
+      console.log("text", canvas.history);
+      return new Text(canvas);
+    },
+  ],
+  [
+    Tools.IMAGE,
+    (canvas: CanvasClass) => {
+      console.log("image", canvas.history);
+      return new Img(canvas);
     },
   ],
 ]);

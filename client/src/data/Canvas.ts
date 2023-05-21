@@ -1,6 +1,7 @@
 import { SelectedShape } from "./Shapes/SelectedShape";
 import { Shape } from "./Shapes/Shape";
 import { FigurePropsTypes } from "@/components/Canvas/Canvas";
+import { Tool } from "./ToolsClass";
 
 export class CanvasClass {
   protected context: CanvasRenderingContext2D | null = null;
@@ -11,6 +12,8 @@ export class CanvasClass {
   selectedShapeIndex: number = -1;
   selectedShape: Shape | null;
   selectedShapeDiv: SelectedShape;
+
+  selectedTool: Tool | null = null;
 
   //options
   options: FigurePropsTypes;
