@@ -113,6 +113,35 @@ export class Ellipse extends Shape {
     return pointArea >= innerArea && pointArea <= outerArea;
   }
 
+  normalizeCorners() {
+    this.leftTop = { x: Infinity, y: Infinity };
+    this.rightBottom = { x: Infinity, y: Infinity };
+
+    if (this.width < 0) {
+      this.width = Math.abs(this.width);
+      this.leftTop.x = this.start.x - this.width;
+      this.rightBottom.x = this.start.x;
+    } else {
+      this.leftTop.x = this.start.x;
+      this.rightBottom.x = this.start.x + this.width;
+    }
+    if (this.height < 0) {
+      this.height = Math.abs(this.height);
+      this.leftTop.y = this.start.y - this.height;
+      this.rightBottom.y = this.start.y;
+    } else {
+      this.leftTop.y = this.start.y;
+      this.rightBottom.y = this.start.y + this.height;
+    }
+
+    this.normalizeSize();
+  }
+
+  normalizeSize() {
+    this.width = (-this.leftTop.x + this.rightBottom.x) / 2;
+    this.height = (-this.leftTop.y + this.rightBottom.y) / 2;
+  }
+
   constructor(
     canvas: CanvasClass,
     start: Point,
@@ -137,12 +166,12 @@ export class Ellipse extends Shape {
     const borderOffset = this.borderWidth * 2;
 
     this.leftTop = {
-      x: start.x - this.width - borderOffset,
-      y: start.y - this.height - borderOffset,
+      x: start.x - this.width, // - borderOffset,
+      y: start.y - this.height, // - borderOffset,
     };
     this.rightBottom = {
-      x: start.x + this.width + borderOffset,
-      y: start.y + this.height + borderOffset,
+      x: start.x + this.width, // + borderOffset,
+      y: start.y + this.height, // + borderOffset,
     };
   }
 }

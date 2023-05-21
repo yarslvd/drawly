@@ -3,6 +3,8 @@ import { CanvasClass } from "../Canvas";
 import { Shape } from "./Shape";
 import { Line } from "./Line";
 import { Rectangle } from "./Rectangle";
+import { Ellipse } from "./Ellipse";
+import { CurveLine } from "./CurveLine";
 
 interface Circle {
   center: Point;
@@ -34,7 +36,7 @@ export class SelectedShape extends Shape {
   }
 
   onDraw(): void {
-    console.log(this);
+    // console.log(this);
     this.circles = [];
     const ctx = this.canvas.getContext2D();
     if (ctx == null || this.canvas.selectedShape == null) {
@@ -55,7 +57,7 @@ export class SelectedShape extends Shape {
 
     ctx.strokeRect(this.leftTop.x, this.leftTop.y, this.width, this.height);
     ctx.strokeStyle = this.color;
-    console.log(this);
+    // console.log(this);
 
     this.drawCircle(
       ctx,
@@ -139,27 +141,111 @@ export class SelectedShape extends Shape {
         const bottomLeft = { x: rect.leftTop.x, y: rect.rightBottom.y };
 
         if (center.x === topLeft.x && center.y === topLeft.y) {
-          rect.start.x = point.x;
-          rect.start.y = point.y;
+          // rect.width += (topLeft.x - point.x);
           rect.leftTop.x = point.x;
           rect.leftTop.y = point.y;
-          rect.width -= topLeft.x - point.x;
-          console.log("leftTop");
-          rect.height += topLeft.y - point.y;
+          rect.start.x = point.x;
+          rect.start.y = point.y;
         } else if (center.x === topRight.x && center.y === topRight.y) {
           rect.start.y = point.y;
-          rect.width += topRight.x - point.x;
-          rect.height += topRight.y - point.y;
+          rect.leftTop.y = point.y;
+          rect.rightBottom.x = point.x;
         } else if (center.x === bottomRight.x && center.y === bottomRight.y) {
-          rect.width += bottomRight.x - point.x;
-          rect.height += bottomRight.y - point.y;
+          rect.rightBottom.x = point.x;
+          rect.rightBottom.y = point.y;
         } else if (center.x === bottomLeft.x && center.y === bottomLeft.y) {
-          rect.start.x = point.x;
-          rect.width += bottomLeft.x - point.x;
-          rect.height += bottomLeft.y - point.y;
+          rect.rightBottom.y = point.y;
+          rect.leftTop.x = point.x;
         }
+
+        center.x = point.x;
+        center.y = point.y;
+
+        rect.normalizeSize();
         this.canvas.redrawCanvas();
 
+        break;
+      }
+      case shape instanceof Ellipse: {
+        const ellipse = shape as Ellipse;
+
+        const topLeft = ellipse.leftTop;
+        const topRight = { x: ellipse.rightBottom.x, y: ellipse.leftTop.y };
+        const bottomRight = ellipse.rightBottom;
+        const bottomLeft = { x: ellipse.leftTop.x, y: ellipse.rightBottom.y };
+
+        if (center.x === topLeft.x && center.y === topLeft.y) {
+          ellipse.start.x += (-ellipse.leftTop.x + point.x) / 2;
+          ellipse.start.y += (-ellipse.leftTop.y + point.y) / 2;
+
+          ellipse.leftTop.x = point.x;
+          ellipse.leftTop.y = point.y;
+        } else if (center.x === topRight.x && center.y === topRight.y) {
+          ellipse.start.x += (-ellipse.rightBottom.x + point.x) / 2;
+          ellipse.start.y += (-ellipse.leftTop.y + point.y) / 2;
+
+          ellipse.leftTop.y = point.y;
+          ellipse.rightBottom.x = point.x;
+        } else if (center.x === bottomRight.x && center.y === bottomRight.y) {
+          ellipse.start.x += (-ellipse.rightBottom.x + point.x) / 2;
+          ellipse.start.y += (-ellipse.rightBottom.y + point.y) / 2;
+
+          ellipse.rightBottom.x = point.x;
+          ellipse.rightBottom.y = point.y;
+        } else if (center.x === bottomLeft.x && center.y === bottomLeft.y) {
+          ellipse.start.x += (-ellipse.leftTop.x + point.x) / 2;
+          ellipse.start.y += (-ellipse.rightBottom.y + point.y) / 2;
+
+          ellipse.rightBottom.y = point.y;
+          ellipse.leftTop.x = point.x;
+        }
+
+        center.x = point.x;
+        center.y = point.y;
+
+        ellipse.normalizeSize();
+        this.canvas.redrawCanvas();
+        break;
+      }
+      case shape instanceof CurveLine: {
+        const curve = shape as CurveLine;
+
+        const topLeft = curve.leftTop;
+        const topRight = { x: curve.rightBottom.x, y: curve.leftTop.y };
+        const bottomRight = curve.rightBottom;
+        const bottomLeft = { x: curve.leftTop.x, y: curve.rightBottom.y };
+
+        // if (center.x === topLeft.x && center.y === topLeft.y) {
+        //   curve.start.x += (-curve.leftTop.x + point.x)/2;
+        //   curve.start.y += (-curve.leftTop.y + point.y)/2;
+
+        //   curve.leftTop.x = point.x;
+        //   curve.leftTop.y = point.y;
+        // } else if (center.x === topRight.x && center.y === topRight.y) {
+        //   curve.start.x += (-curve.rightBottom.x + point.x)/2;
+        //   curve.start.y += (-curve.leftTop.y + point.y)/2;
+
+        //   curve.leftTop.y = point.y;
+        //   curve.rightBottom.x = point.x;
+        // } else if (center.x === bottomRight.x && center.y === bottomRight.y) {
+        //   curve.start.x += (-curve.rightBottom.x + point.x)/2;
+        //   curve.start.y += (-curve.rightBottom.y + point.y)/2;
+
+        //   curve.rightBottom.x = point.x;
+        //   curve.rightBottom.y = point.y;
+        // } else if (center.x === bottomLeft.x && center.y === bottomLeft.y) {
+        //   curve.start.x += (-curve.leftTop.x + point.x)/2;
+        //   curve.start.y += (-curve.rightBottom.y + point.y)/2;
+
+        //   curve.rightBottom.y = point.y;
+        //   curve.leftTop.x = point.x;
+        // }
+
+        center.x = point.x;
+        center.y = point.y;
+
+        curve.normalizeSize();
+        this.canvas.redrawCanvas();
         break;
       }
     }
@@ -174,8 +260,4 @@ export class SelectedShape extends Shape {
 
     this.borderWidth = 2;
   }
-}
-
-function getVec(coord1: number, coord2: number) {
-  return coord1 > coord2 ? -1 : 1;
 }

@@ -29,8 +29,8 @@ export class Rectangle extends Shape {
     if (this.radius != 0) {
       ctx.beginPath();
       ctx.roundRect(
-        this.start.x,
-        this.start.y,
+        this.leftTop.x,
+        this.leftTop.y,
         this.width,
         this.height,
         this.radius
@@ -49,14 +49,14 @@ export class Rectangle extends Shape {
       ctx.globalAlpha = this.strokeOpacity;
       ctx.lineWidth = this.borderWidth;
       ctx.strokeStyle = this.strokeColor;
-      ctx.strokeRect(this.start.x, this.start.y, this.width, this.height);
+      ctx.strokeRect(this.leftTop.x, this.leftTop.y, this.width, this.height);
     }
 
     if (this.displayFill) {
       //fill opacity
       ctx.globalAlpha = this.fillOpacity;
       ctx.fillStyle = this.fillColor;
-      ctx.fillRect(this.start.x, this.start.y, this.width, this.height);
+      ctx.fillRect(this.leftTop.x, this.leftTop.y, this.width, this.height);
     }
 
     ctx.closePath();
@@ -82,7 +82,7 @@ export class Rectangle extends Shape {
   }
 
   isPointInsideBorder(point: Point): boolean {
-    const start = this.start;
+    const start = this.leftTop;
 
     const leftBoundary = start.x;
     const rightBoundary = start.x + this.width;
@@ -111,6 +111,35 @@ export class Rectangle extends Shape {
     );
   }
 
+  normalizeCorners() {
+    this.leftTop = { x: Infinity, y: Infinity };
+    this.rightBottom = { x: Infinity, y: Infinity };
+
+    if (this.width < 0) {
+      this.width = Math.abs(this.width);
+      this.leftTop.x = this.start.x - this.width;
+      this.rightBottom.x = this.start.x;
+    } else {
+      this.leftTop.x = this.start.x;
+      this.rightBottom.x = this.start.x + this.width;
+    }
+    if (this.height < 0) {
+      this.height = Math.abs(this.height);
+      this.leftTop.y = this.start.y - this.height;
+      this.rightBottom.y = this.start.y;
+    } else {
+      this.leftTop.y = this.start.y;
+      this.rightBottom.y = this.start.y + this.height;
+    }
+
+    this.normalizeSize();
+  }
+
+  normalizeSize() {
+    this.width = -this.leftTop.x + this.rightBottom.x;
+    this.height = -this.leftTop.y + this.rightBottom.y;
+  }
+
   constructor(
     canvas: CanvasClass,
     start: Point,
@@ -120,7 +149,7 @@ export class Rectangle extends Shape {
   ) {
     super(canvas);
 
-    this.start = start;
+    this.start = Object.assign(start);
     this.width = width;
     this.height = height;
 
@@ -132,7 +161,6 @@ export class Rectangle extends Shape {
     this.displayFill = options.displayFill;
     this.displayStroke = options.displayStroke;
 
-    this.leftTop = start;
-    this.rightBottom = { x: start.x + width, y: start.y + height };
+    this.normalizeCorners();
   }
 }
