@@ -2,7 +2,7 @@ import styles from "./Canvas.module.scss";
 import React, { FC, useEffect, useRef, useState } from "react";
 import { Tool } from "@/data/ToolsClass";
 import { NameTool } from "@/types/types";
-import { Keyboard, Tools } from "@/data/Constants";
+import { Keyboard, RECTANGLE, Tools } from "@/data/Constants";
 import { getCanvasPoints } from "@/utils/getCanvasPoints";
 import { CanvasClass } from "@/data/Canvas";
 
@@ -25,6 +25,8 @@ export interface FigurePropsTypes {
   fillOpacity: number;
   displayStroke: boolean;
   displayFill: boolean;
+  imageURL: string;
+  imageFilters: string;
 }
 
 let canvas: CanvasClass | null;
@@ -46,6 +48,8 @@ export const Canvas: FC<CanvasProps> = ({
   const fillOpacity = useSelector((state) => state.data.fillOpacity);
   const displayFill = useSelector((state) => state.data.displayFill);
   const displayStroke = useSelector((state) => state.data.displayStroke);
+  const imageURL = useSelector((state) => state.data.imageURL);
+  const imageFilters = useSelector((state) => state.data.imageFilters);
 
   //OBJECT WITH OPTIONS PROPS
   const figureProps: FigurePropsTypes = {
@@ -56,6 +60,8 @@ export const Canvas: FC<CanvasProps> = ({
     fillOpacity,
     displayStroke,
     displayFill,
+    imageURL,
+    imageFilters,
   };
 
   //HANDLING OPTIONS CHANGE

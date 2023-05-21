@@ -3,24 +3,65 @@ import { Button, Input } from "@mui/material";
 import styles from "./MyImage.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { setImageFilters, setImageURL } from "@/store/slices/dataSlice";
-import { CanvasClass } from "@/data/Canvas";
 
-//TODO: type for state?
 export const MyImage: FC = () => {
   const dispatch = useDispatch();
   const imageURL = useSelector((state) => state.data.imageURL);
   const imageFilters = useSelector((state) => state.data.imageFilters);
 
-  const [file, setFile] = useState<string | null>();
+  const [file, setFile] = useState<string | null>(imageURL);
   //Filters
-  const [blur, setBlur] = useState<number>(0); // 0 - 100
-  const [brightness, setBrightness] = useState<number>(100); // 0 - 200
-  const [contrast, setContrast] = useState<number>(100); // 0 - 200
-  const [greyScale, setGreyScale] = useState<number>(0); // 0 - 100
-  const [invert, setInvert] = useState<number>(0); // 0 - 100
-  const [opacity, setOpacity] = useState<number>(100); //0 - 100
-  const [saturate, setSaturate] = useState<number>(100); // 0 - 100
-  const [sepia, setSepia] = useState<number>(0); // 0 - 100
+  const [blur, setBlur] = useState<number>(
+    parseImageFilters(imageFilters).blur
+  ); // 0 - 100
+  const [brightness, setBrightness] = useState<number>(
+    parseImageFilters(imageFilters).brightness
+  ); // 0 - 200
+  const [contrast, setContrast] = useState<number>(
+    parseImageFilters(imageFilters).contrast
+  ); // 0 - 200
+  const [grayScale, setGrayScale] = useState<number>(
+    parseImageFilters(imageFilters).grayScale
+  ); // 0 - 100
+  const [invert, setInvert] = useState<number>(
+    parseImageFilters(imageFilters).invert
+  ); // 0 - 100
+  const [opacity, setOpacity] = useState<number>(
+    parseImageFilters(imageFilters).opacity
+  ); //0 - 100
+  const [saturate, setSaturate] = useState<number>(
+    parseImageFilters(imageFilters).saturate
+  ); // 0 - 100
+  const [sepia, setSepia] = useState<number>(
+    parseImageFilters(imageFilters).sepia
+  ); // 0 - 100
+
+  function parseImageFilters(filtersString: string) {
+    let filters = {
+      blur: 0,
+      brightness: 100,
+      contrast: 100,
+      grayScale: 0,
+      invert: 0,
+      opacity: 100,
+      saturate: 100,
+      sepia: 0,
+    };
+
+    if (filtersString === "" || filtersString === "none") {
+      return filters;
+    }
+
+    const regex = /(\w+)\(([^\)]+)\)/g;
+    let match;
+
+    while ((match = regex.exec(filtersString)) !== null) {
+      const [, property, value] = match;
+      filters[property] = parseFloat(value);
+    }
+
+    return filters;
+  }
 
   useEffect(() => {
     handleImageURL(file);
@@ -28,7 +69,7 @@ export const MyImage: FC = () => {
 
   useEffect(() => {
     handleImageFilters(getFiltersString());
-  }, [blur, brightness, contrast, greyScale, invert, opacity, saturate, sepia]);
+  }, [blur, brightness, contrast, grayScale, invert, opacity, saturate, sepia]);
 
   function handleChange(e) {
     let resp = URL.createObjectURL(e.target.files[0]);
@@ -43,9 +84,8 @@ export const MyImage: FC = () => {
     dispatch(setImageFilters(filters));
   };
 
-  console.log(getFiltersString());
   function getFiltersString() {
-    return `blur(${blur}) brightness(${brightness}%) contrast(${contrast}%) grayscale(${greyScale}%) invert(${invert}%) opacity(${opacity}%) saturate(${saturate}%) sepia(${sepia}%)`;
+    return `blur(${blur}px) brightness(${brightness}%) contrast(${contrast}%) grayscale(${grayScale}%) invert(${invert}%) opacity(${opacity}%) saturate(${saturate}%) sepia(${sepia}%)`;
   }
 
   const blobObjectUrlRegex =
@@ -133,11 +173,11 @@ export const MyImage: FC = () => {
           <input
             disabled={!file || file === ""}
             type="range"
-            onChange={(e) => setGreyScale(Number(e.target.value))}
+            onChange={(e) => setGrayScale(Number(e.target.value))}
             min={0}
             max={100}
             step={1}
-            value={greyScale}
+            value={grayScale}
           ></input>
         </div>
 

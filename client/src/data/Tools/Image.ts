@@ -1,36 +1,69 @@
 import { Tool } from "@/data/ToolsClass";
-import { Rectangle as RectangleShape } from "../Shapes/Rectangle";
 import { Coordinates } from "@/types/types";
+import { CanvasClass } from "@/data/Canvas";
+import { Img as ImgShape } from "@/data/Shapes/Image";
 
 export class Img extends Tool {
   protected start: Coordinates | null = null;
+  protected image: HTMLImageElement;
   protected filters: string = "none";
-  protected image: string =
-    "https://www.simplilearn.com/ice9/free_resources_article_thumb/what_is_image_Processing.jpg";
-  // const image = new Image();
-  //   image.src = 'https://www.simplilearn.com/ice9/free_resources_article_thumb/what_is_image_Processing.jpg';
-  //   image.onload = () => {
-  //     ctx!.filter = 'brightness(200%)' //<-- set this
-  //     ctx?.drawImage(image, 0, 0); // Draw the image at coordinates (0, 0)
-  //     ctx!.filter = 'brightness(100%)' //<-- set this
-  //   };
+  protected url: string;
+  flag: boolean = false;
+
+  private setImage(): void {
+    this.url = this.canvas.options.imageURL;
+    this.filters = this.canvas.options.imageFilters;
+
+    this.image.src = this.url;
+    this.image.onerror = () => {
+      this.url = "";
+    };
+
+    let ctx = this.canvas.getContext2D()!;
+    ctx.filter = this.filters;
+  }
+
+  private removeFilters(): void {
+    let ctx = this.canvas.getContext2D()!;
+    ctx.filter = "none";
+  }
+
+  constructor(canvas: CanvasClass) {
+    super(canvas);
+
+    this.url = canvas.options.imageURL;
+    this.filters = canvas.options.imageFilters;
+
+    this.image = new Image();
+    this.setImage();
+
+    if (this.canvas.getContext2D()) {
+      this.canvas.getContext2D()!.filter = this.filters;
+    }
+  }
+
   protected onDown(point: Coordinates): void {
+    this.setImage();
+    if (this.url === "") return;
+
     this.start = point;
-    const rectangle = new RectangleShape(
+    this.flag = true;
+    const img = new ImgShape(
       this.canvas,
       this.start,
       0,
       0,
-      this.canvas.width,
-      this.canvas.color
+      Object.assign(this.canvas.options)
     );
-    console.log("HERE IMAGE");
-    this.canvas.pushHistory(rectangle);
+    this.canvas.pushHistory(img);
   }
 
   protected onMove(start: Coordinates, end: Coordinates): void {
     if (!this.canvas) return;
     if (!this.start) return;
+
+    this.setImage();
+    if (this.url === "") return;
 
     const context = this.canvas.getContext2D();
     if (!context) return;
@@ -39,23 +72,30 @@ export class Img extends Tool {
     const height = end.y - this.start.y;
 
     this.canvas.undoShape();
-
-    const rectangle = new RectangleShape(
+    const img = new ImgShape(
       this.canvas,
       this.start,
       width,
       height,
-      this.canvas.width,
-      this.canvas.color
+      Object.assign(this.canvas.options)
     );
-    rectangle.onDraw();
+    img.onDraw();
 
-    this.canvas.pushHistory(rectangle);
+    this.flag = false;
+    this.canvas
+      .getContext2D()!
+      .drawImage(this.image, this.start.x, this.start.y, width, height);
+    this.removeFilters();
+
+    this.canvas.pushHistory(img);
   }
 
   protected onUp(point: Coordinates): void {
     if (!this.canvas) return;
     if (!this.start) return;
+
+    this.setImage();
+    if (this.url === "") return;
 
     const context = this.canvas.getContext2D();
     if (!context) return;
@@ -65,28 +105,21 @@ export class Img extends Tool {
 
     this.canvas.undoShape();
 
-    const rectangle = new RectangleShape(
+    const img = new ImgShape(
       this.canvas,
       this.start,
       width,
       height,
-      this.canvas.width,
-      this.canvas.color
+      Object.assign(this.canvas.options)
     );
-    rectangle.onDraw();
+    img.onDraw();
 
-    const image = new Image();
-    image.src =
-      "https://www.simplilearn.com/ice9/free_resources_article_thumb/what_is_image_Processing.jpg";
-    //   image.onload = () => {
-    //     ctx!.filter = 'brightness(200%)' //<-- set this
-    let ctx = this.canvas.getContext2D();
-    ctx?.drawImage(image, this.start.x, this.start.y, width, height); // Draw the image at coordinates (0, 0)
-    //     ctx!.filter = 'brightness(100%)' //<-- set this
-    //   };
+    this.canvas
+      .getContext2D()!
+      .drawImage(this.image, this.start.x, this.start.y, width, height);
+    this.removeFilters();
 
-    // this.canvas.pushHistory(rectangle);
-    this.canvas.undoShape();
+    this.canvas.pushHistory(img);
   }
 
   protected onClick(point: Coordinates): void {
