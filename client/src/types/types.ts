@@ -1,4 +1,4 @@
-import { Brush, Line, Move, Rectangle, Img } from "@/data/Tools";
+import { Brush, Line, Move, Rectangle, Text, Img } from "@/data/Tools";
 import { Tools } from "@/data/Constants";
 import { CanvasClass } from "@/data/Canvas";
 import { Tool } from "@/data/ToolsClass";
