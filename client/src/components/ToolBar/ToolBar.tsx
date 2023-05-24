@@ -12,32 +12,30 @@ const tools = [
   {
     name: Tools.CURVE_LINE,
     icon: "/assets/icons/tools/pentool.png",
-    cursors: "/assets/icons/cursors/pentool.png",
+    cursors: "crosshair",
   },
   {
     tools: [
       {
         name: Tools.RECTANGLE,
         icon: "/assets/icons/tools/figure.png",
-        cursors: "crosshair",
       },
       {
         name: Tools.ELLIPSE,
         icon: "/assets/icons/tools/ellipse.png",
-        cursors: "crosshair",
       },
       {
         name: Tools.LINE,
         icon: "/assets/icons/tools/line.png",
-        cursors: "crosshair",
       },
     ],
+    cursors: "crosshair",
     multipleOptions: true,
   },
   {
     name: Tools.BRUSH,
     icon: "/assets/icons/tools/brush.png",
-    cursors: "/assets/icons/cursors/brush.png",
+    cursors: "crosshair",
   },
   {
     name: Tools.TEXT,
@@ -55,9 +53,9 @@ const tools = [
     cursors: "crosshair",
   },
   {
-    name: "More",
-    icon: "/assets/icons/tools/more.png",
-    cursors: "pointer",
+    name: Tools.IMAGE,
+    icon: "/assets/icons/tools/image.png",
+    cursors: "crosshair",
   },
 ];
 
@@ -74,10 +72,10 @@ export const ToolBar: FC<any> = memo(({ tool, setTool }) => {
     tools[index].tools
       ? setTool(tools[index].tools[shape].name)
       : setTool(tools[index].name);
-    // document.body.style.cursor =
-    //   tools[index].cursors.charAt(0) == "/"
-    //     ? `url(${tools[index].cursors}), auto`
-    //     : `${tools[index].cursors}`;
+    document.body.style.cursor =
+      tools[index].cursors.charAt(0) == "/"
+        ? `url(${tools[index].cursors}), auto`
+        : `${tools[index].cursors}`;
   };
 
   return (

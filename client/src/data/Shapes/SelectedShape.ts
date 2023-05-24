@@ -5,6 +5,7 @@ import { Line } from "./Line";
 import { Rectangle } from "./Rectangle";
 import { Ellipse } from "./Ellipse";
 import { CurveLine } from "./CurveLine";
+import {getCanvasPoints} from "@/utils/getCanvasPoints";
 
 interface Circle {
   center: Point;
@@ -14,25 +15,40 @@ interface Circle {
 export class SelectedShape extends Shape {
   private width: number = 0;
   private height: number = 0;
-  private color: string = "#72bac2";
+  private color: string = "#00B2FF";
 
   private circles: Circle[] = [];
   private selectedCircle: Circle | null = null;
 
   borderWidth: number;
 
-  drawCircle(
-    ctx: CanvasRenderingContext2D,
-    center: Point,
-    radius: number,
-    color: string
+  // drawCircle(
+  //   ctx: CanvasRenderingContext2D,
+  //   center: Point,
+  //   radius: number,
+  //   color: string
+  // ): void {
+  //   ctx.beginPath();
+  //   ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI);
+  //   ctx.fillStyle = color;
+  //   ctx.fill();
+  //
+  //   this.circles.push({ center, radius });
+  // }
+  drawRect(
+      ctx: CanvasRenderingContext2D,
+      center: Point,
+      fillColor: string,
+      borderColor: string
   ): void {
-    ctx.beginPath();
-    ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI);
-    ctx.fillStyle = color;
-    ctx.fill();
+    ctx.fillStyle = fillColor;
+    ctx.strokeStyle = borderColor;
+    const width = 10;
+    const height = 10;
+    ctx.fillRect(center.x - width / 2, center.y - height / 2, width, height);
+    ctx.strokeRect(center.x - width / 2, center.y - height / 2, width, height);
 
-    this.circles.push({ center, radius });
+    this.circles.push({ center, radius: 8 });
   }
 
   onDraw(): void {
@@ -50,40 +66,81 @@ export class SelectedShape extends Shape {
 
     if (this.canvas.selectedShape instanceof Line) {
       const line = this.canvas.selectedShape as Line;
-      this.drawCircle(ctx, line.start, 4, this.color);
-      this.drawCircle(ctx, line.end, 4, this.color);
+      this.drawRect(ctx, line.start,'#fff', this.color);
+      this.drawRect(ctx, line.end,'#fff', this.color);
       return;
     }
 
     ctx.strokeRect(this.leftTop.x, this.leftTop.y, this.width, this.height);
     ctx.strokeStyle = this.color;
     // console.log(this);
-
-    this.drawCircle(
-      ctx,
-      { x: this.leftTop.x, y: this.leftTop.y },
-      4,
-      this.color
+    this.drawRect(
+        ctx,
+        { x: this.leftTop.x, y: this.leftTop.y },
+        '#fff',
+        this.color
     );
-    this.drawCircle(
-      ctx,
-      { x: this.rightBottom.x, y: this.leftTop.y },
-      4,
-      this.color
+    this.drawRect(
+        ctx,
+        { x: this.rightBottom.x, y: this.leftTop.y },
+        '#fff',
+        this.color
     );
-    this.drawCircle(
-      ctx,
-      { x: this.rightBottom.x, y: this.rightBottom.y },
-      4,
-      this.color
+    this.drawRect(
+        ctx,
+        { x: this.rightBottom.x, y: this.rightBottom.y },
+        '#fff',
+        this.color
     );
-    this.drawCircle(
-      ctx,
-      { x: this.leftTop.x, y: this.rightBottom.y },
-      4,
-      this.color
+    this.drawRect(
+        ctx,
+        { x: this.leftTop.x, y: this.rightBottom.y },
+        '#fff',
+        this.color
     );
+    // this.drawCircle(
+    //   ctx,
+    //   { x: this.leftTop.x, y: this.leftTop.y },
+    //   4,
+    //   this.color
+    // );
+    // this.drawCircle(
+    //   ctx,
+    //   { x: this.rightBottom.x, y: this.leftTop.y },
+    //   4,
+    //   this.color
+    // );
+    // this.drawCircle(
+    //   ctx,
+    //   { x: this.rightBottom.x, y: this.rightBottom.y },
+    //   4,
+    //   this.color
+    // );
+    // this.drawCircle(
+    //   ctx,
+    //   { x: this.leftTop.x, y: this.rightBottom.y },
+    //   4,
+    //   this.color
+    // );
   }
+
+  // handleCursorChangeOn(e): void {
+  //   const rect = this.canvas.canvasHTML?.getBoundingClientRect();
+  //   const mouseX = e.clientX - rect.left;
+  //   const mouseY = e.clientY - rect.top;
+  //   console.log(mouseX, mouseY);
+  //   console.log(this.canvas.selectedShape)
+  //   // const point = getCanvasPoints(
+  //   //     { clientX: event.clientX, clientY: event.clientY },
+  //   //     this.canvas.canvasHTML,
+  //   //     scale
+  //   // );
+  //   // if (this.isPointOnCircle()) {
+  //   //   this.canvas.canvasHTML.style.cursor = 'pointer'; // Set cursor style to pointer
+  //   // } else {
+  //   //   this.canvas.canvasHTML.style.cursor = 'default'; // Set cursor style to default
+  //   // }
+  // }
 
   isPointInside(point: Point): boolean {
     return false;
@@ -92,12 +149,12 @@ export class SelectedShape extends Shape {
   isPointOnCircle(point: Point): number {
     console.log("isPointOnCircle");
     this.selectedCircle = null;
+    console.log(this.circles.length);
     for (let i = 0; i < this.circles.length; i++) {
       const distance = Math.sqrt(
         Math.pow(point.x - this.circles[i].center.x, 2) +
           Math.pow(point.y - this.circles[i].center.y, 2)
       );
-
       if (distance < this.circles[i].radius) {
         this.selectedCircle = this.circles[i];
         return i;
@@ -106,6 +163,25 @@ export class SelectedShape extends Shape {
 
     return -1;
   }
+  //
+  // isPointOnRect(point: Point): number {
+  //   console.log("isPointOnCircle");
+  //   this.selectedCircle = null;
+  //   for (let i = 0; i < this.circles.length; i++) {
+  //     console.log(this.circles.length);
+  //         // const distance = Math.sqrt(
+  //         //   Math.pow(point.x - this.circles[i].center.x, 2) +
+  //         //     Math.pow(point.y - this.circles[i].center.y, 2)
+  //         // );
+  //         //
+  //         // if (distance < this.circles[i].radius) {
+  //         //   this.selectedCircle = this.circles[i];
+  //         //   return i;
+  //         // }
+  //   }
+  //
+  //       return -1;
+  // }
 
   movedPoint: Point | null = null;
 
@@ -113,6 +189,9 @@ export class SelectedShape extends Shape {
     if (!this.selectedCircle) {
       return;
     }
+    // if(this.canvas) {
+    //   this.canvas.canvasHTML.addEventListener('mousemove', this.handleCursorChangeOn.bind(this.canvas.selectedShape));
+    // }
     const shape = this.canvas.selectedShape;
     const center = this.selectedCircle?.center;
     switch (true) {
