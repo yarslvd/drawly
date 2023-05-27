@@ -2,8 +2,11 @@ import { FC, memo, useEffect, useState } from "react";
 import styles from "./ToolBar.module.scss";
 import { ToolBarItem } from "@/components/ToolBarItem/ToolBarItem";
 import { Tools } from "@/data/Constants";
+import {useDispatch, useSelector} from "react-redux";
 
-const tools = [
+import {setTool as setStoreTool} from "@/store/slices/dataSlice";
+
+export const tools = [
   {
     name: Tools.MOVE,
     icon: "/assets/icons/tools/move.png",
@@ -62,6 +65,8 @@ const tools = [
 //TODO: Add types ;)))
 export const ToolBar: FC<any> = memo(({ tool, setTool }) => {
   const [shape, setShape] = useState(0);
+  const dispatch = useDispatch();
+
 
   useEffect(() => {
     // TODO: automatically set this shape on mount, think how to fix it
@@ -69,9 +74,15 @@ export const ToolBar: FC<any> = memo(({ tool, setTool }) => {
   }, [shape]);
 
   const handleClick = (index: number) => {
-    tools[index].tools
-      ? setTool(tools[index].tools[shape].name)
-      : setTool(tools[index].name);
+    console.log(shape);
+    if(tools[index].tools) {
+      setTool(tools[index].tools[shape].name);
+      dispatch(setStoreTool(tools[index].tools[shape].name));
+    }
+    else {
+      setTool(tools[index].name)
+      dispatch(setStoreTool(tools[index].name));
+    }
     document.body.style.cursor =
       tools[index].cursors.charAt(0) == "/"
         ? `url(${tools[index].cursors}), auto`

@@ -15,6 +15,7 @@ export const Fill: FC = () => {
   const fillColor = useSelector((state) => state.data.fillColor);
   const fillOpacity = useSelector((state) => state.data.fillOpacity);
   const displayFill = useSelector((state) => state.data.displayFill);
+  const currentTool = useSelector((state) => state.data.tool);
 
   const handleFillColor: ChangeEventHandler<HTMLInputElement> = (color) => {
     dispatch(setFillColor(color.hex));
@@ -45,7 +46,7 @@ export const Fill: FC = () => {
   };
 
   return (
-    <div className={styles.container}>
+      <div className={styles.container}>
       <h4>Fill</h4>
       <div className={styles.options}>
         <label className={styles.checkboxContainer}>

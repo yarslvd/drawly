@@ -6,6 +6,8 @@ import { Rectangle } from "./Rectangle";
 import { Ellipse } from "./Ellipse";
 import { CurveLine } from "./CurveLine";
 import {getCanvasPoints} from "@/utils/getCanvasPoints";
+import {useDispatch} from "react-redux";
+import {setSelectedShape} from "@/store/slices/dataSlice";
 
 interface Circle {
   center: Point;
@@ -21,6 +23,10 @@ export class SelectedShape extends Shape {
   private selectedCircle: Circle | null = null;
 
   borderWidth: number;
+
+  setSelectedProps(obj: any) {
+      console.log(obj);
+  }
 
   // drawCircle(
   //   ctx: CanvasRenderingContext2D,
@@ -52,7 +58,7 @@ export class SelectedShape extends Shape {
   }
 
   onDraw(): void {
-    // console.log(this);
+    console.log(this);
     this.circles = [];
     const ctx = this.canvas.getContext2D();
     if (ctx == null || this.canvas.selectedShape == null) {
@@ -73,7 +79,6 @@ export class SelectedShape extends Shape {
 
     ctx.strokeRect(this.leftTop.x, this.leftTop.y, this.width, this.height);
     ctx.strokeStyle = this.color;
-    // console.log(this);
     this.drawRect(
         ctx,
         { x: this.leftTop.x, y: this.leftTop.y },
@@ -212,7 +217,6 @@ export class SelectedShape extends Shape {
       }
       case shape instanceof Rectangle: {
         const rect = shape as Rectangle;
-
         // Determine which corner of the rectangle is being resized
         const topLeft = rect.leftTop;
         const topRight = { x: rect.rightBottom.x, y: rect.leftTop.y };
@@ -337,6 +341,7 @@ export class SelectedShape extends Shape {
   constructor(canvas: CanvasClass, borderWidth: number) {
     super(canvas);
 
+    this.setSelectedProps(this);
     this.borderWidth = 2;
   }
 }

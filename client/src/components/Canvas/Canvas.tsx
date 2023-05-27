@@ -7,9 +7,17 @@ import { getCanvasPoints } from "@/utils/getCanvasPoints";
 import { CanvasClass } from "@/data/Canvas";
 
 import Shapes from "@/data/Shapes";
-import { useSelector } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import { Text } from "@/data/Tools";
 import { Text as TextShape } from "@/data/Shapes/Text";
+
+import {
+  setSelectedShape,
+  setFillColor,
+  setFillOpacity,
+  setStrokeColor,
+  setDisplayFill, setStrokeOpacity, setDisplayStroke, setBorderWidth,
+} from "@/store/slices/dataSlice";
 
 export interface CanvasProps {
   tool: string;
@@ -39,6 +47,7 @@ export const Canvas: FC<CanvasProps> = ({
   heightCanvas,
   width,
 }) => {
+  const dispatch = useDispatch();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [selectedTool, setSelectedTool] = useState<Tool | null>(null);
   const [scale, setScale] = useState<number>(1);
@@ -66,19 +75,27 @@ export const Canvas: FC<CanvasProps> = ({
     imageFilters,
   };
 
-  //HANDLING OPTIONS CHANGE
   useEffect(() => {
     const canvasHTML = canvasRef.current;
     if (!canvasHTML) return;
 
     if (!canvas) {
-      console.log("new canvas PROPS");
+      console.log("new canvas 1");
       canvas = new CanvasClass(canvasHTML);
       canvas.setCanvasProps(figureProps);
     }
+  }, []);
 
+  //HANDLING OPTIONS CHANGE
+  useEffect(() => {
+    const canvasHTML = canvasRef.current;
+    if (!canvasHTML) return;
+    console.log(canvas);
+
+    console.log(canvas.selectedShape);
     canvas.setCanvasProps(figureProps);
-  }, [figureProps]);
+    canvas.redrawCanvas();
+  }, [figureProps, canvas]);
 
   const handleMouseDown = (event: React.MouseEvent<HTMLCanvasElement>) => {
     const point = getCanvasPoints(
@@ -123,6 +140,16 @@ export const Canvas: FC<CanvasProps> = ({
     }
   };
 
+  const setOptions = (optionsObj) => {
+    dispatch(setFillColor(optionsObj.fillColor));
+    dispatch(setStrokeColor(optionsObj.strokeColor));
+    dispatch(setStrokeOpacity(optionsObj.strokeOpacity));
+    dispatch(setFillOpacity(optionsObj.fillOpacity));
+    dispatch(setDisplayFill(optionsObj.displayFill));
+    dispatch(setDisplayStroke(optionsObj.strokeOpacity));
+    dispatch(setBorderWidth(optionsObj.borderWidth));
+  }
+
   const handleOnClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
     if (selectedTool && tool == Tools.CURVE_LINE) {
       const point = getCanvasPoints(
@@ -145,11 +172,23 @@ export const Canvas: FC<CanvasProps> = ({
       for (let i = canvas.history.length - 1; i >= 0; i--) {
         if (point && canvas.history[i].isPointInside(point)) {
           console.log("Selected shape", i);
+          //dispatch(setSelectedShape(canvas.history[i].canvas.selectedShape));
           canvas.selectedShapeIndex = i;
           canvas.selectedShape = canvas.history[i];
           canvas.selectedShapeDiv.leftTop = canvas.selectedShape.leftTop;
-          canvas.selectedShapeDiv.rightBottom =
-            canvas.selectedShape.rightBottom;
+          canvas.selectedShapeDiv.rightBottom = canvas.selectedShape.rightBottom;
+          const optionsObj = {
+            fillColor: canvas.selectedShape.fillColor,
+            strokeColor: canvas.selectedShape.strokeColor,
+            borderWidth: canvas.selectedShape.borderWidth,
+            strokeOpacity: canvas.selectedShape.strokeOpacity,
+            fillOpacity: canvas.selectedShape.fillOpacity,
+            displayStroke: canvas.selectedShape.displayStroke,
+            displayFill: canvas.selectedShape.displayFill,
+            imageURL: canvas.selectedShape.imageURL,
+            imageFilters: canvas.selectedShape.imageFilters,
+          }
+          setOptions(optionsObj);
           canvas.redrawCanvas();
           return;
         }
@@ -157,20 +196,10 @@ export const Canvas: FC<CanvasProps> = ({
 
       canvas.selectedShapeIndex = -1;
       canvas.selectedShape = null;
+      dispatch(setSelectedShape(null));
       canvas.redrawCanvas();
     }
   };
-
-  useEffect(() => {
-    const canvasHTML = canvasRef.current;
-    if (!canvasHTML) return;
-
-    if (!canvas) {
-      console.log("new canvas 1");
-      canvas = new CanvasClass(canvasHTML);
-      canvas.setCanvasProps(figureProps);
-    }
-  }, []);
 
   // useEffect(() => {
   //   const canvasHTML = canvasRef.current;
@@ -236,6 +265,7 @@ export const Canvas: FC<CanvasProps> = ({
     if (!currentTool) return;
     const selectedTool_ = currentTool(canvas);
     setSelectedTool(selectedTool_);
+    console.log(currentTool);
     canvas.selectedTool = selectedTool_;
   }, [tool]);
 

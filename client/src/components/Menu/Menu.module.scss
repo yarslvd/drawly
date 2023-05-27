@@ -11,6 +11,10 @@
   padding: 20px;
   z-index: 100;
   color: #363636;
+  cursor: default;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 
   .options {
     background-color: #F4F4F4;
@@ -24,6 +28,17 @@
     h3 {
       font-size: 21px;
       font-weight: 700;
+    }
+  }
+
+  .layers {
+    h3 {
+      font-size: 21px;
+      font-weight: 700;
+    }
+
+    .layersContainer {
+
     }
   }
 

@@ -6,7 +6,6 @@ import { CSSProperties, MouseEventHandler } from "react";
 import styles from "./ToolBarItem.module.scss";
 
 import { Dropdown } from "@/components/Dropdown/Dropdown";
-import { Tools } from "@/data/Constants";
 
 // TODO: Fix types ;))
 interface ToolProps {
@@ -28,6 +27,7 @@ export const ToolBarItem: FC<UnionProps> = (props: ToolProps) => {
 
   const handleDropdown = () => {
     setDropdown(!dropdown);
+
   };
 
   useEffect(() => {

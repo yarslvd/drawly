@@ -15,10 +15,11 @@ interface DataStateTypes {
   displayFill: boolean | null;
   imageURL: string | null;
   imageFilters: string;
+  selectedShape: any;
 }
 
 const initialState: DataStateTypes = {
-  tool: Tools.MOVE,
+  tool: Tools.RECTANGLE,
   strokeColor: "#000000",
   fillColor: "#000000",
   strokeWidth: 5,
@@ -30,6 +31,7 @@ const initialState: DataStateTypes = {
   displayFill: true,
   imageURL: "",
   imageFilters: "none",
+  selectedShape: null,
 };
 
 export const dataSlice = createSlice({
@@ -72,6 +74,9 @@ export const dataSlice = createSlice({
     setImageFilters: (state, action: PayloadAction<string>) => {
       state.imageFilters = action.payload;
     },
+    setSelectedShape: (state, action: PayloadAction<any>) => {
+      state.selectedShape = action.payload;
+    },
   },
 });
 
@@ -88,6 +93,7 @@ export const {
   setDisplayFill,
   setImageURL,
   setImageFilters,
+  setSelectedShape,
 } = dataSlice.actions;
 export const selectData = (state) => state.data.data;
 export default dataSlice.reducer;
