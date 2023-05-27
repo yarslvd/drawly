@@ -5,9 +5,12 @@ import { Line } from "./Line";
 import { Rectangle } from "./Rectangle";
 import { Ellipse } from "./Ellipse";
 import { CurveLine } from "./CurveLine";
-import {getCanvasPoints} from "@/utils/getCanvasPoints";
-import {useDispatch} from "react-redux";
-import {setSelectedShape} from "@/store/slices/dataSlice";
+import { getCanvasPoints } from "@/utils/getCanvasPoints";
+import { useDispatch } from "react-redux";
+import { setSelectedShape } from "@/store/slices/dataSlice";
+import { Img } from "./Image";
+import { BrushLine } from "./BrushLine";
+import { Text } from "./Text";
 
 interface Circle {
   center: Point;
@@ -37,10 +40,10 @@ export class SelectedShape extends Shape {
   //   this.circles.push({ center, radius });
   // }
   drawRect(
-      ctx: CanvasRenderingContext2D,
-      center: Point,
-      fillColor: string,
-      borderColor: string
+    ctx: CanvasRenderingContext2D,
+    center: Point,
+    fillColor: string,
+    borderColor: string
   ): void {
     ctx.fillStyle = fillColor;
     ctx.strokeStyle = borderColor;
@@ -69,36 +72,36 @@ export class SelectedShape extends Shape {
 
     if (this.canvas.selectedShape instanceof Line) {
       const line = this.canvas.selectedShape as Line;
-      this.drawRect(ctx, line.start,'#fff', this.outlineColor);
-      this.drawRect(ctx, line.end,'#fff', this.outlineColor);
+      this.drawRect(ctx, line.start, "#fff", this.outlineColor);
+      this.drawRect(ctx, line.end, "#fff", this.outlineColor);
       return;
     }
     //
     ctx.strokeRect(this.leftTop.x, this.leftTop.y, this.width, this.height);
     ctx.strokeStyle = this.outlineColor;
     this.drawRect(
-        ctx,
-        { x: this.leftTop.x, y: this.leftTop.y },
-        '#fff',
-        this.outlineColor
+      ctx,
+      { x: this.leftTop.x, y: this.leftTop.y },
+      "#fff",
+      this.outlineColor
     );
     this.drawRect(
-        ctx,
-        { x: this.rightBottom.x, y: this.leftTop.y },
-        '#fff',
-        this.outlineColor
+      ctx,
+      { x: this.rightBottom.x, y: this.leftTop.y },
+      "#fff",
+      this.outlineColor
     );
     this.drawRect(
-        ctx,
-        { x: this.rightBottom.x, y: this.rightBottom.y },
-        '#fff',
-        this.outlineColor
+      ctx,
+      { x: this.rightBottom.x, y: this.rightBottom.y },
+      "#fff",
+      this.outlineColor
     );
     this.drawRect(
-        ctx,
-        { x: this.leftTop.x, y: this.rightBottom.y },
-        '#fff',
-        this.outlineColor
+      ctx,
+      { x: this.leftTop.x, y: this.rightBottom.y },
+      "#fff",
+      this.outlineColor
     );
     // this.drawCircle(
     //   ctx,
@@ -145,6 +148,22 @@ export class SelectedShape extends Shape {
   // }
 
   isPointInside(point: Point): boolean {
+    if (this.canvas.selectedShape instanceof Line) {
+      const line = this.canvas.selectedShape as Line;
+      return line.isPointInside(point);
+    }
+
+    const { x, y } = point;
+
+    if (
+      x >= this.leftTop.x &&
+      x <= this.rightBottom.x &&
+      y >= this.leftTop.y &&
+      y <= this.rightBottom.y
+    ) {
+      return true;
+    }
+
     return false;
   }
 
@@ -212,8 +231,10 @@ export class SelectedShape extends Shape {
 
         break;
       }
+      case shape instanceof Img:
       case shape instanceof Rectangle: {
-        const rect = shape as Rectangle;
+        const rect =
+          shape instanceof Rectangle ? (shape as Rectangle) : (shape as Img);
         // Determine which corner of the rectangle is being resized
         const topLeft = rect.leftTop;
         const topRight = { x: rect.rightBottom.x, y: rect.leftTop.y };
@@ -242,6 +263,16 @@ export class SelectedShape extends Shape {
         center.y = point.y;
 
         rect.normalizeSize();
+        if (rect.width < 0) {
+          const swap = rect.leftTop.x;
+          rect.leftTop.x = rect.rightBottom.x;
+          rect.rightBottom.x = swap;
+        }
+        if (rect.height < 0) {
+          const swap = rect.leftTop.y;
+          rect.leftTop.y = rect.rightBottom.y;
+          rect.rightBottom.y = swap;
+        }
         this.canvas.redrawCanvas();
 
         break;
@@ -288,12 +319,12 @@ export class SelectedShape extends Shape {
         break;
       }
       case shape instanceof CurveLine: {
-        const curve = shape as CurveLine;
+        // const curve = shape as CurveLine;
 
-        const topLeft = curve.leftTop;
-        const topRight = { x: curve.rightBottom.x, y: curve.leftTop.y };
-        const bottomRight = curve.rightBottom;
-        const bottomLeft = { x: curve.leftTop.x, y: curve.rightBottom.y };
+        // const topLeft = curve.leftTop;
+        // const topRight = { x: curve.rightBottom.x, y: curve.leftTop.y };
+        // const bottomRight = curve.rightBottom;
+        // const bottomLeft = { x: curve.leftTop.x, y: curve.rightBottom.y };
 
         // if (center.x === topLeft.x && center.y === topLeft.y) {
         //   curve.start.x += (-curve.leftTop.x + point.x)/2;
@@ -321,11 +352,134 @@ export class SelectedShape extends Shape {
         //   curve.leftTop.x = point.x;
         // }
 
-        center.x = point.x;
-        center.y = point.y;
+        // center.x = point.x;
+        // center.y = point.y;
 
-        curve.normalizeSize();
+        // curve.normalizeSize();
+        // this.canvas.redrawCanvas();
+        break;
+      }
+    }
+  }
+
+  handleMove(start: Point, point: Point) {
+    console.log("handleMove");
+
+    const dx = point.x - start.x;
+    const dy = point.y - start.y;
+
+    const shape = this.canvas.selectedShape;
+    console.log({ dx, dy });
+
+    switch (true) {
+      case shape instanceof Line: {
+        const line = shape as Line;
+
+        line.start.x += dx;
+        line.start.y += dy;
+
+        line.end.x += dx;
+        line.end.y += dy;
+
+        console.log("move line");
+
         this.canvas.redrawCanvas();
+
+        break;
+      }
+      case shape instanceof Img:
+      case shape instanceof Rectangle: {
+        const rect =
+          shape instanceof Rectangle ? (shape as Rectangle) : (shape as Img);
+
+        rect.start.x += dx;
+        rect.start.y += dy;
+
+        rect.leftTop.x += dx;
+        rect.leftTop.y += dy;
+
+        rect.rightBottom.x += dx;
+        rect.rightBottom.y += dy;
+
+        rect.normalizeCorners();
+
+        this.canvas.redrawCanvas();
+
+        this.leftTop = rect.leftTop;
+        this.rightBottom = rect.rightBottom;
+
+        break;
+      }
+      case shape instanceof Ellipse: {
+        const ellipse = shape as Ellipse;
+
+        ellipse.start.x += dx;
+        ellipse.start.y += dy;
+
+        ellipse.leftTop.x += dx;
+        ellipse.leftTop.y += dy;
+
+        ellipse.rightBottom.x += dx;
+        ellipse.rightBottom.y += dy;
+
+        this.leftTop = ellipse.leftTop;
+        this.rightBottom = ellipse.rightBottom;
+
+        this.canvas.redrawCanvas();
+
+        break;
+      }
+      case shape instanceof CurveLine: {
+        const curve = shape as CurveLine;
+
+        const points = curve.points;
+
+        for (let i = 0; i < points.length; i++) {
+          points[i].x += dx;
+          points[i].y += dy;
+        }
+
+        curve.calcBoundingBox();
+
+        this.leftTop = curve.leftTop;
+        this.rightBottom = curve.rightBottom;
+
+        this.canvas.redrawCanvas();
+
+        break;
+      }
+      case shape instanceof BrushLine: {
+        const brush = shape as BrushLine;
+
+        const points = brush.points;
+
+        for (let i = 0; i < points.length; i++) {
+          points[i].x += dx;
+          points[i].y += dy;
+        }
+
+        brush.calcBoundingBox();
+
+        this.leftTop = brush.leftTop;
+        this.rightBottom = brush.rightBottom;
+
+        this.canvas.redrawCanvas();
+
+        break;
+      }
+      case shape instanceof Text: {
+        const text = shape as Text;
+
+        text.start.x += dx;
+        text.start.y += dy;
+
+        text.calcBoundingBox();
+
+        this.leftTop = text.leftTop;
+        this.rightBottom = text.rightBottom;
+
+        this.canvas.redrawCanvas();
+
         break;
       }
     }

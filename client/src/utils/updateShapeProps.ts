@@ -1,5 +1,3 @@
-
-
 export const updateShapeProps = (canvas, figureProps) => {
     canvas.selectedShape.canvas.selectedShape.fillColor = figureProps.fillColor;
     canvas.selectedShape.canvas.selectedShape.strokeColor = figureProps.strokeColor;

@@ -2,7 +2,7 @@ import { FC } from "react";
 import Image from "next/image";
 
 import styles from "./Position.module.scss";
-import {useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 
 export const Position: FC = () => {
   const currentTool = useSelector((state) => state.data.tool);

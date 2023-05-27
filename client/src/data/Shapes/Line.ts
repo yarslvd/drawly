@@ -39,6 +39,9 @@ export class Line extends Shape {
     }
 
     const distance = this.distanceToPoint(point, this.start, this.end);
+
+    console.log("Line isPointInside", distance);
+
     return distance <= this.borderWidth;
   }
 

@@ -5,6 +5,7 @@ import { Shape } from "./Shape";
 import { FigurePropsTypes } from "@/components/Canvas/Canvas";
 
 export class Img extends Shape {
+  protected image: HTMLImageElement;
   start: Point;
 
   width: number;
@@ -13,7 +14,17 @@ export class Img extends Shape {
   filters: string;
   url: string;
 
-  onDraw(): void {}
+  ctx: CanvasRenderingContext2D;
+
+  onDraw(): void {
+    this.ctx.drawImage(
+      this.image,
+      this.leftTop.x,
+      this.leftTop.y,
+      this.width,
+      this.height
+    );
+  }
 
   isPointInside(point: Point): boolean {
     const { x, y } = point;
@@ -26,12 +37,43 @@ export class Img extends Shape {
     );
   }
 
+  normalizeCorners() {
+    this.leftTop = { x: Infinity, y: Infinity };
+    this.rightBottom = { x: Infinity, y: Infinity };
+
+    if (this.width < 0) {
+      this.width = Math.abs(this.width);
+      this.leftTop.x = this.start.x - this.width;
+      this.rightBottom.x = this.start.x;
+    } else {
+      this.leftTop.x = this.start.x;
+      this.rightBottom.x = this.start.x + this.width;
+    }
+    if (this.height < 0) {
+      this.height = Math.abs(this.height);
+      this.leftTop.y = this.start.y - this.height;
+      this.rightBottom.y = this.start.y;
+    } else {
+      this.leftTop.y = this.start.y;
+      this.rightBottom.y = this.start.y + this.height;
+    }
+
+    this.normalizeSize();
+  }
+
+  normalizeSize() {
+    this.width = -this.leftTop.x + this.rightBottom.x;
+    this.height = -this.leftTop.y + this.rightBottom.y;
+    console.log({ width: this.width, height: this.height });
+  }
+
   constructor(
     canvas: CanvasClass,
     start: Point,
     width: number,
     height: number,
-    options: FigurePropsTypes
+    options: FigurePropsTypes,
+    image: HTMLImageElement | null = null
   ) {
     super(canvas);
 
@@ -39,14 +81,31 @@ export class Img extends Shape {
     this.width = width;
     this.height = height;
 
+    this.ctx = this.canvas.getContext2D()!;
+
     this.filters = options.imageFilters;
     this.url = options.imageURL;
+
+    console.log("image constructor");
+
+    if (image == null) {
+      this.image = new Image();
+      this.image.src = this.url;
+      this.image.onerror = () => {
+        this.url = "";
+      };
+
+      this.image.onload = () => {
+        console.log("loaded");
+      };
+    } else {
+      this.image = image;
+    }
 
     const ctx = this.canvas.getContext2D();
     if (ctx == null) return;
     ctx.filter = this.filters;
 
-    this.leftTop = start;
-    this.rightBottom = { x: start.x + width, y: start.y + height };
+    this.normalizeCorners();
   }
 }

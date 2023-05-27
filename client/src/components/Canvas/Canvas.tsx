@@ -1,13 +1,13 @@
 import styles from "./Canvas.module.scss";
 import React, { FC, useEffect, useRef, useState } from "react";
 import { Tool } from "@/data/ToolsClass";
-import { NameTool } from "@/types/types";
+import { Coordinates, NameTool } from "@/types/types";
 import { Keyboard, Tools } from "@/data/Constants";
 import { getCanvasPoints } from "@/utils/getCanvasPoints";
 import { CanvasClass } from "@/data/Canvas";
 
 import Shapes from "@/data/Shapes";
-import {useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Text } from "@/data/Tools";
 import { Text as TextShape } from "@/data/Shapes/Text";
 
@@ -16,9 +16,12 @@ import {
   setFillColor,
   setFillOpacity,
   setStrokeColor,
-  setDisplayFill, setStrokeOpacity, setDisplayStroke, setBorderWidth,
+  setDisplayFill,
+  setStrokeOpacity,
+  setDisplayStroke,
+  setBorderWidth,
 } from "@/store/slices/dataSlice";
-import { updateShapeProps } from '../../utils/updateShapeProps';
+import { updateShapeProps } from "../../utils/updateShapeProps";
 
 export interface CanvasProps {
   tool: string;
@@ -94,11 +97,16 @@ export const Canvas: FC<CanvasProps> = ({
 
     canvas.setCanvasProps(figureProps);
 
-    if(canvas.selectedShape) {
+    if (canvas.selectedShape) {
       updateShapeProps(canvas, figureProps);
       canvas.redrawCanvas();
     }
   }, [figureProps, canvas]);
+
+  let isResize: boolean = false;
+  let isMove: boolean = false;
+
+  let moveStart: Coordinates = { x: Infinity, y: Infinity };
 
   const handleMouseDown = (event: React.MouseEvent<HTMLCanvasElement>) => {
     const point = getCanvasPoints(
@@ -106,11 +114,18 @@ export const Canvas: FC<CanvasProps> = ({
       canvasRef,
       scale
     );
+    if (!point) {
+      return;
+    }
     if (canvas?.selectedShape) {
-      if (point && canvas.selectedShapeDiv.isPointOnCircle(point) == -1) {
+      if (canvas.selectedShapeDiv.isPointOnCircle(point) != -1) {
+        isResize = true;
+      } else if (canvas.selectedShapeDiv.isPointInside(point)) {
+        moveStart = point;
+        isMove = true;
+      } else if (canvas.selectedShapeDiv.isPointOnCircle(point) == -1) {
         canvas.selectedShape = null;
         canvas.redrawCanvas();
-        return;
       }
     }
     if (selectedTool && point) {
@@ -125,7 +140,13 @@ export const Canvas: FC<CanvasProps> = ({
       scale
     );
     if (canvas?.selectedShape && point) {
-      canvas.selectedShapeDiv.handleResize(point);
+      if (isResize) {
+        canvas.selectedShapeDiv.handleResize(point);
+      } else if (isMove) {
+        console.log("move");
+        canvas.selectedShapeDiv.handleMove(moveStart, point);
+        moveStart = point;
+      }
       return;
     }
     if (selectedTool && point) {
@@ -136,6 +157,11 @@ export const Canvas: FC<CanvasProps> = ({
   const handleMouseUp = () => {
     if (canvas?.selectedShape) {
       canvas.selectedShapeDiv.onMouseUp();
+      isResize = false;
+      isMove = false;
+
+      moveStart = { x: Infinity, y: Infinity };
+
       return;
     }
     if (selectedTool) {
@@ -151,7 +177,7 @@ export const Canvas: FC<CanvasProps> = ({
     dispatch(setDisplayFill(optionsObj.displayFill));
     dispatch(setDisplayStroke(optionsObj.displayStroke));
     dispatch(setBorderWidth(optionsObj.borderWidth));
-  }
+  };
 
   const handleOnClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
     if (selectedTool && tool == Tools.CURVE_LINE) {
@@ -175,11 +201,13 @@ export const Canvas: FC<CanvasProps> = ({
       for (let i = canvas.history.length - 1; i >= 0; i--) {
         if (point && canvas.history[i].isPointInside(point)) {
           console.log("Selected shape", i);
+          console.log()
+          //dispatch(setSelectedShape(canvas.history[i].canvas.selectedShape));
           canvas.selectedShapeIndex = i;
           canvas.selectedShape = canvas.history[i];
-          dispatch(setSelectedShape(Object.getPrototypeOf(canvas.selectedShape).constructor.name));
           canvas.selectedShapeDiv.leftTop = canvas.selectedShape.leftTop;
-          canvas.selectedShapeDiv.rightBottom = canvas.selectedShape.rightBottom;
+          canvas.selectedShapeDiv.rightBottom =
+            canvas.selectedShape.rightBottom;
           const optionsObj = {
             fillColor: canvas.selectedShape.fillColor,
             strokeColor: canvas.selectedShape.strokeColor,
@@ -190,7 +218,7 @@ export const Canvas: FC<CanvasProps> = ({
             displayFill: canvas.selectedShape.displayFill,
             imageURL: canvas.selectedShape.imageURL,
             imageFilters: canvas.selectedShape.imageFilters,
-          }
+          };
           setOptions(optionsObj);
           canvas.redrawCanvas();
           return;
