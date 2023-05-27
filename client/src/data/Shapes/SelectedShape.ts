@@ -17,17 +17,12 @@ interface Circle {
 export class SelectedShape extends Shape {
   private width: number = 0;
   private height: number = 0;
-  private color: string = "#00B2FF";
+  private outlineColor: string = "#00B2FF";
 
   private circles: Circle[] = [];
   private selectedCircle: Circle | null = null;
 
   borderWidth: number;
-
-  setSelectedProps(obj: any) {
-      console.log(obj);
-  }
-
   // drawCircle(
   //   ctx: CanvasRenderingContext2D,
   //   center: Point,
@@ -58,7 +53,9 @@ export class SelectedShape extends Shape {
   }
 
   onDraw(): void {
-    console.log(this);
+    // if(this.canvas.selectedShape) {
+    //   this.canvas.selectedShape.fillColor = this.canvas.options.fillColor;
+    // }
     this.circles = [];
     const ctx = this.canvas.getContext2D();
     if (ctx == null || this.canvas.selectedShape == null) {
@@ -72,36 +69,36 @@ export class SelectedShape extends Shape {
 
     if (this.canvas.selectedShape instanceof Line) {
       const line = this.canvas.selectedShape as Line;
-      this.drawRect(ctx, line.start,'#fff', this.color);
-      this.drawRect(ctx, line.end,'#fff', this.color);
+      this.drawRect(ctx, line.start,'#fff', this.outlineColor);
+      this.drawRect(ctx, line.end,'#fff', this.outlineColor);
       return;
     }
-
+    //
     ctx.strokeRect(this.leftTop.x, this.leftTop.y, this.width, this.height);
-    ctx.strokeStyle = this.color;
+    ctx.strokeStyle = this.outlineColor;
     this.drawRect(
         ctx,
         { x: this.leftTop.x, y: this.leftTop.y },
         '#fff',
-        this.color
+        this.outlineColor
     );
     this.drawRect(
         ctx,
         { x: this.rightBottom.x, y: this.leftTop.y },
         '#fff',
-        this.color
+        this.outlineColor
     );
     this.drawRect(
         ctx,
         { x: this.rightBottom.x, y: this.rightBottom.y },
         '#fff',
-        this.color
+        this.outlineColor
     );
     this.drawRect(
         ctx,
         { x: this.leftTop.x, y: this.rightBottom.y },
         '#fff',
-        this.color
+        this.outlineColor
     );
     // this.drawCircle(
     //   ctx,
@@ -341,7 +338,6 @@ export class SelectedShape extends Shape {
   constructor(canvas: CanvasClass, borderWidth: number) {
     super(canvas);
 
-    this.setSelectedProps(this);
     this.borderWidth = 2;
   }
 }

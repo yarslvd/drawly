@@ -20,8 +20,8 @@ export const Menu: FC = () => {
       <div className={styles.options}>
           <h3>Selected element</h3>
           <Position />
-          <Fill />
-          <Stroke />
+          {fillArr.includes(selecedShape) && <Fill />}
+          {strokeArr.includes(selecedShape) && <Stroke />}
       </div>
       <div className={styles.layers}>
             <h3>Layers</h3>

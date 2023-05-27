@@ -18,6 +18,7 @@ import {
   setStrokeColor,
   setDisplayFill, setStrokeOpacity, setDisplayStroke, setBorderWidth,
 } from "@/store/slices/dataSlice";
+import { updateShapeProps } from '../../utils/updateShapeProps';
 
 export interface CanvasProps {
   tool: string;
@@ -90,11 +91,13 @@ export const Canvas: FC<CanvasProps> = ({
   useEffect(() => {
     const canvasHTML = canvasRef.current;
     if (!canvasHTML) return;
-    console.log(canvas);
 
-    console.log(canvas.selectedShape);
     canvas.setCanvasProps(figureProps);
-    canvas.redrawCanvas();
+
+    if(canvas.selectedShape) {
+      updateShapeProps(canvas, figureProps);
+      canvas.redrawCanvas();
+    }
   }, [figureProps, canvas]);
 
   const handleMouseDown = (event: React.MouseEvent<HTMLCanvasElement>) => {
@@ -146,7 +149,7 @@ export const Canvas: FC<CanvasProps> = ({
     dispatch(setStrokeOpacity(optionsObj.strokeOpacity));
     dispatch(setFillOpacity(optionsObj.fillOpacity));
     dispatch(setDisplayFill(optionsObj.displayFill));
-    dispatch(setDisplayStroke(optionsObj.strokeOpacity));
+    dispatch(setDisplayStroke(optionsObj.displayStroke));
     dispatch(setBorderWidth(optionsObj.borderWidth));
   }
 
@@ -172,6 +175,7 @@ export const Canvas: FC<CanvasProps> = ({
       for (let i = canvas.history.length - 1; i >= 0; i--) {
         if (point && canvas.history[i].isPointInside(point)) {
           console.log("Selected shape", i);
+          console.log()
           //dispatch(setSelectedShape(canvas.history[i].canvas.selectedShape));
           canvas.selectedShapeIndex = i;
           canvas.selectedShape = canvas.history[i];

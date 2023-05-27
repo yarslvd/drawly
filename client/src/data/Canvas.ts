@@ -94,6 +94,6 @@ export class CanvasClass {
     this.removedHistory = [];
     this.selectedShape = null;
 
-    this.selectedShapeDiv = new SelectedShape(this);
+    this.selectedShapeDiv = new SelectedShape(this, 3);
   }
 }
