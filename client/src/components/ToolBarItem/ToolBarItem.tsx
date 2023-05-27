@@ -27,7 +27,6 @@ export const ToolBarItem: FC<UnionProps> = (props: ToolProps) => {
 
   const handleDropdown = () => {
     setDropdown(!dropdown);
-
   };
 
   useEffect(() => {

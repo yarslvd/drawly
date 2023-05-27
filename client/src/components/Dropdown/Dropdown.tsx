@@ -3,9 +3,9 @@ import { motion } from "framer-motion";
 import { FC } from "react";
 
 import styles from "./Dropdown.module.scss";
-import {useDispatch} from "react-redux";
-import {setTool} from "@/store/slices/dataSlice";
-import {tools} from "@/components/ToolBar/ToolBar";
+import { useDispatch } from "react-redux";
+import { setTool } from "@/store/slices/dataSlice";
+import { tools } from "@/components/ToolBar/ToolBar";
 
 export const Dropdown: FC = ({ tools, setShape, shape }) => {
   return (
@@ -30,7 +30,7 @@ const ListItem: FC = ({ name, icon, setShape, shape, index }) => {
 
   const handleShapeChange = () => {
     setShape(index);
-    dispatch(setTool(tools[2].tools[index].name))
+    dispatch(setTool(tools[2].tools[index].name));
   };
 
   return (

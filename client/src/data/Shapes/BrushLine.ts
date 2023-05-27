@@ -98,6 +98,15 @@ export class BrushLine extends Shape {
     return distanceToSegment;
   }
 
+  calcBoundingBox(): void {
+    this.leftTop = { x: Infinity, y: Infinity };
+    this.rightBottom = { x: -Infinity, y: -Infinity };
+
+    for (let i = 0; i < this.points.length; i++) {
+      this.handleBorderPoints(this.points[i]);
+    }
+  }
+
   constructor(canvas: CanvasClass, points: Point[], options: FigurePropsTypes) {
     super(canvas);
 

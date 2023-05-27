@@ -127,7 +127,53 @@ export class Text extends Shape {
   }
 
   isPointInside(point: Point): boolean {
-    return false;
+    this.calcBoundingBox();
+    const { x, y } = point;
+
+    return (
+      x >= this.leftTop.x &&
+      x <= this.rightBottom.x &&
+      y >= this.leftTop.y &&
+      y <= this.rightBottom.y
+    );
+  }
+
+  calcBoundingBox() {
+    const ctx = this.canvas.getContext2D();
+    if (ctx == null) {
+      return;
+    }
+
+    const lines = this.text.split("\n");
+    const lineHeight = this.fontSize;
+
+    let maxLineWidth: number = -Infinity;
+    const borderHeight = lines.length * lineHeight;
+
+    lines.forEach((line, index) => {
+      const lineWidth = ctx.measureText(line).width;
+      if (lineWidth > maxLineWidth) {
+        maxLineWidth = lineWidth;
+      }
+    });
+
+    this.leftTop = { x: this.start.x, y: this.start.y - lineHeight };
+    this.rightBottom = {
+      x: this.start.x + maxLineWidth,
+      y: this.start.y + borderHeight - lineHeight / 2,
+    };
+
+    if (this.leftTop.x > this.rightBottom.x) {
+      const swap = this.leftTop.x;
+      this.leftTop.x = this.rightBottom.x;
+      this.rightBottom.x = swap;
+    }
+
+    if (this.leftTop.y > this.rightBottom.y) {
+      const swap = this.leftTop.y;
+      this.leftTop.y = this.rightBottom.y;
+      this.rightBottom.y = swap;
+    }
   }
 
   constructor(
@@ -140,7 +186,7 @@ export class Text extends Shape {
   ) {
     super(canvas);
 
-    this.start = start;
+    this.start = { x: start.x, y: start.y + fontSize / 2 };
 
     this.text = text;
     this.fontWeight = fontWeight;

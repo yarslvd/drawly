@@ -220,6 +220,8 @@ export class CurveLine extends Shape {
     if (this.points.length < 2) {
       return;
     }
+    this.leftTop = { x: Infinity, y: Infinity };
+    this.rightBottom = { x: -Infinity, y: -Infinity };
     this.handleBorderPoints(this.points[0]);
 
     const len = this.points.length;

@@ -46,7 +46,7 @@ export const Fill: FC = () => {
   };
 
   return (
-      <div className={styles.container}>
+    <div className={styles.container}>
       <h4>Fill</h4>
       <div className={styles.options}>
         <label className={styles.checkboxContainer}>
@@ -68,7 +68,7 @@ export const Fill: FC = () => {
             </div>
             <input
               type="text"
-              value={"#" + fillColor.slice(1)}
+              value={"#" + fillColor?.slice(1)}
               onChange={(e) => validateHex(e.target.value)}
               onKeyDown={handleKeyDown}
               maxLength={7}

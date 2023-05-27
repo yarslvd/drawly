@@ -5,22 +5,30 @@ import { Img as ImgShape } from "@/data/Shapes/Image";
 
 export class Img extends Tool {
   protected start: Coordinates | null = null;
-  protected image: HTMLImageElement;
   protected filters: string = "none";
   protected url: string;
+  protected currentImgShape: ImgShape | null = null;
+  protected cachedImage: HTMLImageElement | null = null;
+  protected animationFrameId: number | null = null;
   flag: boolean = false;
 
   private setImage(): void {
     this.url = this.canvas.options.imageURL;
     this.filters = this.canvas.options.imageFilters;
 
-    this.image.src = this.url;
-    this.image.onerror = () => {
+    this.cachedImage = new Image();
+    this.cachedImage.src = this.url;
+    this.cachedImage.onerror = () => {
       this.url = "";
+      console.log("error");
     };
 
-    let ctx = this.canvas.getContext2D()!;
-    ctx.filter = this.filters;
+    this.cachedImage.onload = () => {
+      console.log("loaded");
+    };
+
+    // let ctx = this.canvas.getContext2D()!;
+    // ctx.filter = this.filters;
   }
 
   private removeFilters(): void {
@@ -34,7 +42,6 @@ export class Img extends Tool {
     this.url = canvas.options.imageURL;
     this.filters = canvas.options.imageFilters;
 
-    this.image = new Image();
     this.setImage();
 
     if (this.canvas.getContext2D()) {
@@ -46,48 +53,71 @@ export class Img extends Tool {
     this.setImage();
     if (this.url === "") return;
 
+    console.log("OnDown");
+
     this.start = point;
-    this.flag = true;
-    const img = new ImgShape(
+    this.currentImgShape = new ImgShape(
       this.canvas,
       this.start,
       0,
       0,
-      Object.assign(this.canvas.options)
+      Object.assign(this.canvas.options),
+      this.cachedImage
     );
-    this.canvas.pushHistory(img);
+    this.canvas.pushHistory(this.currentImgShape);
+
+    this.updateCanvas();
   }
 
   protected onMove(start: Coordinates, end: Coordinates): void {
     if (!this.canvas) return;
     if (!this.start) return;
+    if (!this.currentImgShape) return;
 
-    this.setImage();
+    // this.setImage();
     if (this.url === "") return;
 
-    const context = this.canvas.getContext2D();
-    if (!context) return;
+    const image = this.canvas.history[
+      this.canvas.history.length - 1
+    ] as ImgShape;
 
     const width = end.x - this.start.x;
     const height = end.y - this.start.y;
 
-    this.canvas.undoShape();
-    const img = new ImgShape(
-      this.canvas,
-      this.start,
-      width,
-      height,
-      Object.assign(this.canvas.options)
-    );
-    img.onDraw();
+    image.rightBottom = end;
 
-    this.flag = false;
-    this.canvas
-      .getContext2D()!
-      .drawImage(this.image, this.start.x, this.start.y, width, height);
-    this.removeFilters();
+    image.width = width;
+    image.height = height;
 
-    this.canvas.pushHistory(img);
+    image.leftTop = this.start;
+    image.rightBottom = end;
+
+    image.normalizeCorners();
+
+    if (image.width < 0) {
+      const swap = image.leftTop.x;
+      image.leftTop.x = image.rightBottom.x;
+      image.rightBottom.x = swap;
+    }
+    if (image.height < 0) {
+      const swap = image.leftTop.y;
+      image.leftTop.y = image.rightBottom.y;
+      image.rightBottom.y = swap;
+    }
+    // this.canvas.redrawCanvas();
+  }
+
+  private updateCanvas(): void {
+    if (!this.canvas) return;
+    if (!this.start) return;
+    if (!this.currentImgShape) return;
+
+    this.canvas.redrawCanvas();
+    console.log("redraw");
+    // Request the next frame update
+    this.animationFrameId = requestAnimationFrame(() => {
+      this.updateCanvas();
+    });
   }
 
   protected onUp(point: Coordinates): void {
@@ -110,16 +140,18 @@ export class Img extends Tool {
       this.start,
       width,
       height,
-      Object.assign(this.canvas.options)
+      Object.assign(this.canvas.options),
+      this.cachedImage
     );
     img.onDraw();
+    this.currentImgShape?.normalizeCorners();
 
-    this.canvas
-      .getContext2D()!
-      .drawImage(this.image, this.start.x, this.start.y, width, height);
     this.removeFilters();
 
     this.canvas.pushHistory(img);
+
+    cancelAnimationFrame(this.animationFrameId!);
+    this.animationFrameId = null;
   }
 
   protected onClick(point: Coordinates): void {

@@ -79,7 +79,7 @@ export const Stroke: FC = () => {
               </div>
               <input
                 type="text"
-                value={"#" + strokeColor.slice(1)}
+                value={"#" + strokeColor?.slice(1)}
                 onChange={(e) => validateHex(e.target.value)}
                 onKeyDown={handleKeyDown}
                 maxLength={7}
