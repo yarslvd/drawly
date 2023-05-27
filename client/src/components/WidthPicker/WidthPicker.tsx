@@ -8,7 +8,7 @@ interface WidthPickerPropsTypes {
   handleChange: (width: number) => void;
 }
 
-export const WidthPicker = ({ width, handleChange }: WidthPickerPropsTypes) => {
+const WidthPicker = ({ width, handleChange }: WidthPickerPropsTypes) => {
   const [displayPicker, setDisplayPicker] = useState(false);
 
   return (

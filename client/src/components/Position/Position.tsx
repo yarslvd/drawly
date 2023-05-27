@@ -13,7 +13,7 @@ export const Position: FC = () => {
       <div className={styles.options}>
         <div className={styles.inputContainer}>
           <span>X</span>
-          <input type="number" onChange={() => console.log(currentTool)} />
+          <input type="number" />
         </div>
         <div className={styles.inputContainer}>
           <span>Y</span>
@@ -21,17 +21,8 @@ export const Position: FC = () => {
         </div>
         <div className={styles.inputContainer}>
           <Image
-            src="/assets/icons/tools/angle.png"
-            alt="Rotate"
-            width={20}
-            height={20}
-          />
-          <input type="number" />
-        </div>
-        <div className={styles.inputContainer}>
-          <Image
             src="/assets/icons/tools/borderRadius.png"
-            alt="Rotate"
+            alt="Border radius"
             width={20}
             height={20}
           />

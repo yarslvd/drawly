@@ -24,7 +24,9 @@ export class BrushLine extends Shape {
     ctx.lineWidth = this.borderWidth;
 
     const point = this.points[0];
+    console.log(point);
     ctx.beginPath();
+    ctx.fillStyle = this.strokeColor;
     ctx.arc(point.x, point.y, this.borderWidth / 2, 0, 2 * Math.PI);
     ctx.fill();
 

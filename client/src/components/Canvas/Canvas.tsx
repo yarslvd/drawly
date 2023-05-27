@@ -175,10 +175,9 @@ export const Canvas: FC<CanvasProps> = ({
       for (let i = canvas.history.length - 1; i >= 0; i--) {
         if (point && canvas.history[i].isPointInside(point)) {
           console.log("Selected shape", i);
-          console.log()
-          //dispatch(setSelectedShape(canvas.history[i].canvas.selectedShape));
           canvas.selectedShapeIndex = i;
           canvas.selectedShape = canvas.history[i];
+          dispatch(setSelectedShape(Object.getPrototypeOf(canvas.selectedShape).constructor.name));
           canvas.selectedShapeDiv.leftTop = canvas.selectedShape.leftTop;
           canvas.selectedShapeDiv.rightBottom = canvas.selectedShape.rightBottom;
           const optionsObj = {

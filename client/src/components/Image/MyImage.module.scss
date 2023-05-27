@@ -2,12 +2,34 @@
   display: flex;
   flex-direction: column;
 
-  h4{
+  h2 {
+    margin-bottom: 10px;
+  }
+
+  h4 {
+    font-size: 22px;
+    margin-bottom: 5px;
+  }
+
+  h5 {
+    font-size: 14px;
+  }
+
+  .title{
     font-size: 16px;
     color: #b0b0b0;
     font-weight: 500;
     margin-bottom: 5px;
   }
+
+  .uploadButton{
+    background-color: #363636;
+
+    &:hover {
+      background-color: #2d2d2d;
+    }
+  }
+
   .header{
     color: #363636;
     font-size: 21px;

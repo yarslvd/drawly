@@ -179,7 +179,7 @@ export class CurveLine extends Shape {
       const distance = Math.sqrt(
         Math.pow(point.x - x, 2) + Math.pow(point.y - y, 2)
       );
-      console.log({ distance });
+      //console.log({ distance });
       if (distance < minDistance) {
         minDistance = distance;
       }

@@ -100,7 +100,7 @@ export const MyImage: FC = () => {
       <h2 className={styles.header}>Image</h2>
 
       <div>
-        <h4 className={styles.title}>Choose from local files:</h4>
+        <span className={styles.title}>Choose from local files:</span>
         <label htmlFor="upload-photo">
           <input
             style={{ display: "none" }}
@@ -110,24 +110,31 @@ export const MyImage: FC = () => {
             onChange={(e) => handleChange(e)}
           />
 
-          <Button color="secondary" variant="contained" component="span">
+          <Button
+              color="primary"
+              variant="contained"
+              component="span"
+              sx={{ marginBottom: '10px', width: '100%' }}
+              className={styles.uploadButton}
+          >
             Upload button
           </Button>
         </label>
       </div>
       {/*TODO: may be some validation for url?*/}
-      <div>
-        <h4>or enter the link to photo:</h4>
+      <div style={{ marginBottom: '20px'}}>
+        <span className={styles.title}>or enter the link to photo:</span>
         <input
           className={styles.inputText}
           value={file!}
           onChange={(e) => setFile(e.target.value)}
           type="url"
+          style={{ width: '90%' }}
         />
       </div>
 
       <div>
-        <h4>Apply filters</h4>
+        <h4>Filters</h4>
 
         <div>
           <h5>Blur:</h5>
@@ -139,6 +146,7 @@ export const MyImage: FC = () => {
             max={100}
             step={1}
             value={blur}
+            style={{ width: '100%', marginBottom: '15px' }}
           ></input>
         </div>
 
@@ -152,6 +160,7 @@ export const MyImage: FC = () => {
             max={200}
             step={1}
             value={brightness}
+            style={{ width: '100%', marginBottom: '15px' }}
           ></input>
         </div>
 
@@ -165,6 +174,7 @@ export const MyImage: FC = () => {
             max={200}
             step={1}
             value={contrast}
+            style={{ width: '100%', marginBottom: '15px' }}
           ></input>
         </div>
 
@@ -178,6 +188,7 @@ export const MyImage: FC = () => {
             max={100}
             step={1}
             value={grayScale}
+            style={{ width: '100%', marginBottom: '15px' }}
           ></input>
         </div>
 
@@ -191,6 +202,7 @@ export const MyImage: FC = () => {
             max={100}
             step={1}
             value={invert}
+            style={{ width: '100%', marginBottom: '15px' }}
           ></input>
         </div>
 
@@ -204,6 +216,7 @@ export const MyImage: FC = () => {
             max={100}
             step={1}
             value={opacity}
+            style={{ width: '100%', marginBottom: '15px' }}
           ></input>
         </div>
 
@@ -217,6 +230,7 @@ export const MyImage: FC = () => {
             max={100}
             step={1}
             value={saturate}
+            style={{ width: '100%', marginBottom: '15px' }}
           ></input>
         </div>
 
@@ -230,6 +244,7 @@ export const MyImage: FC = () => {
             max={100}
             step={1}
             value={sepia}
+            style={{ width: '100%', marginBottom: '15px' }}
           ></input>
         </div>
       </div>
