@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { Tools } from "@/data/Constants";
 import { CanvasClass } from "@/data/Canvas";
+import { Shape } from "@/data/Shapes/Shape";
 
 interface DataStateTypes {
   tool: any;
@@ -18,6 +19,7 @@ interface DataStateTypes {
   imageFilters: string;
   selectedShape: any;
   canvas: CanvasClass | null;
+  history: Shape[];
 }
 
 const initialState: DataStateTypes = {
@@ -35,6 +37,7 @@ const initialState: DataStateTypes = {
   imageFilters: "none",
   selectedShape: null,
   canvas: null,
+  history: [],
 };
 
 export const dataSlice = createSlice({
@@ -83,6 +86,9 @@ export const dataSlice = createSlice({
     setCanvas: (state, action: PayloadAction<any>) => {
       state.canvas = action.payload;
     },
+    setCanvasHistory: (state, action: PayloadAction<any>) => {
+      state.history = action.payload;
+    },
   },
 });
 
@@ -101,6 +107,7 @@ export const {
   setImageFilters,
   setSelectedShape,
   setCanvas,
+  setCanvasHistory,
 } = dataSlice.actions;
 export const selectData = (state) => state.data.data;
 export default dataSlice.reducer;

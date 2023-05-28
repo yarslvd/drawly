@@ -65,6 +65,9 @@ export class SelectedShape extends Shape {
       return;
     }
 
+    this.leftTop = this.canvas.selectedShape.leftTop;
+    this.rightBottom = this.canvas.selectedShape.rightBottom;
+
     this.width = this.rightBottom.x - this.leftTop.x;
     this.height = this.rightBottom.y - this.leftTop.y;
 

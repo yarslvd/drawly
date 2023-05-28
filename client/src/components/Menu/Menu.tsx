@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 
 import styles from "./Menu.module.scss";
 
@@ -17,19 +17,21 @@ import { Stroke } from "@/components/Stroke/Stroke";
 import { MyImage } from "@/components/Image/MyImage";
 import { useSelector } from "react-redux";
 
-import Image from "next/image";
 import { Collapse } from "@mui/material";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import { CanvasClass } from "@/data/Canvas";
 import { Tools } from "@/data/Constants";
+import { Shape } from "@/data/Shapes/Shape";
 
 export const Menu: FC = () => {
   const currentTool = useSelector((state) => state.data.tool);
   const selectedShape = useSelector((state) => state.data.selectedShape);
   const [displayPickerFill, setDisplayPickerFill] = useState(false);
   const [displayPickerStroke, setDisplayPickerStroke] = useState(false);
-  const fillArrTools = [Tools.RECTANGLE, Tools.ELLIPSE];
+  const [layers, setLayers] = useState<Shape[][]>([]);
+  const [selectedIndex, setSelectedIndex] = useState<number>(0);
+  const fillArrTools = ["rectangle", "ellipse"];
   const strokeArrTools = [
     Tools.RECTANGLE,
     Tools.ELLIPSE,
@@ -48,15 +50,33 @@ export const Menu: FC = () => {
   console.log("HERE", selectedShape, currentTool);
 
   const canvas: CanvasClass = useSelector((state) => state.data.canvas);
-  const [open, setOpen] = useState(false);
+  const history: Shape[] = useSelector((state) => state.data.canvas?.history);
 
-  const handleClick = () => {
-    setOpen(!open);
-  };
+  // useEffect(() => {
+  //   if(canvas?.layers)
+  //   setLayers([...canvas.layers]);
+
+  //   console.log("update layers")
+  // }, [canvas, history]);
+  useEffect(() => {
+    if (canvas?.layers) {
+      setLayers([...canvas.layers]);
+    }
+  }, [canvas?.layers]);
 
   const addLayer = () => {
-    canvas.layers.push([]);
-    canvas.history = canvas.layers[canvas.layers.length - 1];
+    const newLayers = [...canvas.layers, []];
+    canvas.layers = newLayers;
+    canvas.history = newLayers[newLayers.length - 1];
+    setLayers(newLayers);
+  };
+
+  const handleSelectLayer = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    index: number
+  ) => {
+    canvas.history = canvas.layers[index];
+    setSelectedIndex(index);
   };
 
   return (
@@ -108,31 +128,15 @@ export const Menu: FC = () => {
             </ListItemIcon>
             <ListItemText />
           </ListItemButton> */}
-            {canvas &&
-              canvas.layers.map((layer, index) => {
-                return (
-                  <>
-                    <ListItemButton onClick={handleClick}>
-                      <ListItemText primary={`layer ${index + 1}`} />
-                      {open ? <ExpandLess /> : <ExpandMore />}
-                    </ListItemButton>
-                    <Collapse in={open} timeout="auto" unmountOnExit>
-                      <List component="div" disablePadding>
-                        {layer.map((shape) => {
-                          return (
-                            <>
-                              <ListItemButton sx={{ pl: 4 }}>
-                                <ListItemIcon></ListItemIcon>
-                                <ListItemText primary={shape.name} />
-                              </ListItemButton>
-                            </>
-                          );
-                        })}
-                      </List>
-                    </Collapse>
-                  </>
-                );
-              })}
+            {layers &&
+              layers.map((layer, index) => (
+                <NestedList
+                  layer={{ shapes: [...layer] }}
+                  index={index}
+                  selectLayer={handleSelectLayer}
+                  selectedIndex={selectedIndex}
+                />
+              ))}
           </List>
         </div>
       </div>
@@ -140,5 +144,64 @@ export const Menu: FC = () => {
         <MyImage />
       </div>
     </div>
+  );
+};
+
+const NestedList: FC<{
+  layer: { shapes: Shape[] };
+  index: number;
+  selectLayer;
+  selectedIndex;
+}> = ({ layer, index, selectLayer, selectedIndex }) => {
+  const [open, setOpen] = useState(false);
+  const [shapes, setShapes] = useState<Shape[]>(layer.shapes);
+  const canvas: CanvasClass = useSelector((state) => state.data.canvas);
+
+  useEffect(() => {
+    setShapes(layer.shapes);
+  }, [layer.shapes]);
+
+  const handleClick = (event, index) => {
+    setOpen(!open);
+    selectLayer(event, index);
+  };
+
+  const [selectedShapeIndex, setSelectedShapeIndex] = useState<number>(-1);
+
+  const handleSelectShape = (event, index) => {
+    canvas.selectedShape = canvas.history[index];
+    canvas.selectedShapeIndex = index;
+    canvas.redrawCanvas();
+    setSelectedShapeIndex(index);
+  };
+
+  return (
+    <>
+      <ListItemButton
+        selected={selectedIndex === index}
+        onClick={(event) => handleClick(event, index)}
+      >
+        <ListItemText primary={`layer ${index + 1}`} />
+        {open ? <ExpandLess /> : <ExpandMore />}
+      </ListItemButton>
+      <Collapse in={open} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          {shapes.map((shape, shapeIndex) => {
+            return (
+              <>
+                <ListItemButton
+                  sx={{ pl: 4 }}
+                  selected={selectedShapeIndex == shapeIndex}
+                  onClick={(event) => handleSelectShape(event, shapeIndex)}
+                >
+                  <ListItemIcon></ListItemIcon>
+                  <ListItemText primary={shape.name} />
+                </ListItemButton>
+              </>
+            );
+          })}
+        </List>
+      </Collapse>
+    </>
   );
 };

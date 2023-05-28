@@ -9,6 +9,10 @@ const store = () =>
       [dataSlice.name]: dataSlice.reducer,
     },
     devTools: true,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: false,
+      }),
   });
 
 export const wrapper = createWrapper(store);
