@@ -16,6 +16,33 @@ export class Img extends Shape {
 
   ctx: CanvasRenderingContext2D;
 
+  // toJSON(): string {
+  //   return `{"type":"Img",\
+  //     "start":"${JSON.stringify(this.start)}"
+  //     "leftTop":"${JSON.stringify(this.leftTop)}",\
+  //     "rightBottom":"${JSON.stringify(this.rightBottom)}",\
+  //     "name":${this.name},\
+  //     "filters":"${this.filters}",\
+  //     "url":"${this.url}",\
+  //     "width":"${this.width}",\
+  //     "height":"${this.height}"\
+  //   }`;
+  // }
+
+  toJSON(): string {
+    return JSON.stringify({
+      type: "Img",
+      start: this.start,
+      leftTop: this.leftTop,
+      rightBottom: this.rightBottom,
+      name: this.name,
+      filters: this.filters,
+      url: this.url,
+      width: this.width,
+      height: this.height,
+    });
+  }
+
   onDraw(): void {
     this.ctx.filter = this.filters;
     this.ctx.drawImage(

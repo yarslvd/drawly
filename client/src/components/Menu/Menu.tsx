@@ -9,13 +9,13 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import TextField from "@mui/material/TextField";
 import { ToolBarItem } from "@/components/ToolBarItem/ToolBarItem";
-import { Button, Input, IconButton } from "@mui/material";
+import { Button } from "@mui/material";
 
 import { Position } from "@/components/Position/Position";
 import { Fill } from "@/components/Fill/Fill";
 import { Stroke } from "@/components/Stroke/Stroke";
 import { MyImage } from "@/components/Image/MyImage";
-import {useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { Collapse } from "@mui/material";
 import ExpandLess from "@mui/icons-material/ExpandLess";
@@ -117,13 +117,25 @@ export const Menu: FC = () => {
         <Export />
       </div>
       <div className={styles.layers}>
-        <div style={{ display: "flex", alignItems: 'center', justifyContent: 'space-between' }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
           <h3>Layers</h3>
           <Button onClick={addLayer}>Add</Button>
         </div>
         <div className={styles.layersContainer}>
           <List
-            sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper", overflow: 'auto', height: '180px' }}
+            sx={{
+              width: "100%",
+              maxWidth: 360,
+              bgcolor: "background.paper",
+              overflow: "auto",
+              height: "180px",
+            }}
             component="nav"
             aria-labelledby="nested-list-subheader"
           >
@@ -192,7 +204,11 @@ const NestedList: FC<{
     canvas.selectedShape = canvas.history[index];
     canvas.selectedShapeIndex = index;
     console.log(canvas.selectedShape);
-    dispatch(setSelectedShape(Object.getPrototypeOf(canvas.selectedShape).constructor.name));
+    dispatch(
+      setSelectedShape(
+        Object.getPrototypeOf(canvas.selectedShape).constructor.name
+      )
+    );
     canvas.redrawCanvas();
     setSelectedShapeIndex(index);
   };

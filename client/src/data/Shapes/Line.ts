@@ -12,6 +12,35 @@ export class Line extends Shape {
   strokeOpacity: number;
   displayStroke: boolean;
 
+  // toJSON(): string {
+  //   return `{"type":"Line",\
+  //   "start":"${JSON.stringify(this.start)}",\
+  //   "end":"${JSON.stringify(this.end)}",\
+  //   "leftTop":"${JSON.stringify(this.leftTop)}",\
+  //   "rightBottom":"${JSON.stringify(this.rightBottom)}",\
+  //   "name":${this.name},\
+  //   "borderWidth":"${this.borderWidth}",\
+  //   "strokeColor":"${this.strokeColor}",\
+  //   "strokeOpacity":"${this.strokeOpacity}",\
+  //   "displayStroke":"${this.displayStroke}"\
+  // }`;
+  // }
+
+  toJSON(): string {
+    return JSON.stringify({
+      type: "Line",
+      start: this.start,
+      end: this.end,
+      leftTop: this.leftTop,
+      rightBottom: this.rightBottom,
+      name: this.name,
+      borderWidth: this.borderWidth,
+      strokeColor: this.strokeColor,
+      strokeOpacity: this.strokeOpacity,
+      displayStroke: this.displayStroke,
+    });
+  }
+
   onDraw(): void {
     const ctx = this.canvas.getContext2D();
     if (ctx == null) {

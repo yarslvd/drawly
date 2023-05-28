@@ -4,6 +4,7 @@ const db = require("../models/db");
 const { v4: uuidv4 } = require("uuid");
 const create = async (req, res) => {
   try {
+    console.log(req.body);
     const request = checkFields(req.body, ["title", "content"]);
     if (!request) {
       return res.status(StatusCodes.BAD_REQUEST).json({
