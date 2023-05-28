@@ -17,6 +17,41 @@ export class Text extends Shape {
 
   isFocused: boolean = false;
 
+  // toJSON(): string {
+  //   return `{"type":"Text",\
+  //     "start":"${JSON.stringify(this.start)}",\
+  //     "leftTop":"${JSON.stringify(this.leftTop)}",\
+  //     "rightBottom":"${JSON.stringify(this.rightBottom)}",\
+  //     "name":${this.name},\
+  //     "borderWidth":"${this.borderWidth}",\
+  //     "borderColor":"${this.borderColor}",\
+  //     "width":${this.width},\
+  //     "height":${this.height},\
+  //     "text":"${this.text}",\
+  //     "fontWeight":"${this.fontWeight}",\
+  //     "fontSize":"${this.fontSize}",\
+  //     "color":"${this.color}"\
+  //   }`;
+  // }
+
+  toJSON(): string {
+    return JSON.stringify({
+      type: "Text",
+      start: this.start,
+      leftTop: this.leftTop,
+      rightBottom: this.rightBottom,
+      name: this.name,
+      borderWidth: this.borderWidth,
+      borderColor: this.borderColor,
+      width: this.width,
+      height: this.height,
+      text: this.text,
+      fontWeight: this.fontWeight,
+      fontSize: this.fontSize,
+      color: this.color,
+    });
+  }
+
   // Event listeners
   handleMouseDown = (event) => {
     const { offsetX, offsetY } = event;

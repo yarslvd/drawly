@@ -27,6 +27,12 @@ export abstract class Shape {
     }
   }
 
+  toJSON(): string {
+    return `{"leftTop":"${this.leftTop.toString()}","rightBottom":"${this.rightBottom.toString()}","name":${
+      this.name
+    }}`;
+  }
+
   constructor(canvas: CanvasClass) {
     this.canvas = canvas;
     this.name = new.target.name;

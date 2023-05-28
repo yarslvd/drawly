@@ -20,9 +20,16 @@ import {
   setStrokeOpacity,
   setDisplayStroke,
   setBorderWidth,
-  setCanvas, setBorderRadius, setText
+  setCanvas,
+  setBorderRadius,
+  setText,
 } from "@/store/slices/dataSlice";
 import { updateShapeProps } from "../../utils/updateShapeProps";
+import { Button } from "@mui/material";
+import {
+  useAddCanvasMutation,
+  useGetCanvasMutation,
+} from "@/store/api/fetchCanvasApi";
 
 export interface CanvasProps {
   tool: string;
@@ -67,6 +74,10 @@ export const Canvas: FC<CanvasProps> = ({
   const imageURL = useSelector((state) => state.data.imageURL);
   const imageFilters = useSelector((state) => state.data.imageFilters);
 
+  const [createCanvas] = useAddCanvasMutation();
+  const [getCanvas] = useGetCanvasMutation();
+  const id = "6c14428c-f73b-42af-a928-8480317df238";
+
   //OBJECT WITH OPTIONS PROPS
   const figureProps: FigurePropsTypes = {
     fillColor,
@@ -90,6 +101,18 @@ export const Canvas: FC<CanvasProps> = ({
       canvas.setCanvasProps(figureProps);
 
       dispatch(setCanvas(canvas));
+    }
+
+    if (id) {
+      (async () => {
+        const canvasData = await getCanvas(id);
+        // console.log({canvasData});
+        // console.log(JSON.parse(canvasData.data.canvases.content));
+        // console.log((JSON.parse(canvasData.data.canvases.content)[0][0]));
+        // console.log(JSON.parse(JSON.parse(canvasData.data.canvases.content)[0][0]));
+
+        canvas.setLayersData(JSON.parse(canvasData.data.canvases.content));
+      })();
     }
   }, []);
 
@@ -209,9 +232,14 @@ export const Canvas: FC<CanvasProps> = ({
           console.log("Selected shape", i);
           canvas.selectedShapeIndex = i;
           canvas.selectedShape = canvas.history[i];
-          dispatch(setSelectedShape(Object.getPrototypeOf(canvas.selectedShape).constructor.name));
+          dispatch(
+            setSelectedShape(
+              Object.getPrototypeOf(canvas.selectedShape).constructor.name
+            )
+          );
           canvas.selectedShapeDiv.leftTop = canvas.selectedShape.leftTop;
-          canvas.selectedShapeDiv.rightBottom = canvas.selectedShape.rightBottom;
+          canvas.selectedShapeDiv.rightBottom =
+            canvas.selectedShape.rightBottom;
           console.log(canvas.selectedShape);
           const optionsObj = {
             fillColor: canvas.selectedShape.fillColor,
@@ -445,17 +473,26 @@ export const Canvas: FC<CanvasProps> = ({
     };
   }, [scale]);
 
+  const saveCanvas = async () => {
+    await createCanvas({ canvas, title: "canvas title" });
+  };
+
   return (
-    <canvas
-      width={widthCanvas}
-      height={heightCanvas}
-      className={styles.canvas}
-      style={{ transform: `scale(${scale})` }}
-      ref={canvasRef}
-      onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-      onClick={handleOnClick}
-    />
+    <>
+      <Button variant="contained" onClick={saveCanvas}>
+        Save
+      </Button>
+      <canvas
+        width={widthCanvas}
+        height={heightCanvas}
+        className={styles.canvas}
+        style={{ transform: `scale(${scale})` }}
+        ref={canvasRef}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onClick={handleOnClick}
+      />
+    </>
   );
 };

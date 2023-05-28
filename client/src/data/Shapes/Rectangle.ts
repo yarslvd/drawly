@@ -20,6 +20,45 @@ export class Rectangle extends Shape {
 
   radius: number = 0;
 
+  // toJSON(): string {
+  //   return `{"type":"Rectangle",\
+  //     "start":"${JSON.stringify(this.start)}"
+  //     "leftTop":"${JSON.stringify(this.leftTop)}",\
+  //     "rightBottom":"${JSON.stringify(this.rightBottom)}",\
+  //     "name":${this.name},\
+  //     "borderWidth":"${this.borderWidth}",\
+  //     "strokeColor":"${this.strokeColor}",\
+  //     "fillColor":"${this.fillColor}",\
+  //     "strokeOpacity":"${this.strokeOpacity}",\
+  //     "fillOpacity":"${this.fillOpacity}",\
+  //     "displayFill":"${this.displayFill}",\
+  //     "displayStroke":"${this.displayStroke}",\
+  //     "width":"${this.width}",\
+  //     "height":"${this.height}",\
+  //     "radius":"${this.radius}"\
+  //   }`;
+  // }
+
+  toJSON(): string {
+    return JSON.stringify({
+      type: "Rectangle",
+      start: this.start,
+      leftTop: this.leftTop,
+      rightBottom: this.rightBottom,
+      name: this.name,
+      borderWidth: this.borderWidth,
+      strokeColor: this.strokeColor,
+      fillColor: this.fillColor,
+      strokeOpacity: this.strokeOpacity,
+      fillOpacity: this.fillOpacity,
+      displayFill: this.displayFill,
+      displayStroke: this.displayStroke,
+      width: this.width,
+      height: this.height,
+      radius: this.radius,
+    });
+  }
+
   onDraw(): void {
     const ctx = this.canvas.getContext2D();
     if (ctx == null) {

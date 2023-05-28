@@ -15,7 +15,7 @@ import { Position } from "@/components/Position/Position";
 import { Fill } from "@/components/Fill/Fill";
 import { Stroke } from "@/components/Stroke/Stroke";
 import { MyImage } from "@/components/Image/MyImage";
-import {useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { Collapse } from "@mui/material";
 import ExpandLess from "@mui/icons-material/ExpandLess";
@@ -24,8 +24,8 @@ import { CanvasClass } from "@/data/Canvas";
 import { Tools } from "@/data/Constants";
 import { Shape } from "@/data/Shapes/Shape";
 import { Export } from "@/components/Export/Export";
-import {setSelectedShape} from "@/store/slices/dataSlice";
-import {TextEdit} from "@/components/TextEdit/TextEdit";
+import { setSelectedShape } from "@/store/slices/dataSlice";
+import { TextEdit } from "@/components/TextEdit/TextEdit";
 
 export const Menu: FC = () => {
   const currentTool = useSelector((state) => state.data.tool);
@@ -116,13 +116,25 @@ export const Menu: FC = () => {
         <Export />
       </div>
       <div className={styles.layers}>
-        <div style={{ display: "flex", alignItems: 'center', justifyContent: 'space-between' }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
           <h3>Layers</h3>
           <Button onClick={addLayer}>Add</Button>
         </div>
         <div className={styles.layersContainer}>
           <List
-            sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper", overflow: 'auto', height: '180px' }}
+            sx={{
+              width: "100%",
+              maxWidth: 360,
+              bgcolor: "background.paper",
+              overflow: "auto",
+              height: "180px",
+            }}
             component="nav"
             aria-labelledby="nested-list-subheader"
           >
@@ -183,7 +195,11 @@ const NestedList: FC<{
     canvas.selectedShape = canvas.history[index];
     canvas.selectedShapeIndex = index;
     console.log(canvas.selectedShape);
-    dispatch(setSelectedShape(Object.getPrototypeOf(canvas.selectedShape).constructor.name));
+    dispatch(
+      setSelectedShape(
+        Object.getPrototypeOf(canvas.selectedShape).constructor.name
+      )
+    );
     canvas.redrawCanvas();
     setSelectedShapeIndex(index);
   };

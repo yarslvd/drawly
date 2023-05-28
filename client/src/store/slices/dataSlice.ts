@@ -39,7 +39,7 @@ const initialState: DataStateTypes = {
   selectedShape: null,
   canvas: null,
   history: [],
-  text: '',
+  text: "",
 };
 
 export const dataSlice = createSlice({

@@ -1,17 +1,17 @@
 import { FC, useState } from "react";
 import Image from "next/image";
-import {useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import styles from "./Position.module.scss";
-import {setBorderRadius} from "@/store/slices/dataSlice";
+import { setBorderRadius } from "@/store/slices/dataSlice";
 
 export const Position: FC = () => {
-    const dispatch = useDispatch();
-    const borderRadius = useSelector((state) => state.data.borderRadius);
+  const dispatch = useDispatch();
+  const borderRadius = useSelector((state) => state.data.borderRadius);
 
-    const handleBorderRadius = (num) => {
-        dispatch(setBorderRadius(num));
-    }
+  const handleBorderRadius = (num) => {
+    dispatch(setBorderRadius(num));
+  };
 
   return (
     <div className={styles.container}>
@@ -33,9 +33,9 @@ export const Position: FC = () => {
             height={20}
           />
           <input
-              type="number"
-              value={borderRadius}
-              onChange={(e) => handleBorderRadius(+e.target.value)}
+            type="number"
+            value={borderRadius}
+            onChange={(e) => handleBorderRadius(+e.target.value)}
           />
         </div>
       </div>

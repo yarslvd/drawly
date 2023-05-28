@@ -11,6 +11,31 @@ export class CurveLine extends Shape {
   strokeColor: string;
   strokeOpacity: number;
 
+  // toJSON(): string {
+  //   return `{"type":"CurveLine",\
+  //     "leftTop":"${JSON.stringify(this.leftTop)}",\
+  //     "rightBottom":"${JSON.stringify(this.rightBottom)}",\
+  //     "name":${this.name},\
+  //     "borderWidth":"${this.borderWidth}",\
+  //     "strokeColor":"${this.strokeColor}",\
+  //     "strokeOpacity":"${this.strokeOpacity}",\
+  //     "points":"${JSON.stringify(this.points)}"\
+  //   }`;
+  // }
+
+  toJSON(): string {
+    return JSON.stringify({
+      type: "CurveLine",
+      leftTop: this.leftTop,
+      rightBottom: this.rightBottom,
+      name: this.name,
+      borderWidth: this.borderWidth,
+      strokeColor: this.strokeColor,
+      strokeOpacity: this.strokeOpacity,
+      points: this.points,
+    });
+  }
+
   onDraw(): void {
     const ctx = this.canvas.getContext2D();
     if (this.points.length < 2 || ctx == null) {

@@ -17,6 +17,43 @@ export class Ellipse extends Shape {
   displayFill: boolean;
   displayStroke: boolean;
 
+  // toJSON(): string {
+  //   return `{"type":"Ellipse",\
+  //     "start":"${JSON.stringify(this.start)}"
+  //     "leftTop":"${JSON.stringify(this.leftTop)}",\
+  //     "rightBottom":"${JSON.stringify(this.rightBottom)}",\
+  //     "name":${this.name},\
+  //     "borderWidth":"${this.borderWidth}",\
+  //     "strokeColor":"${this.strokeColor}",\
+  //     "fillColor":"${this.fillColor}",\
+  //     "strokeOpacity":"${this.strokeOpacity}",\
+  //     "fillOpacity":"${this.fillOpacity}",\
+  //     "displayFill":"${this.displayFill}",\
+  //     "displayStroke":"${this.displayStroke}",\
+  //     "width":"${this.width}",\
+  //     "height":"${this.height}"\
+  //   }`;
+  // }
+
+  toJSON(): string {
+    return JSON.stringify({
+      type: "Ellipse",
+      start: this.start,
+      leftTop: this.leftTop,
+      rightBottom: this.rightBottom,
+      name: this.name,
+      borderWidth: this.borderWidth,
+      strokeColor: this.strokeColor,
+      fillColor: this.fillColor,
+      strokeOpacity: this.strokeOpacity,
+      fillOpacity: this.fillOpacity,
+      displayFill: this.displayFill,
+      displayStroke: this.displayStroke,
+      width: this.width,
+      height: this.height,
+    });
+  }
+
   onDraw(): void {
     const ctx = this.canvas.getContext2D();
     if (ctx == null) {
