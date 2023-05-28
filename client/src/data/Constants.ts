@@ -17,3 +17,17 @@ export namespace Tools {
   export const TEXT = "text";
   export const IMAGE = "image";
 }
+
+export namespace MimeTypes {
+  export const JPEG = "image/jpeg";
+  export const PNG = "image/png";
+  export const WEBP = "image/webp";
+  export const PDF = "application/pdf";
+}
+
+export namespace FileExtensions {
+  export const JPEG = ".jpeg";
+  export const PNG = ".png";
+  export const WEBP = ".webp";
+  export const PDF = ".pdf";
+}

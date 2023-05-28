@@ -18,6 +18,7 @@ export class Img extends Tool {
 
     this.cachedImage = new Image();
     this.cachedImage.src = this.url;
+    this.cachedImage.crossOrigin = "*";
     this.cachedImage.onerror = () => {
       this.url = "";
       console.log("error");

@@ -23,6 +23,7 @@ import ExpandMore from "@mui/icons-material/ExpandMore";
 import { CanvasClass } from "@/data/Canvas";
 import { Tools } from "@/data/Constants";
 import { Shape } from "@/data/Shapes/Shape";
+import { Export } from "@/components/Export/Export";
 import {setSelectedShape} from "@/store/slices/dataSlice";
 import {TextEdit} from "@/components/TextEdit/TextEdit";
 
@@ -110,6 +111,9 @@ export const Menu: FC = () => {
         )}
         {(currentTool == "image" || selectedShape == "Img") && <MyImage />}
         {selectedShape == "Text" && <TextEdit />}
+      </div>
+      <div>
+        <Export />
       </div>
       <div className={styles.layers}>
         <div style={{ display: "flex", alignItems: 'center', justifyContent: 'space-between' }}>
