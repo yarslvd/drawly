@@ -10,7 +10,7 @@ export const Position: FC = () => {
     const borderRadius = useSelector((state) => state.data.borderRadius);
 
     const handleBorderRadius = (num) => {
-        dispatch(setBorderRadius(num));
+        //dispatch(setBorderRadius(num));
     }
 
   return (

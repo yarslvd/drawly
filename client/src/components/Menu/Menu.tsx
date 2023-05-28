@@ -9,7 +9,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import TextField from "@mui/material/TextField";
 import { ToolBarItem } from "@/components/ToolBarItem/ToolBarItem";
-import { Button, Input } from "@mui/material";
+import { Button, Input, IconButton } from "@mui/material";
 
 import { Position } from "@/components/Position/Position";
 import { Fill } from "@/components/Fill/Fill";
@@ -26,6 +26,7 @@ import { Shape } from "@/data/Shapes/Shape";
 import { Export } from "@/components/Export/Export";
 import {setSelectedShape} from "@/store/slices/dataSlice";
 import {TextEdit} from "@/components/TextEdit/TextEdit";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 export const Menu: FC = () => {
   const currentTool = useSelector((state) => state.data.tool);
@@ -163,6 +164,7 @@ const NestedList: FC<{
   selectLayer;
   selectedIndex;
 }> = ({ layer, index, selectLayer, selectedIndex }) => {
+  const [refresh, setRefresh] = useState(false);
   const [open, setOpen] = useState(false);
   const [shapes, setShapes] = useState<Shape[]>(layer.shapes);
   const canvas: CanvasClass = useSelector((state) => state.data.canvas);
@@ -176,6 +178,13 @@ const NestedList: FC<{
     setOpen(!open);
     selectLayer(event, index);
   };
+
+  const handleDeleteShape = (index) => {
+    console.log(canvas.history[index]);
+    canvas.history.splice(index, 1);
+    setRefresh(!refresh);
+    canvas.redrawCanvas();
+  }
 
   const [selectedShapeIndex, setSelectedShapeIndex] = useState<number>(-1);
 
@@ -198,10 +207,10 @@ const NestedList: FC<{
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
       <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
+        <List component="div" disablePadding >
           {shapes.map((shape, shapeIndex) => {
             return (
-              <>
+              <div style={{ display: 'flex' }}>
                 <ListItemButton
                   sx={{ pl: 4 }}
                   selected={selectedShapeIndex == shapeIndex}
@@ -211,7 +220,10 @@ const NestedList: FC<{
                   <ListItemIcon></ListItemIcon>
                   <ListItemText primary={shape.name} />
                 </ListItemButton>
-              </>
+                <Button onClick={() => handleDeleteShape(shapeIndex)}>
+                  <DeleteIcon sx={{ color: '#000'}} />
+                </Button>
+              </div>
             );
           })}
         </List>

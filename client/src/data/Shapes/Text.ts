@@ -144,6 +144,7 @@ export class Text extends Shape {
       return;
     }
 
+    console.log(this.text);
     const lines = this.text.split("\n");
     const lineHeight = this.fontSize;
 

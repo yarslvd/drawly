@@ -12,6 +12,6 @@ export const updateShapeProps = (canvas, figureProps) => {
     figureProps.fillOpacity;
   canvas.selectedShape.canvas.selectedShape.strokeOpacity =
     figureProps.strokeOpacity;
-  // canvas.selectedShape.canvas.selectedShape.text =
-  //     figureProps.text;24x
+  canvas.selectedShape.canvas.selectedShape.text =
+      figureProps.text;
 };

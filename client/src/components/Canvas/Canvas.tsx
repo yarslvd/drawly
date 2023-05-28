@@ -66,6 +66,8 @@ export const Canvas: FC<CanvasProps> = ({
   const displayStroke = useSelector((state) => state.data.displayStroke);
   const imageURL = useSelector((state) => state.data.imageURL);
   const imageFilters = useSelector((state) => state.data.imageFilters);
+  const text = useSelector((state) => state.data.text);
+  //const borderRadius = useSelector((state) => state.data.borderRadius);
 
   //OBJECT WITH OPTIONS PROPS
   const figureProps: FigurePropsTypes = {
@@ -78,6 +80,8 @@ export const Canvas: FC<CanvasProps> = ({
     displayFill,
     imageURL,
     imageFilters,
+    text,
+    //borderRadius
   };
 
   useEffect(() => {
@@ -101,8 +105,6 @@ export const Canvas: FC<CanvasProps> = ({
     canvas.setCanvasProps(figureProps);
 
     if (canvas.selectedShape) {
-      console.log(canvas.selectedShape.canvas.selectedShape.text);
-      console.log(figureProps);
       updateShapeProps(canvas, figureProps);
       canvas.redrawCanvas();
     }
@@ -183,6 +185,7 @@ export const Canvas: FC<CanvasProps> = ({
     dispatch(setDisplayStroke(optionsObj.displayStroke));
     dispatch(setBorderWidth(optionsObj.borderWidth));
     dispatch(setText(optionsObj.text));
+    //dispatch(setBorderRadius(optionsObj.borderRadius));
   };
 
   const handleOnClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
@@ -224,6 +227,7 @@ export const Canvas: FC<CanvasProps> = ({
             imageURL: canvas.selectedShape.imageURL,
             imageFilters: canvas.selectedShape.imageFilters,
             text: canvas.selectedShape.text,
+            //borderRadius: canvas.selectedShape.radius,
           };
           setOptions(optionsObj);
           canvas.redrawCanvas();

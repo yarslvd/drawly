@@ -16,7 +16,11 @@ export const TextEdit = () => {
     return(
         <div className={styles.container}>
             <h4>Text edit</h4>
-            <input type="text" className={styles.input} onChange={(e) => setTextInput(e.target.value)}/>
+            <input
+                type="text"
+                className={styles.input}
+                value={textInput}
+                onChange={(e) => setTextInput(e.target.value)}/>
             <Button
                 variant='contained'
                 className={styles.button}
