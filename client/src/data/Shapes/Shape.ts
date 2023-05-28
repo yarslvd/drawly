@@ -6,6 +6,8 @@ export abstract class Shape {
   leftTop: Point;
   rightBottom: Point;
 
+  name: string = "";
+
   abstract onDraw(): void;
 
   abstract isPointInside(point: Point): boolean;
@@ -27,6 +29,7 @@ export abstract class Shape {
 
   constructor(canvas: CanvasClass) {
     this.canvas = canvas;
+    this.name = new.target.name;
 
     // kostil bleat
     this.leftTop = {

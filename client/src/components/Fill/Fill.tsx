@@ -1,4 +1,4 @@
-import {ChangeEventHandler, FC, useEffect, useState} from "react";
+import { ChangeEventHandler, FC, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
@@ -9,7 +9,7 @@ import {
 import styles from "./Fill.module.scss";
 import { BlockPicker } from "react-color";
 
-export const Fill: FC = ({displayPicker, setDisplayPicker}) => {
+export const Fill: FC = ({ displayPicker, setDisplayPicker }) => {
   const dispatch = useDispatch();
   const fillColor = useSelector((state) => state.data.fillColor);
   const fillOpacity = useSelector((state) => state.data.fillOpacity);
@@ -87,7 +87,11 @@ export const Fill: FC = ({displayPicker, setDisplayPicker}) => {
                 className={styles.cover}
                 onClick={() => setDisplayPicker(false)}
               />
-              <BlockPicker color={fillColor} onChange={handleFillColor} style={{ zIndex: '100000'}}/>
+              <BlockPicker
+                color={fillColor}
+                onChange={handleFillColor}
+                style={{ zIndex: "100000" }}
+              />
             </div>
           ) : null}
         </div>

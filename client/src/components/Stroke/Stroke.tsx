@@ -10,7 +10,7 @@ import {
 import styles from "./Stroke.module.scss";
 import { BlockPicker, ColorChangeHandler } from "react-color";
 
-export const Stroke: FC = ({displayPicker, setDisplayPicker}) => {
+export const Stroke: FC = ({ displayPicker, setDisplayPicker }) => {
   const dispatch = useDispatch();
 
   const strokeColor = useSelector((state) => state.data.strokeColor);

@@ -20,6 +20,7 @@ import {
   setStrokeOpacity,
   setDisplayStroke,
   setBorderWidth,
+  setCanvas,
 } from "@/store/slices/dataSlice";
 import { updateShapeProps } from "../../utils/updateShapeProps";
 
@@ -87,6 +88,8 @@ export const Canvas: FC<CanvasProps> = ({
       console.log("new canvas 1");
       canvas = new CanvasClass(canvasHTML);
       canvas.setCanvasProps(figureProps);
+
+      dispatch(setCanvas(canvas));
     }
   }, []);
 
@@ -201,7 +204,7 @@ export const Canvas: FC<CanvasProps> = ({
       for (let i = canvas.history.length - 1; i >= 0; i--) {
         if (point && canvas.history[i].isPointInside(point)) {
           console.log("Selected shape", i);
-          console.log()
+          console.log();
           //dispatch(setSelectedShape(canvas.history[i].canvas.selectedShape));
           canvas.selectedShapeIndex = i;
           canvas.selectedShape = canvas.history[i];
@@ -265,6 +268,7 @@ export const Canvas: FC<CanvasProps> = ({
     if (!canvas) {
       console.log("new canvas 2");
       canvas = new CanvasClass(canvasHTML);
+      dispatch(setCanvas(canvas));
     }
     // const context = canvas.getContext("2d");
     // if (!context) return;

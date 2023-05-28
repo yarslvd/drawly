@@ -7,6 +7,8 @@ export class CanvasClass {
   protected context: CanvasRenderingContext2D | null = null;
   public canvasHTML: HTMLCanvasElement | null = null;
 
+  layers: Shape[][] = [];
+
   history: Shape[];
   removedHistory: Shape[];
   selectedShapeIndex: number = -1;
@@ -30,8 +32,10 @@ export class CanvasClass {
 
     ctx.clearRect(0, 0, this.canvasHTML?.width, this.canvasHTML?.height);
 
-    this.history.forEach((shape: Shape) => {
-      shape.onDraw();
+    this.layers.map((history) => {
+      history.forEach((shape: Shape) => {
+        shape.onDraw();
+      });
     });
 
     this.selectedShapeIndex != -1 && this.selectedShapeDiv?.onDraw();
@@ -52,11 +56,7 @@ export class CanvasClass {
       this.removedHistory.unshift(this.history[this.history.length - 1]);
       this.history.pop();
 
-      ctx.clearRect(0, 0, this.canvasHTML?.width, this.canvasHTML?.height);
-
-      this.history.forEach((shape: Shape) => {
-        shape.onDraw();
-      });
+      this.redrawCanvas();
     }
   }
 
@@ -90,7 +90,8 @@ export class CanvasClass {
       this.context.imageSmoothingQuality = "medium";
     }
 
-    this.history = [];
+    this.layers.push([]);
+    this.history = this.layers[0];
     this.removedHistory = [];
     this.selectedShape = null;
 
