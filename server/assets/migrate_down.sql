@@ -1,2 +1,5 @@
+DROP TABLE IF EXISTS participants;
+DROP TABLE IF EXISTS canvases;
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS tokens;
 

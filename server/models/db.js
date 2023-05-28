@@ -14,8 +14,15 @@ const sequelize = new Sequelize(
   }
 );
 
-let users = require("./users")(sequelize);
-let tokens = require("./tokens")(sequelize);
+let users = require("../models/users")(sequelize);
+let canvases = require("../models/canvases")(sequelize);
+let participants = require("../models/participants")(sequelize);
+let tokens = require("../models/tokens")(sequelize);
+
+participants.belongsTo(canvases, { as: "canvas", foreignKey: "canvas_id" });
+canvases.hasMany(participants, { as: "participants", foreignKey: "canvas_id" });
+participants.belongsTo(users, { as: "user", foreignKey: "user_id" });
+users.hasMany(participants, { as: "participants", foreignKey: "user_id" });
 
 (async () => {
   await sequelize
@@ -36,6 +43,8 @@ let tokens = require("./tokens")(sequelize);
 
 module.exports = {
   sequelize: sequelize,
-  users: users,
   tokens: tokens,
+  users: users,
+  canvases: canvases,
+  participants: participants,
 };
