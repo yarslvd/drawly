@@ -20,7 +20,7 @@ import {
   setStrokeOpacity,
   setDisplayStroke,
   setBorderWidth,
-  setCanvas,
+  setCanvas, setBorderRadius, setText
 } from "@/store/slices/dataSlice";
 import { updateShapeProps } from "../../utils/updateShapeProps";
 
@@ -101,6 +101,8 @@ export const Canvas: FC<CanvasProps> = ({
     canvas.setCanvasProps(figureProps);
 
     if (canvas.selectedShape) {
+      console.log(canvas.selectedShape.canvas.selectedShape.text);
+      console.log(figureProps);
       updateShapeProps(canvas, figureProps);
       canvas.redrawCanvas();
     }
@@ -180,6 +182,7 @@ export const Canvas: FC<CanvasProps> = ({
     dispatch(setDisplayFill(optionsObj.displayFill));
     dispatch(setDisplayStroke(optionsObj.displayStroke));
     dispatch(setBorderWidth(optionsObj.borderWidth));
+    dispatch(setText(optionsObj.text));
   };
 
   const handleOnClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
@@ -204,13 +207,12 @@ export const Canvas: FC<CanvasProps> = ({
       for (let i = canvas.history.length - 1; i >= 0; i--) {
         if (point && canvas.history[i].isPointInside(point)) {
           console.log("Selected shape", i);
-          console.log();
-          //dispatch(setSelectedShape(canvas.history[i].canvas.selectedShape));
           canvas.selectedShapeIndex = i;
           canvas.selectedShape = canvas.history[i];
+          dispatch(setSelectedShape(Object.getPrototypeOf(canvas.selectedShape).constructor.name));
           canvas.selectedShapeDiv.leftTop = canvas.selectedShape.leftTop;
-          canvas.selectedShapeDiv.rightBottom =
-            canvas.selectedShape.rightBottom;
+          canvas.selectedShapeDiv.rightBottom = canvas.selectedShape.rightBottom;
+          console.log(canvas.selectedShape);
           const optionsObj = {
             fillColor: canvas.selectedShape.fillColor,
             strokeColor: canvas.selectedShape.strokeColor,
@@ -221,6 +223,7 @@ export const Canvas: FC<CanvasProps> = ({
             displayFill: canvas.selectedShape.displayFill,
             imageURL: canvas.selectedShape.imageURL,
             imageFilters: canvas.selectedShape.imageFilters,
+            text: canvas.selectedShape.text,
           };
           setOptions(optionsObj);
           canvas.redrawCanvas();
@@ -327,7 +330,7 @@ export const Canvas: FC<CanvasProps> = ({
 
   const handleZoomOut = () => {
     const newScale = scale - 0.1;
-    newScale > 0.2 && setScale((prev) => prev - 0.1);
+    newScale >= 1 && setScale((prev) => prev - 0.1);
   };
 
   const handleKeyDown = (event: KeyboardEvent) => {

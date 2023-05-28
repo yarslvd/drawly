@@ -20,6 +20,7 @@ interface DataStateTypes {
   selectedShape: any;
   canvas: CanvasClass | null;
   history: Shape[];
+  text: string | null;
 }
 
 const initialState: DataStateTypes = {
@@ -38,6 +39,7 @@ const initialState: DataStateTypes = {
   selectedShape: null,
   canvas: null,
   history: [],
+  text: '',
 };
 
 export const dataSlice = createSlice({
@@ -89,6 +91,9 @@ export const dataSlice = createSlice({
     setCanvasHistory: (state, action: PayloadAction<any>) => {
       state.history = action.payload;
     },
+    setText: (state, action: PayloadAction<string>) => {
+      state.text = action.payload;
+    },
   },
 });
 
@@ -107,6 +112,7 @@ export const {
   setImageFilters,
   setSelectedShape,
   setCanvas,
+  setText,
   setCanvasHistory,
 } = dataSlice.actions;
 export const selectData = (state) => state.data.data;

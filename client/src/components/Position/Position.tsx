@@ -1,28 +1,30 @@
 import { FC, useState } from "react";
 import Image from "next/image";
+import {useDispatch, useSelector} from "react-redux";
 
 import styles from "./Position.module.scss";
-import { useSelector } from "react-redux";
+import {setBorderRadius} from "@/store/slices/dataSlice";
 
 export const Position: FC = () => {
-  const currentTool = useSelector((state) => state.data.tool);
-  const currentShape = useSelector((state) => state.data.selectedShape);
-  const [x, setX] = useState(currentShape?.start.x);
+    const dispatch = useDispatch();
+    const borderRadius = useSelector((state) => state.data.borderRadius);
 
-  console.log("JOPA1:", currentShape);
-  console.log("JOPA2:", currentTool);
+    const handleBorderRadius = (num) => {
+        dispatch(setBorderRadius(num));
+    }
+
   return (
     <div className={styles.container}>
-      <h4>Position</h4>
+      <h4>Border Radius</h4>
       <div className={styles.options}>
-        <div className={styles.inputContainer}>
-          <span>X</span>
-          <input type="number" />
-        </div>
-        <div className={styles.inputContainer}>
-          <span>Y</span>
-          <input type="number" />
-        </div>
+        {/*<div className={styles.inputContainer}>*/}
+        {/*  <span>X</span>*/}
+        {/*  <input type="number" />*/}
+        {/*</div>*/}
+        {/*<div className={styles.inputContainer}>*/}
+        {/*  <span>Y</span>*/}
+        {/*  <input type="number" />*/}
+        {/*</div>*/}
         <div className={styles.inputContainer}>
           <Image
             src="/assets/icons/tools/borderRadius.png"
@@ -30,7 +32,11 @@ export const Position: FC = () => {
             width={20}
             height={20}
           />
-          <input type="number" />
+          <input
+              type="number"
+              value={borderRadius}
+              onChange={(e) => handleBorderRadius(+e.target.value)}
+          />
         </div>
       </div>
     </div>

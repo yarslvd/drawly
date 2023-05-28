@@ -15,7 +15,7 @@ import { Position } from "@/components/Position/Position";
 import { Fill } from "@/components/Fill/Fill";
 import { Stroke } from "@/components/Stroke/Stroke";
 import { MyImage } from "@/components/Image/MyImage";
-import { useSelector } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 
 import { Collapse } from "@mui/material";
 import ExpandLess from "@mui/icons-material/ExpandLess";
@@ -23,6 +23,8 @@ import ExpandMore from "@mui/icons-material/ExpandMore";
 import { CanvasClass } from "@/data/Canvas";
 import { Tools } from "@/data/Constants";
 import { Shape } from "@/data/Shapes/Shape";
+import {setSelectedShape} from "@/store/slices/dataSlice";
+import {TextEdit} from "@/components/TextEdit/TextEdit";
 
 export const Menu: FC = () => {
   const currentTool = useSelector((state) => state.data.tool);
@@ -107,13 +109,16 @@ export const Menu: FC = () => {
           />
         )}
         {(currentTool == "image" || selectedShape == "Img") && <MyImage />}
+        {selectedShape == "Text" && <TextEdit />}
       </div>
       <div className={styles.layers}>
-        <h3>Layers</h3>
-        <Button onClick={addLayer}>Add layer</Button>
+        <div style={{ display: "flex", alignItems: 'center', justifyContent: 'space-between' }}>
+          <h3>Layers</h3>
+          <Button onClick={addLayer}>Add</Button>
+        </div>
         <div className={styles.layersContainer}>
           <List
-            sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+            sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper", overflow: 'auto', height: '180px' }}
             component="nav"
             aria-labelledby="nested-list-subheader"
           >
@@ -135,14 +140,15 @@ export const Menu: FC = () => {
                   index={index}
                   selectLayer={handleSelectLayer}
                   selectedIndex={selectedIndex}
+                  key={index}
                 />
               ))}
           </List>
         </div>
       </div>
-      <div className={styles.image}>
-        <MyImage />
-      </div>
+      {/*<div className={styles.image}>*/}
+      {/*  <MyImage />*/}
+      {/*</div>*/}
     </div>
   );
 };
@@ -156,6 +162,7 @@ const NestedList: FC<{
   const [open, setOpen] = useState(false);
   const [shapes, setShapes] = useState<Shape[]>(layer.shapes);
   const canvas: CanvasClass = useSelector((state) => state.data.canvas);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setShapes(layer.shapes);
@@ -171,6 +178,8 @@ const NestedList: FC<{
   const handleSelectShape = (event, index) => {
     canvas.selectedShape = canvas.history[index];
     canvas.selectedShapeIndex = index;
+    console.log(canvas.selectedShape);
+    dispatch(setSelectedShape(Object.getPrototypeOf(canvas.selectedShape).constructor.name));
     canvas.redrawCanvas();
     setSelectedShapeIndex(index);
   };
@@ -193,6 +202,7 @@ const NestedList: FC<{
                   sx={{ pl: 4 }}
                   selected={selectedShapeIndex == shapeIndex}
                   onClick={(event) => handleSelectShape(event, shapeIndex)}
+                  key={shapeIndex}
                 >
                   <ListItemIcon></ListItemIcon>
                   <ListItemText primary={shape.name} />
