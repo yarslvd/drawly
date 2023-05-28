@@ -4,7 +4,6 @@ var cors = require("cors");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const { parseWhitelist } = require("./utils/cors");
-// const WebSocket = require("ws");
 
 const whitelist = parseWhitelist(process.env.CORS_ORIGINS);
 
@@ -50,16 +49,3 @@ app.use(admin.options.rootPath, AdminJSRouter());
 app.listen(process.env.SERVER_PORT, () => {
   console.log(`Server running at http://localhost:${process.env.SERVER_PORT}/`);
 });
-
-//
-// const wss = new WebSocket({server:http.cer});
-//
-// wss.on('connection', function connection(ws) {
-//     ws.on('error', console.error);
-//
-//     ws.on('message', function message(data) {
-//         console.log('received: %s', data);
-//     });
-//
-//     ws.send('something');
-// });

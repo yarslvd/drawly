@@ -1,5 +1,5 @@
 import { Brush, Line, Move, Rectangle, Text, Img } from "@/data/Tools";
-import { Tools } from "@/data/Constants";
+import { FileExtensions, MimeTypes, Tools } from "@/data/Constants";
 import { CanvasClass } from "@/data/Canvas";
 import { Tool } from "@/data/ToolsClass";
 import { CurveLine } from "@/data/Tools/CurveLine";
@@ -87,4 +87,11 @@ export const NameTool = new Map<string, (canvas: CanvasClass) => Tool>([
       return new Img(canvas);
     },
   ],
+]);
+
+export const MimeExtension = new Map<string, string>([
+  [MimeTypes.PNG, FileExtensions.PNG],
+  [MimeTypes.JPEG, FileExtensions.JPEG],
+  [MimeTypes.WEBP, FileExtensions.WEBP],
+  [MimeTypes.PDF, FileExtensions.PDF],
 ]);

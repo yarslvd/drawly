@@ -23,6 +23,7 @@ import ExpandMore from "@mui/icons-material/ExpandMore";
 import { CanvasClass } from "@/data/Canvas";
 import { Tools } from "@/data/Constants";
 import { Shape } from "@/data/Shapes/Shape";
+import { Export } from "@/components/Export/Export";
 
 export const Menu: FC = () => {
   const currentTool = useSelector((state) => state.data.tool);
@@ -107,6 +108,9 @@ export const Menu: FC = () => {
           />
         )}
         {(currentTool == "image" || selectedShape == "Img") && <MyImage />}
+      </div>
+      <div>
+        <Export />
       </div>
       <div className={styles.layers}>
         <h3>Layers</h3>
