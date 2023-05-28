@@ -17,6 +17,7 @@ export class Img extends Shape {
   ctx: CanvasRenderingContext2D;
 
   onDraw(): void {
+    this.ctx.filter = this.filters;
     this.ctx.drawImage(
       this.image,
       this.leftTop.x,
@@ -24,6 +25,7 @@ export class Img extends Shape {
       this.width,
       this.height
     );
+    this.ctx.filter = "none";
   }
 
   isPointInside(point: Point): boolean {
@@ -104,7 +106,7 @@ export class Img extends Shape {
 
     const ctx = this.canvas.getContext2D();
     if (ctx == null) return;
-    ctx.filter = this.filters;
+    // ctx.filter = this.filters;
 
     this.normalizeCorners();
   }

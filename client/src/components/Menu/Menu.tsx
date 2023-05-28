@@ -22,19 +22,20 @@ import { Collapse } from "@mui/material";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import { CanvasClass } from "@/data/Canvas";
+import { Tools } from "@/data/Constants";
 
 export const Menu: FC = () => {
   const currentTool = useSelector((state) => state.data.tool);
   const selectedShape = useSelector((state) => state.data.selectedShape);
   const [displayPickerFill, setDisplayPickerFill] = useState(false);
   const [displayPickerStroke, setDisplayPickerStroke] = useState(false);
-  const fillArrTools = ["rectangle", "ellipse"];
+  const fillArrTools = [Tools.RECTANGLE, Tools.ELLIPSE];
   const strokeArrTools = [
-    "rectangle",
-    "ellipse",
-    "line",
-    "curve_line",
-    "brush",
+    Tools.RECTANGLE,
+    Tools.ELLIPSE,
+    Tools.LINE,
+    Tools.CURVE_LINE,
+    Tools.BRUSH,
   ];
   const fillArrShapes = ["Rectangle", "Ellipse"];
   const strokeArrShapes = [
@@ -44,7 +45,7 @@ export const Menu: FC = () => {
     "CurveLine",
     "brush",
   ];
-  console.log(selectedShape, currentTool);
+  console.log("HERE", selectedShape, currentTool);
 
   const canvas: CanvasClass = useSelector((state) => state.data.canvas);
   const [open, setOpen] = useState(false);

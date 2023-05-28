@@ -43,10 +43,6 @@ export class Img extends Tool {
     this.filters = canvas.options.imageFilters;
 
     this.setImage();
-
-    if (this.canvas.getContext2D()) {
-      this.canvas.getContext2D()!.filter = this.filters;
-    }
   }
 
   protected onDown(point: Coordinates): void {
