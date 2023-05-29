@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchAuthMe, selectIsAuthMe } from "@/store/slices/authSlice";
 import Cookies from "js-cookie";
 import { useRouter } from 'next/router';
+import {IconButton} from "@mui/material";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const userToken = () => {
     return Cookies.get("access_token") ? Cookies.get("access_token") : null;
@@ -20,6 +22,7 @@ export default function Home() {
     const [color, setColor] = useState("#000");
     const [width, setWidth] = useState(5);
     const { query } = useRouter();
+    const router = useRouter();
 
     console.log(process.env.API_URI);
 
@@ -50,6 +53,12 @@ export default function Home() {
             <main>
                 <ToolBar tool={tool} setTool={setTool} />
                 <Menu />
+                <IconButton
+                    sx={{ top: '30px', left: '20px'}}
+                    onClick={() => router.push('/')}
+                >
+                    <ArrowBackIcon sx={{ color: '#000',  width: '30px', height: '30px'}}/>
+                </IconButton>
                 <div
                     style={{ width: "100wh", height: "100vh" }}
                     className="canvas_container"

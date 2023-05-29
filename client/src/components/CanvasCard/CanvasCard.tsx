@@ -30,7 +30,7 @@ export const CanvasCard = () => {
         <div
           className={styles.image}
           style={{
-            backgroundImage: `url(https://images.unsplash.com/photo-1682685797736-dabb341dc7de?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80)`,
+            backgroundImage: `url(https://i.ibb.co/87r99Kb/272ebe31be92.png)`,
           }}
           onClick={() => router.push("https://www.google.com")}
         ></div>

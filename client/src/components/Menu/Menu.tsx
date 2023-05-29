@@ -110,7 +110,7 @@ export const Menu: FC = () => {
         }
       >
         <h3>Selected element</h3>
-        <Position />
+        {/*<Position />*/}
         {(fillArrTools.includes(currentTool) ||
           (currentTool == "move" && fillArrShapes.includes(selectedShape))) && (
           <Fill
@@ -242,7 +242,7 @@ const NestedList: FC<{
                   onClick={(event) => handleSelectShape(event, shapeIndex)}
                   key={shapeIndex}
                 >
-                  <ListItemIcon></ListItemIcon>
+                  {/*<ListItemIcon></ListItemIcon>*/}
                   <ListItemText primary={shape.name} />
                 </ListItemButton>
                 <Button onClick={() => handleDeleteShape(shapeIndex)}>
