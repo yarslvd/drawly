@@ -56,7 +56,7 @@ export const tools = [
     cursors: "crosshair",
   },
   {
-    name: "Eraser",
+    name: Tools.ERASER,
     icon: "/assets/icons/tools/eraser.png",
     cursors: "crosshair",
   },
