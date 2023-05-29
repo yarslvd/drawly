@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchAuthMe, selectIsAuthMe } from "@/store/slices/authSlice";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
+import {IconButton} from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const userToken = () => {
   return Cookies.get("access_token") ? Cookies.get("access_token") : null;
@@ -53,18 +55,14 @@ export default function Canvas() {
       <main>
         <ToolBar tool={tool} setTool={setTool} />
         <Menu />
-        {/*<Settings*/}
-        {/*  color={color}*/}
-        {/*  setColor={(newColor) => {*/}
-        {/*    setColor(newColor);*/}
-        {/*    document.dispatchEvent(new CustomEvent("figure-settings"));*/}
-        {/*  }}*/}
-        {/*  width={width}*/}
-        {/*  setWidth={(newWidth) => {*/}
-        {/*    setWidth(newWidth);*/}
-        {/*    document.dispatchEvent(new CustomEvent("figure-settings"));*/}
-        {/*  }}*/}
-        {/*/>*/}
+        <IconButton
+            sx={{ position: "absolute", top: "30px", left: "20px" }}
+            onClick={() => router.push("/")}
+        >
+          <ArrowBackIcon
+              sx={{ color: "#000", width: "30px", height: "30px" }}
+          />
+        </IconButton>
         <div
           style={{ width: "100wh", height: "100vh" }}
           className="canvas_container"

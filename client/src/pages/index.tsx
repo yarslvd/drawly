@@ -44,7 +44,12 @@ const Home = () => {
         (async () => {
           const list = await getList([]);
           console.log({ list });
-          setCanvases(list.data.canvases);
+          try{
+            setCanvases(list.data.canvases);
+          }
+          catch(err) {
+            console.log(err);
+          }
         })();
       } catch (e) {
         console.log("error while fetching me: ", e);
