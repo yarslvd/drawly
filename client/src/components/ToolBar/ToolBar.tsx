@@ -45,19 +45,19 @@ export const tools = [
     icon: "/assets/icons/tools/text.png",
     cursors: "text",
   },
+  // {
+  //   name: "Hand",
+  //   icon: "/assets/icons/tools/hand.png",
+  //   cursors: "grab",
+  // },
   {
-    name: "Hand",
-    icon: "/assets/icons/tools/hand.png",
-    cursors: "grab",
+    name: Tools.IMAGE,
+    icon: "/assets/icons/tools/image.png",
+    cursors: "crosshair",
   },
   {
     name: Tools.ERASER,
     icon: "/assets/icons/tools/eraser.png",
-    cursors: "crosshair",
-  },
-  {
-    name: Tools.IMAGE,
-    icon: "/assets/icons/tools/image.png",
     cursors: "crosshair",
   },
 ];

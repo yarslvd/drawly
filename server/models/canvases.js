@@ -18,6 +18,11 @@ module.exports = function (sequelize) {
         type: DataTypes.JSONB,
         allowNull: false,
       },
+      preview: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+        defaultValue: "CANVAS_URL",
+      },
     },
     {
       sequelize,

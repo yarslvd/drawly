@@ -17,6 +17,7 @@ export class Img extends Tool {
     this.filters = this.canvas.options.imageFilters;
 
     this.cachedImage = new Image();
+    this.cachedImage.crossOrigin = "anonymous";
     this.cachedImage.src = this.url;
     this.cachedImage.crossOrigin = "*";
     this.cachedImage.onerror = () => {

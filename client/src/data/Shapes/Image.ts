@@ -4,6 +4,42 @@ import { Shape } from "./Shape";
 
 import { FigurePropsTypes } from "@/components/Canvas/Canvas";
 
+// import imgur from 'imgur';
+
+// const imgurClient = new imgur({ clientId: process.env.NEXT_PUBLIC_IMGUR_ID });
+
+import imgbbUploader from "imgbb-uploader";
+
+async function blobUrlToBase64(blobUrl) {
+  try {
+    // Fetch the blob data from the provided URL
+    const response = await fetch(blobUrl);
+    const blobData = await response.blob();
+
+    // Create a FileReader object
+    const fileReader = new FileReader();
+
+    // Create a Promise for reading the file data
+    const readPromise = new Promise((resolve, reject) => {
+      fileReader.onloadend = () => {
+        resolve(fileReader.result);
+      };
+
+      fileReader.onerror = reject;
+    });
+
+    // Read the blob data as a base64 string
+    fileReader.readAsDataURL(blobData);
+
+    // Wait for the file data to be read and return the base64 string
+    const base64Data = await readPromise;
+    return base64Data;
+  } catch (error) {
+    console.error("Error converting blob URL to base64:", error);
+    throw error;
+  }
+}
+
 export class Img extends Shape {
   protected image: HTMLImageElement;
   start: Point;
@@ -15,6 +51,23 @@ export class Img extends Shape {
   url: string;
 
   ctx: CanvasRenderingContext2D;
+
+  private uploadImage = async (dataURL) => {
+    try {
+      console.log({ dataURL });
+      const options = {
+        apiKey: process.env.NEXT_PUBLIC_IMGBB_API_KEY,
+        base64string: (await blobUrlToBase64(dataURL)).split(",")[1],
+      };
+      const response = await imgbbUploader(options);
+
+      console.log("Image uploaded successfully:", response);
+      // const imageUrl = response.display_url;
+      this.url = response.display_url;
+    } catch (error) {
+      console.error("Failed to upload image:", error.message);
+    }
+  };
 
   // toJSON(): string {
   //   return `{"type":"Img",\
@@ -130,22 +183,33 @@ export class Img extends Shape {
     this.ctx = this.canvas.getContext2D()!;
 
     this.filters = options.imageFilters;
-    this.url = options.imageURL;
+    this.url = options.imageURL || options.url;
 
     console.log("image constructor");
 
     if (image == null) {
       this.image = new Image();
+      this.image.crossOrigin = "anonymous";
       this.image.src = this.url;
+
       this.image.onerror = () => {
         this.url = "";
       };
 
       this.image.onload = () => {
         console.log("loaded");
+        console.log({ url: this.url });
+        this.canvas.redrawCanvas();
+        if (this.url.includes("blob:")) {
+          this.uploadImage(this.image.src);
+        }
       };
     } else {
       this.image = image;
+      console.log({ url: this.url });
+      if (this.url.includes("blob:")) {
+        this.uploadImage(this.image.src);
+      }
     }
 
     const ctx = this.canvas.getContext2D();

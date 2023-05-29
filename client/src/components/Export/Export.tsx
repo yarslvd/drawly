@@ -17,6 +17,8 @@ import { CanvasClass } from "@/data/Canvas";
 import { useSelector } from "react-redux";
 import { jsPDF } from "jspdf";
 
+import styles from "./Export.module.scss";
+
 export const Export: FC = () => {
   const [type, setType] = useState(MimeTypes.PNG);
   const [filename, setFilename] = useState("");
@@ -76,7 +78,7 @@ export const Export: FC = () => {
   }
 
   return (
-    <div>
+    <div className={styles.container}>
       <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -86,14 +88,14 @@ export const Export: FC = () => {
           <h3>Export</h3>
         </AccordionSummary>
         <AccordionDetails>
-          <Box sx={{ minWidth: 120 }}>
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Age</InputLabel>
+          <div className={styles.select}>
+            <FormControl fullWidth size="small">
+              <InputLabel id="demo-simple-select-label">Format</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 value={type}
-                label="Type"
+                label="Format"
                 onChange={(event) => setType(event.target.value)}
               >
                 <MenuItem value={MimeTypes.PNG}>PNG</MenuItem>
@@ -102,7 +104,7 @@ export const Export: FC = () => {
                 <MenuItem value={MimeTypes.PDF}>PDF</MenuItem>
               </Select>
             </FormControl>
-          </Box>
+          </div>
           <TextField
             label="Filename"
             id="outlined-basic"
@@ -115,9 +117,15 @@ export const Export: FC = () => {
                 </InputAdornment>
               ),
             }}
+            size="small"
+            sx={{ width: "100%" }}
           />
 
-          <Button variant="outlined" onClick={handleExport}>
+          <Button
+            variant="outlined"
+            onClick={handleExport}
+            className={styles.exportButton}
+          >
             Export
           </Button>
         </AccordionDetails>

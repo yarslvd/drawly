@@ -2,7 +2,7 @@ import styles from "./Canvas.module.scss";
 import React, { FC, useEffect, useRef, useState } from "react";
 import { Tool } from "@/data/ToolsClass";
 import { Coordinates, NameTool } from "@/types/types";
-import { Keyboard, Tools } from "@/data/Constants";
+import { Keyboard, MimeTypes, Tools } from "@/data/Constants";
 import { getCanvasPoints } from "@/utils/getCanvasPoints";
 import { CanvasClass } from "@/data/Canvas";
 
@@ -35,12 +35,30 @@ import {
 import { useRouter } from "next/router";
 import { selectIsAuthMe } from "@/store/slices/authSlice";
 
+import imgbbUploader from "imgbb-uploader";
+
+const uploadImage = async (canvasHTML: HTMLCanvasElement) => {
+  try {
+    const options = {
+      apiKey: process.env.NEXT_PUBLIC_IMGBB_API_KEY, // MANDATORY
+      base64string: canvasHTML.toDataURL(MimeTypes.PNG).split(",")[1],
+    };
+    const response = await imgbbUploader(options);
+
+    console.log("Image uploaded successfully:", response);
+    return response.display_url;
+  } catch (error) {
+    console.error("Failed to upload image:", error.message);
+  }
+};
+
 export interface CanvasProps {
   tool: string;
   widthCanvas: string;
   heightCanvas: string;
   fillColor: string;
   width: number;
+  canvasId: string;
 }
 
 export interface FigurePropsTypes {
@@ -62,8 +80,8 @@ export const Canvas: FC<CanvasProps> = ({
   widthCanvas,
   heightCanvas,
   width,
+  canvasId,
 }) => {
-  const router = useRouter();
   const dispatch = useDispatch();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [selectedTool, setSelectedTool] = useState<Tool | null>(null);
@@ -108,33 +126,44 @@ export const Canvas: FC<CanvasProps> = ({
   };
 
   useEffect(() => {
+    setId(canvasId);
+    if (canvas) {
+      canvas.id = canvasId;
+    }
+  }, [canvasId]);
+
+  useEffect(() => {
     const canvasHTML = canvasRef.current;
     if (!canvasHTML) return;
 
     if (!canvas) {
       console.log("new canvas 1");
-      canvas = new CanvasClass(canvasHTML);
+      canvas = new CanvasClass(canvasHTML, id);
+      console.log(id, canvas);
       canvas.setCanvasProps(figureProps);
 
       dispatch(setCanvas(canvas));
     }
 
-    if (id) {
+    if (id || canvasId) {
       (async () => {
-        const canvasData = await getCanvas(id);
+        console.log({ id, canvasId });
+        const canvasData = await getCanvas(id || canvasId);
         // console.log({canvasData});
         // console.log(JSON.parse(canvasData.data.canvases.content));
         // console.log((JSON.parse(canvasData.data.canvases.content)[0][0]));
         // console.log(JSON.parse(JSON.parse(canvasData.data.canvases.content)[0][0]));
-        //canvas.setLayersData(JSON.parse(canvasData.data.canvases.content));
+        canvas.setLayersData(canvasData.data.canvases.content);
       })();
+
+      return;
     }
 
     console.log({ userInfo, id });
-    if (userInfo && !id) {
+    if (userInfo && !id && !canvasId) {
       (async () => {
         const canvasData = await getFirstCanvas([]);
-        console.log("fetch first 1");
+        console.log("fetch first 1", { id, canvasId });
 
         if (canvasData?.data?.canvases?.id == null) {
           return;
@@ -142,28 +171,31 @@ export const Canvas: FC<CanvasProps> = ({
         console.log("fetch first 2");
         canvas.setLayersData(canvasData.data.canvases.content);
         setId(canvasData.data.canvases.id);
-      })();
-    }
-  }, []);
-
-  useEffect(() => {
-    console.log({ userInfo, id });
-    if (isAuth && userInfo && !id && canvas) {
-      (async () => {
-        const canvasData = await getFirstCanvas([]);
-        console.log("fetch first 1");
-
-        if (canvasData?.data?.canvases?.id == null) {
-          return;
+        if (canvas) {
+          canvas.id = canvasId;
         }
-        console.log("fetch first 2", canvasData);
-
-        canvas.setLayersData(canvasData.data.canvases.content);
-        setId(canvasData.data.canvases.id);
-        // console.log({id});
       })();
     }
-  }, [isAuth]);
+  }, [id]);
+
+  // useEffect(() => {
+  //   console.log({ userInfo, id });
+  //   if (isAuth && userInfo && !id && !canvasId && canvas) {
+  //     (async () => {
+  //       const canvasData = await getFirstCanvas([]);
+  //       console.log("fetch first 1", {id, canvasId});
+
+  //       if (canvasData?.data?.canvases?.id == null) {
+  //         return;
+  //       }
+  //       console.log("fetch first 2", canvasData);
+
+  //       canvas.setLayersData(canvasData.data.canvases.content);
+  //       setId(canvasData.data.canvases.id);
+  //       // console.log({id});
+  //     })();
+  //   }
+  // }, [isAuth]);
 
   //HANDLING OPTIONS CHANGE
   useEffect(() => {
@@ -538,22 +570,28 @@ export const Canvas: FC<CanvasProps> = ({
 
   const saveCanvas = async () => {
     console.log("save");
+    const previewURL = await uploadImage(canvas!.canvasHTML!);
     if (!id) {
       console.log("create", { id });
-      await createCanvas({ canvas, title: "canvas title" });
+      await createCanvas({
+        canvas,
+        title: "canvas title",
+        preview: previewURL,
+      });
       return;
     }
 
     console.log("update", { id });
-    await updateCanvas({ id, canvas });
+    uploadImage(canvas!.canvasHTML!);
+    await updateCanvas({ id, canvas, preview: previewURL });
   };
 
   return (
     <>
       {
-        <Button variant="contained" onClick={saveCanvas}>
-          Save
-        </Button>
+        // <Button variant="contained" onClick={saveCanvas}>
+        //   Save
+        // </Button>
       }
       <canvas
         width={widthCanvas}

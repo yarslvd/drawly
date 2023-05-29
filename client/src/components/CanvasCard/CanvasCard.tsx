@@ -7,10 +7,12 @@ import DoneIcon from "@mui/icons-material/Done";
 
 import styles from "./CanvasCard.module.scss";
 
-export const CanvasCard = () => {
+export const CanvasCard = ({ canvas }) => {
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
-  const [cardName, setCardName] = useState("Card name");
+  const [cardName, setCardName] = useState(canvas.title);
+
+  const handleDeleteClick = () => {};
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -30,9 +32,9 @@ export const CanvasCard = () => {
         <div
           className={styles.image}
           style={{
-            backgroundImage: `url(https://images.unsplash.com/photo-1682685797736-dabb341dc7de?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80)`,
+            backgroundImage: `url(${canvas.preview})`,
           }}
-          onClick={() => router.push("https://www.google.com")}
+          onClick={() => router.push("/canvas/" + canvas.id)}
         ></div>
         {isEditing ? (
           <input
@@ -45,7 +47,7 @@ export const CanvasCard = () => {
         ) : (
           <h3>{cardName}</h3>
         )}
-        <IconButton className={styles.deleteIcon}>
+        <IconButton className={styles.deleteIcon} onClick={handleDeleteClick}>
           <DeleteIcon sx={{ color: "#fff" }} />
         </IconButton>
         {isEditing ? (
