@@ -3,7 +3,7 @@ import { createWrapper } from "next-redux-wrapper";
 
 import { dataSlice } from "@/store/slices/dataSlice";
 import { authReducer } from "./slices/authSlice";
-import { fetchAuthApi } from './api/fetchAuthApi';
+import { fetchAuthApi } from "./api/fetchAuthApi";
 import { fetchCanvasApi } from "./api/fetchCanvasApi";
 
 const store = () =>
@@ -11,7 +11,7 @@ const store = () =>
     reducer: {
       [dataSlice.name]: dataSlice.reducer,
       [fetchCanvasApi.reducerPath]: fetchCanvasApi.reducer,
-        auth: authReducer,
+      auth: authReducer,
     },
     devTools: true,
     middleware: (getDefaultMiddleware) =>

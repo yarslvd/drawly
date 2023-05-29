@@ -24,9 +24,9 @@ import { CanvasClass } from "@/data/Canvas";
 import { Tools } from "@/data/Constants";
 import { Shape } from "@/data/Shapes/Shape";
 import { Export } from "@/components/Export/Export";
-import {setSelectedShape} from "@/store/slices/dataSlice";
-import {TextEdit} from "@/components/TextEdit/TextEdit";
-import DeleteIcon from '@mui/icons-material/Delete';
+import { setSelectedShape } from "@/store/slices/dataSlice";
+import { TextEdit } from "@/components/TextEdit/TextEdit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export const Menu: FC = () => {
   const currentTool = useSelector((state) => state.data.tool);
@@ -196,7 +196,7 @@ const NestedList: FC<{
     canvas.history.splice(index, 1);
     setRefresh(!refresh);
     canvas.redrawCanvas();
-  }
+  };
 
   const [selectedShapeIndex, setSelectedShapeIndex] = useState<number>(-1);
 
@@ -223,10 +223,10 @@ const NestedList: FC<{
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
       <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding >
+        <List component="div" disablePadding>
           {shapes.map((shape, shapeIndex) => {
             return (
-              <div style={{ display: 'flex' }}>
+              <div style={{ display: "flex" }}>
                 <ListItemButton
                   sx={{ pl: 4 }}
                   selected={selectedShapeIndex == shapeIndex}
@@ -237,7 +237,7 @@ const NestedList: FC<{
                   <ListItemText primary={shape.name} />
                 </ListItemButton>
                 <Button onClick={() => handleDeleteShape(shapeIndex)}>
-                  <DeleteIcon sx={{ color: '#000'}} />
+                  <DeleteIcon sx={{ color: "#000" }} />
                 </Button>
               </div>
             );

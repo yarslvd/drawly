@@ -55,7 +55,7 @@ async function verifyToken(access_token, refresh_token, res) {
       return null;
     }
 
-    console.debug("token is expired");
+    console.debug("token is expired", { access_token, refresh_token });
 
     let decodedRefresh = decodeToken(refresh_token);
     if (decodedRefresh.error) {

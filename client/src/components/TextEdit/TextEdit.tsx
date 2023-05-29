@@ -13,19 +13,22 @@ export const TextEdit = () => {
     dispatch(setText(textInput));
   };
 
-    return(
-        <div className={styles.container}>
-            <h4>Text edit</h4>
-            <input
-                type="text"
-                className={styles.input}
-                value={textInput}
-                onChange={(e) => setTextInput(e.target.value)}/>
-            <Button
-                variant='contained'
-                className={styles.button}
-                onClick={handleTextChange}
-            >Save</Button>
-        </div>
-    );
-}
+  return (
+    <div className={styles.container}>
+      <h4>Text edit</h4>
+      <input
+        type="text"
+        className={styles.input}
+        value={textInput}
+        onChange={(e) => setTextInput(e.target.value)}
+      />
+      <Button
+        variant="contained"
+        className={styles.button}
+        onClick={handleTextChange}
+      >
+        Save
+      </Button>
+    </div>
+  );
+};

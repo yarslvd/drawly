@@ -6,7 +6,8 @@ const router = express.Router();
 
 //  api/canvases
 router.post("/", jwtMiddleware, controller.create);
-router.get("/:id", jwtMiddleware, controller.get);
+router.get("/first", jwtMiddleware, controller.getFirstCanvas);
+router.get("/:id", controller.get);
 router.patch("/", jwtMiddleware, controller.update);
 router.delete("/", jwtMiddleware, controller.delete);
 
