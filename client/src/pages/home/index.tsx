@@ -33,6 +33,12 @@ const Home = () => {
   const isAuth = useSelector(selectIsAuthMe);
   console.log("isAuth", isAuth);
 
+  const fetchList = async () => {
+    const list = await getList([]);
+    console.log({ list });
+    setCanvases(list.data.canvases);
+  };
+
   useEffect(() => {
     const getMe = async () => {
       try {
@@ -41,11 +47,7 @@ const Home = () => {
           router.push("/login");
         }
 
-        (async () => {
-          const list = await getList([]);
-          console.log({ list });
-          setCanvases(list.data.canvases);
-        })();
+        fetchList();
       } catch (e) {
         console.log("error while fetching me: ", e);
       }
@@ -97,7 +99,9 @@ const Home = () => {
             </div>
             <div className={styles.cardContainer}>
               {canvases.map((canvas) => {
-                return <CanvasCard canvas={canvas} />;
+                return (
+                  <CanvasCard canvas={canvas} refetchCanvases={fetchList} />
+                );
               })}
             </div>
           </div>

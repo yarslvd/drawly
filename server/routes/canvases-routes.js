@@ -10,6 +10,6 @@ router.get("/", jwtMiddleware, controller.getList);
 router.get("/first", jwtMiddleware, controller.getFirstCanvas);
 router.get("/:id", controller.get);
 router.patch("/", jwtMiddleware, controller.update);
-router.delete("/", jwtMiddleware, controller.delete);
+router.delete("/:id", jwtMiddleware, controller.delete);
 
 module.exports = router;
