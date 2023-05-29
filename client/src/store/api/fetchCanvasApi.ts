@@ -5,8 +5,7 @@ const baseQuery = fetchBaseQuery({
   baseUrl: `http://localhost:4000/api/canvases`,
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
-    const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYiLCJuYW5vSW90Ijo3MDEsImlhdCI6MTY4NTMwNDcxNSwiZXhwIjoxNjg1MzExOTE1fQ.0KhtximCSqFWWjLx52IdLRCecNsOopMQOtkZ8WGHfM4"; //getState().auth.userToken;
+    const token = getState().auth.userToken;
 
     if (token) {
       headers.set("Authorization", `Bearer ${token}`);
@@ -20,11 +19,12 @@ export const fetchCanvasApi = createApi({
   baseQuery: baseQuery,
   endpoints: (build) => ({
     updateCanvas: build.mutation({
-      query: ({ id, canvas, title }) => ({
-        url: `/${id}`,
+      query: ({ id, canvas }) => ({
+        url: `/`,
         method: "PATCH",
         body: {
-          title,
+          id,
+          title: "canvas title", // canvas.title
           content: canvas.layers,
         },
       }),
@@ -32,6 +32,12 @@ export const fetchCanvasApi = createApi({
     getCanvas: build.mutation({
       query: (id) => ({
         url: `/${id}`,
+        method: "GET",
+      }),
+    }),
+    getFirstCanvas: build.mutation({
+      query: () => ({
+        url: `/first`,
         method: "GET",
       }),
     }),
@@ -57,6 +63,7 @@ export const fetchCanvasApi = createApi({
 export const {
   useUpdateCanvasMutation,
   useGetCanvasMutation,
+  useGetFirstCanvasMutation,
   useAddCanvasMutation,
   useDeleteCanvasMutation,
 } = fetchCanvasApi;

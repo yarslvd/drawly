@@ -10,10 +10,12 @@ import styles from "./Signup.module.scss";
 
 import { fetchSignup } from "../../store/slices/authSlice";
 import Head from "next/head";
+import { useRouter } from "next/router";
 
 const Signup = () => {
   //const navigate = useNavigate();
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const { userInfo, error } = useSelector((state) => state.auth);
 
@@ -51,11 +53,11 @@ const Signup = () => {
     dispatch(fetchSignup(values));
   };
 
-  // useEffect(() => {
-  //     if (userInfo) {
-  //         navigate("/login");
-  //     }
-  // }, [userInfo]);
+  useEffect(() => {
+    if (userInfo) {
+      router.push("/login");
+    }
+  }, [userInfo]);
 
   return (
     <>

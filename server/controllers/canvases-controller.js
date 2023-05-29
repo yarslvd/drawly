@@ -2,9 +2,11 @@ const { checkFields, getDesiredFields } = require("../helpers/object-fields");
 const { StatusCodes } = require("http-status-codes");
 const db = require("../models/db");
 const { v4: uuidv4 } = require("uuid");
+const { Op } = require("sequelize");
+
 const create = async (req, res) => {
   try {
-    console.log(req.body);
+    // console.log(req.body);
     const request = checkFields(req.body, ["title", "content"]);
     if (!request) {
       return res.status(StatusCodes.BAD_REQUEST).json({
@@ -36,6 +38,7 @@ const create = async (req, res) => {
 
 const update = async (req, res) => {
   try {
+    console.log("update");
     const request = checkFields(req.body, ["id", "title", "content"]);
     if (!request) {
       return res.status(StatusCodes.BAD_REQUEST).json({
@@ -82,6 +85,32 @@ const getCanvas = async (req, res) => {
   }
 };
 
+const getFirstCanvas = async (req, res) => {
+  try {
+    const canvases = await db.canvases.findOne({
+      include: {
+        model: db.participants,
+        as: "participants",
+        where: {
+          user_id: req.user.id,
+        },
+      },
+      attributes: ["id", "title", "content"],
+      order: [["id", "ASC"]],
+      limit: 1,
+    });
+
+    return res.status(StatusCodes.OK).json({
+      canvases,
+    });
+  } catch (error) {
+    console.log("Some error while getting canvases: ", error.message);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      error: "Some error while getting canvases: " + error.message,
+    });
+  }
+};
+
 const deleteCanvas = async (req, res) => {
   try {
     const request = checkFields(req.body, ["id"]);
@@ -113,6 +142,7 @@ const deleteCanvas = async (req, res) => {
 };
 
 module.exports = {
+  getFirstCanvas,
   get: getCanvas,
   update,
   create,

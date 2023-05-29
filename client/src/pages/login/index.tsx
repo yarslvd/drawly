@@ -11,9 +11,10 @@ import styles from "./Login.module.scss";
 
 import { fetchLogin } from "@/store/slices/authSlice";
 import Head from "next/head";
+import { useRouter } from "next/router";
 
 const Login = () => {
-  // const navigate = useNavigate();
+  const router = useRouter();
   const dispatch = useDispatch();
 
   let { userInfo, error } = useSelector((state) => state.auth);
@@ -47,7 +48,7 @@ const Login = () => {
   useEffect(() => {
     if (userInfo) {
       localStorage.setItem("userInfo", JSON.stringify(userInfo));
-      // navigate('/');
+      router.push("/");
     }
   }, [userInfo]);
 
