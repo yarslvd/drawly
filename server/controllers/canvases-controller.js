@@ -7,7 +7,7 @@ const { Op } = require("sequelize");
 const create = async (req, res) => {
   try {
     // console.log(req.body);
-    const request = checkFields(req.body, ["title", "content"]);
+    const request = checkFields(req.body, ["title", "content", "preview"]);
     if (!request) {
       return res.status(StatusCodes.BAD_REQUEST).json({
         error: "Some fields are missed",
@@ -18,6 +18,7 @@ const create = async (req, res) => {
       id: uuidv4(),
       title: request.title,
       content: request.content,
+      preview: request.preview,
     });
 
     const participant = await db.participants.create({
@@ -39,7 +40,12 @@ const create = async (req, res) => {
 const update = async (req, res) => {
   try {
     console.log("update");
-    const request = checkFields(req.body, ["id", "title", "content"]);
+    const request = checkFields(req.body, [
+      "id",
+      "title",
+      "content",
+      "preview",
+    ]);
     if (!request) {
       return res.status(StatusCodes.BAD_REQUEST).json({
         error: "Some fields are missed",
@@ -57,6 +63,7 @@ const update = async (req, res) => {
     }
     canvas.content = request.content;
     canvas.title = request.title;
+    canvas.preview = request.preview;
     await canvas.save();
 
     return res.status(StatusCodes.NO_CONTENT).send();

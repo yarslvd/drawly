@@ -2,7 +2,7 @@ import styles from "./Canvas.module.scss";
 import React, { FC, useEffect, useRef, useState } from "react";
 import { Tool } from "@/data/ToolsClass";
 import { Coordinates, NameTool } from "@/types/types";
-import { Keyboard, Tools } from "@/data/Constants";
+import { Keyboard, MimeTypes, Tools } from "@/data/Constants";
 import { getCanvasPoints } from "@/utils/getCanvasPoints";
 import { CanvasClass } from "@/data/Canvas";
 
@@ -34,6 +34,23 @@ import {
 } from "@/store/api/fetchCanvasApi";
 import { useRouter } from "next/router";
 import { selectIsAuthMe } from "@/store/slices/authSlice";
+
+import imgbbUploader from "imgbb-uploader";
+
+const uploadImage = async (canvasHTML: HTMLCanvasElement) => {
+  try {
+    const options = {
+      apiKey: process.env.NEXT_PUBLIC_IMGBB_API_KEY, // MANDATORY
+      base64string: canvasHTML.toDataURL(MimeTypes.PNG).split(",")[1],
+    };
+    const response = await imgbbUploader(options);
+
+    console.log("Image uploaded successfully:", response);
+    return response.display_url;
+  } catch (error) {
+    console.error("Failed to upload image:", error.message);
+  }
+};
 
 export interface CanvasProps {
   tool: string;
@@ -543,14 +560,20 @@ export const Canvas: FC<CanvasProps> = ({
 
   const saveCanvas = async () => {
     console.log("save");
+    const previewURL = await uploadImage(canvas!.canvasHTML!);
     if (!id) {
       console.log("create", { id });
-      await createCanvas({ canvas, title: "canvas title" });
+      await createCanvas({
+        canvas,
+        title: "canvas title",
+        preview: previewURL,
+      });
       return;
     }
 
     console.log("update", { id });
-    await updateCanvas({ id, canvas });
+    uploadImage(canvas!.canvasHTML!);
+    await updateCanvas({ id, canvas, preview: previewURL });
   };
 
   return (

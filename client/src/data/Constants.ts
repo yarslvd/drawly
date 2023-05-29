@@ -19,6 +19,7 @@ export namespace Tools {
 }
 
 export namespace MimeTypes {
+  export const JPG = "image/jpg";
   export const JPEG = "image/jpeg";
   export const PNG = "image/png";
   export const WEBP = "image/webp";

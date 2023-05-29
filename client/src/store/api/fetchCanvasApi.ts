@@ -19,13 +19,14 @@ export const fetchCanvasApi = createApi({
   baseQuery: baseQuery,
   endpoints: (build) => ({
     updateCanvas: build.mutation({
-      query: ({ id, canvas }) => ({
+      query: ({ id, canvas, preview }) => ({
         url: `/`,
         method: "PATCH",
         body: {
           id,
           title: "canvas title", // canvas.title
           content: canvas.layers,
+          preview,
         },
       }),
     }),
@@ -42,12 +43,13 @@ export const fetchCanvasApi = createApi({
       }),
     }),
     addCanvas: build.mutation({
-      query: ({ canvas, title }) => ({
+      query: ({ canvas, title, preview }) => ({
         url: "/",
         method: "POST",
         body: {
           title: title,
           content: JSON.stringify(canvas.layers),
+          preview,
         },
       }),
     }),
