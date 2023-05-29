@@ -1,0 +1,62 @@
+@import '../../styles/mixins.scss';
+
+.container {
+  .navigationContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0;
+    box-shadow: 0px 4px 4px 1px rgba(0, 0, 0, 0.02);
+    //border: 2px solid rgba(47, 47, 47);
+    padding: 30px 50px;
+    border-radius: 20px;
+    background-color: #ffffff;
+
+    .logoLink {
+      text-decoration: none;
+      color: #2f2f2f;
+      font-size: 20px;
+
+      a {
+        font-weight: 700;
+      }
+    }
+
+    .menu {
+      display: flex;
+      gap: 30px;
+
+      button {
+        color: #2d2d2d;
+      }
+    }
+  }
+
+  .canvasContainer {
+    background-color: #fff;
+    min-height: 72vh;
+    margin-bottom: 20px;
+    height: 100%;
+    border-radius: 20px;
+    box-shadow: 0px 4px 4px 1px rgba(0, 0, 0, 0.02);
+    padding: 60px 100px;
+
+    .heading {
+      color: #2d2d2d;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .button {
+        background-color: #2d2d2d;
+      }
+    }
+
+    .cardContainer {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-gap: 15px 15px;
+      margin-top: 20px;
+    }
+  }
+}
