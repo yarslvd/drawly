@@ -40,12 +40,7 @@ const create = async (req, res) => {
 const update = async (req, res) => {
   try {
     console.log("update");
-    const request = checkFields(req.body, [
-      "id",
-      "title",
-      "content",
-      "preview",
-    ]);
+    const request = getDesiredFields(req.body, ["title", "content", "preview"]);
     if (!request) {
       return res.status(StatusCodes.BAD_REQUEST).json({
         error: "Some fields are missed",
@@ -53,7 +48,7 @@ const update = async (req, res) => {
     }
 
     let canvas = await db.canvases.findOne({
-      where: { id: request.id },
+      where: { id: req.body.id },
     });
 
     if (!canvas) {
@@ -61,10 +56,12 @@ const update = async (req, res) => {
         error: "No canvas with such id",
       });
     }
-    canvas.content = request.content;
-    canvas.title = request.title;
-    canvas.preview = request.preview;
-    await canvas.save();
+
+    await db.canvases.update(request, {
+      where: {
+        id: req.body.id,
+      },
+    });
 
     return res.status(StatusCodes.NO_CONTENT).send();
   } catch (error) {
@@ -144,15 +141,10 @@ const getFirstCanvas = async (req, res) => {
 
 const deleteCanvas = async (req, res) => {
   try {
-    const request = checkFields(req.body, ["id"]);
-    if (!request) {
-      return res.status(StatusCodes.BAD_REQUEST).json({
-        error: "Some fields are missed",
-      });
-    }
+    const canvasUUID = req.params.id;
 
     let canvas = await db.canvases.findOne({
-      where: { id: request.id },
+      where: { id: canvasUUID },
     });
 
     if (!canvas) {
@@ -160,6 +152,12 @@ const deleteCanvas = async (req, res) => {
         error: "No canvas with such id",
       });
     }
+
+    await db.participants.destroy({
+      where: {
+        canvas_id: canvasUUID,
+      },
+    });
 
     await canvas.destroy();
 

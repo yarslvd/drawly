@@ -6,13 +6,24 @@ import EditIcon from "@mui/icons-material/Edit";
 import DoneIcon from "@mui/icons-material/Done";
 
 import styles from "./CanvasCard.module.scss";
+import {
+  useDeleteCanvasMutation,
+  useUpdateCanvasMutation,
+} from "@/store/api/fetchCanvasApi";
+import { unmountComponentAtNode } from "react-dom";
 
-export const CanvasCard = ({ canvas }) => {
+export const CanvasCard = ({ canvas, refetchCanvases }) => {
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
   const [cardName, setCardName] = useState(canvas.title);
 
-  const handleDeleteClick = () => {};
+  const [updateCanvas] = useUpdateCanvasMutation();
+  const [deleteCanvas] = useDeleteCanvasMutation();
+
+  const handleDeleteClick = async () => {
+    await deleteCanvas({ id: canvas.id });
+    await refetchCanvases();
+  };
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -22,8 +33,11 @@ export const CanvasCard = ({ canvas }) => {
     setCardName(e.target.value);
   };
 
-  const handleSaveClick = () => {
+  const handleSaveClick = async () => {
     setIsEditing(false);
+
+    console.log({ id: canvas.id, title: cardName });
+    await updateCanvas({ id: canvas.id, title: cardName });
   };
 
   return (

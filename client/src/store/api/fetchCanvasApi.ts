@@ -19,14 +19,14 @@ export const fetchCanvasApi = createApi({
   baseQuery: baseQuery,
   endpoints: (build) => ({
     updateCanvas: build.mutation({
-      query: ({ id, canvas, preview }) => ({
+      query: ({ id, canvas, preview, title }) => ({
         url: `/`,
         method: "PATCH",
         body: {
           id,
-          title: "canvas title", // canvas.title
-          content: canvas.layers,
-          preview,
+          ...(title ? { title } : {}),
+          ...(canvas?.layers ? { content: canvas.layers } : {}),
+          ...(preview ? { preview } : {}),
         },
       }),
     }),
