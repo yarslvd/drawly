@@ -16,6 +16,7 @@ export namespace Tools {
   export const CURVE_LINE = "curve_line";
   export const TEXT = "text";
   export const IMAGE = "image";
+  export const ERASER = "eraser";
 }
 
 export namespace MimeTypes {

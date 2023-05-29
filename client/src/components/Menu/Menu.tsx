@@ -42,6 +42,7 @@ export const Menu: FC = () => {
     Tools.LINE,
     Tools.CURVE_LINE,
     Tools.BRUSH,
+    Tools.ERASER,
   ];
   const fillArrShapes = ["Rectangle", "Ellipse"];
   const strokeArrShapes = [
@@ -108,6 +109,7 @@ export const Menu: FC = () => {
           <Stroke
             displayPicker={displayPickerStroke}
             setDisplayPicker={setDisplayPickerStroke}
+            isEraser={currentTool === Tools.ERASER}
           />
         )}
         {(currentTool == "image" || selectedShape == "Img") && <MyImage />}

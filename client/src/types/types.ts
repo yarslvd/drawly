@@ -1,4 +1,4 @@
-import { Brush, Line, Move, Rectangle, Text, Img } from "@/data/Tools";
+import { Brush, Line, Move, Rectangle, Text, Img, Eraser } from "@/data/Tools";
 import { FileExtensions, MimeTypes, Tools } from "@/data/Constants";
 import { CanvasClass } from "@/data/Canvas";
 import { Tool } from "@/data/ToolsClass";
@@ -85,6 +85,13 @@ export const NameTool = new Map<string, (canvas: CanvasClass) => Tool>([
     (canvas: CanvasClass) => {
       console.log("image", canvas.history);
       return new Img(canvas);
+    },
+  ],
+  [
+    Tools.ERASER,
+    (canvas: CanvasClass) => {
+      console.log("eraser", canvas.history);
+      return new Eraser(canvas);
     },
   ],
 ]);

@@ -10,7 +10,7 @@ import {
 import styles from "./Stroke.module.scss";
 import { BlockPicker, ColorChangeHandler } from "react-color";
 
-export const Stroke: FC = ({ displayPicker, setDisplayPicker }) => {
+export const Stroke: FC = ({ displayPicker, setDisplayPicker, isEraser }) => {
   const dispatch = useDispatch();
 
   const strokeColor = useSelector((state) => state.data.strokeColor);
@@ -58,51 +58,71 @@ export const Stroke: FC = ({ displayPicker, setDisplayPicker }) => {
     <div className={styles.container}>
       <h4>Stroke</h4>
       <div className={styles.options}>
-        <label className={styles.checkboxContainer}>
-          <input
-            type="checkbox"
-            className={styles.checkbox}
-            checked={displayStroke}
-            onChange={() => dispatch(setDisplayStroke(!displayStroke))}
-          />
-          <span className={styles.checkmark}></span>
-        </label>
-        <div className={styles.colorPickerContainer}>
-          <div className={styles.up}>
-            <div className={styles.colorPicker}>
-              <div onClick={() => setDisplayPicker(!displayPicker)}>
-                <div
-                  className={styles.color}
-                  style={{ backgroundColor: strokeColor }}
-                />
-              </div>
+        {!isEraser && (
+          <>
+            <label className={styles.checkboxContainer}>
               <input
-                type="text"
-                value={"#" + strokeColor?.slice(1)}
-                onChange={(e) => validateHex(e.target.value)}
-                onKeyDown={handleKeyDown}
-                maxLength={7}
+                type="checkbox"
+                className={styles.checkbox}
+                checked={displayStroke}
+                onChange={() => dispatch(setDisplayStroke(!displayStroke))}
               />
-            </div>
-            <div className={styles.opacity}>
-              <input
-                type="text"
-                value={strokeOpacity * 100 + "%"}
-                onChange={(e) => handleStrokeOpacity(e.target.value)}
-                onKeyDown={handleKeyDown}
-              />
-            </div>
+              <span className={styles.checkmark}></span>
+            </label>
+            <div className={styles.colorPickerContainer}>
+              <div className={styles.up}>
+                <div className={styles.colorPicker}>
+                  <div onClick={() => setDisplayPicker(!displayPicker)}>
+                    <div
+                      className={styles.color}
+                      style={{ backgroundColor: strokeColor }}
+                    />
+                  </div>
+                  <input
+                    type="text"
+                    value={"#" + strokeColor?.slice(1)}
+                    onChange={(e) => validateHex(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    maxLength={7}
+                  />
+                </div>
+                <div className={styles.opacity}>
+                  <input
+                    type="text"
+                    value={strokeOpacity * 100 + "%"}
+                    onChange={(e) => handleStrokeOpacity(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                  />
+                </div>
 
-            {displayPicker ? (
-              <div className={styles.popover}>
-                <div
-                  className={styles.cover}
-                  onClick={() => setDisplayPicker(false)}
-                />
-                <BlockPicker color={strokeColor} onChange={handleStrokeColor} />
+                {displayPicker ? (
+                  <div className={styles.popover}>
+                    <div
+                      className={styles.cover}
+                      onClick={() => setDisplayPicker(false)}
+                    />
+                    <BlockPicker
+                      color={strokeColor}
+                      onChange={handleStrokeColor}
+                    />
+                  </div>
+                ) : null}
               </div>
-            ) : null}
-          </div>
+              <div className={styles.down}>
+                <h5>Stroke width:</h5>
+                <div className={styles.inputContainer}>
+                  <input
+                    type="text"
+                    className={styles.inputWidth}
+                    value={borderWidth}
+                    onChange={handleStrokeWidth}
+                  />
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+        {isEraser && (
           <div className={styles.down}>
             <h5>Stroke width:</h5>
             <div className={styles.inputContainer}>
@@ -114,7 +134,7 @@ export const Stroke: FC = ({ displayPicker, setDisplayPicker }) => {
               />
             </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
