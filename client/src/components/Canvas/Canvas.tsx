@@ -178,6 +178,20 @@ export const Canvas: FC<CanvasProps> = ({
     }
   }, [figureProps, canvas]);
 
+  //HANDLE DYNAMIC FILTER CHANGE
+  useEffect(() => {
+    const canvasHTML = canvasRef.current;
+    if (!canvasHTML) return;
+
+    canvas!.setCanvasProps(figureProps);
+
+    if (canvas!.selectedShape) {
+      if (canvas!.selectedShape.name === "Img") {
+        canvas.selectedShape.redrawImage();
+      }
+    }
+  }, [figureProps.imageFilters]);
+
   let isResize: boolean = false;
   let isMove: boolean = false;
 
