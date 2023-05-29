@@ -73,6 +73,9 @@ export interface FigurePropsTypes {
   imageFilters: string;
 }
 
+let canvas: CanvasClass | null;
+let prevId: string | null = null;
+
 export const Canvas: FC<CanvasProps> = ({
   tool,
   widthCanvas,
@@ -86,9 +89,17 @@ export const Canvas: FC<CanvasProps> = ({
   const [scale, setScale] = useState<number>(1);
   const [id, setId] = useState<number | null>(null);
 
-  const isAuth = useSelector(selectIsAuthMe);
+  if (prevId == null) {
+    prevId = canvasId;
+  }
 
-  let canvas: CanvasClass | null;
+  if (prevId != canvasId) {
+    canvas = null;
+  }
+
+  prevId = canvasId;
+
+  const isAuth = useSelector(selectIsAuthMe);
 
   let { userInfo, error } = useSelector((state) => state.auth);
 
@@ -128,7 +139,7 @@ export const Canvas: FC<CanvasProps> = ({
   useEffect(() => {
     setId(canvasId);
     if (canvas) {
-      canvas.id = canvasId;
+      canvas.id = id;
     }
   }, [canvasId]);
 
@@ -140,6 +151,8 @@ export const Canvas: FC<CanvasProps> = ({
       console.log("new canvas 1");
       canvas = new CanvasClass(canvasHTML, id);
       console.log(id, canvas);
+      canvas.id = canvasId;
+
       canvas.setCanvasProps(figureProps);
 
       dispatch(setCanvas(canvas));
@@ -149,10 +162,6 @@ export const Canvas: FC<CanvasProps> = ({
       (async () => {
         console.log({ id, canvasId });
         const canvasData = await getCanvas(id || canvasId);
-        // console.log({canvasData});
-        // console.log(JSON.parse(canvasData.data.canvases.content));
-        // console.log((JSON.parse(canvasData.data.canvases.content)[0][0]));
-        // console.log(JSON.parse(JSON.parse(canvasData.data.canvases.content)[0][0]));
         canvas.setLayersData(canvasData.data.canvases.content);
       })();
 
@@ -160,7 +169,7 @@ export const Canvas: FC<CanvasProps> = ({
     }
 
     console.log({ userInfo, id });
-    if (userInfo && !id && !canvasId && canvas) {
+    if (userInfo && !id && !canvasId) {
       (async () => {
         const canvasData = await getFirstCanvas([]);
         console.log("fetch first 1", { id, canvasId });
@@ -172,7 +181,7 @@ export const Canvas: FC<CanvasProps> = ({
         canvas.setLayersData(canvasData.data.canvases.content);
         setId(canvasData.data.canvases.id);
         if (canvas) {
-          canvas.id = canvasId;
+          canvas.id = id;
         }
       })();
     }
@@ -200,7 +209,7 @@ export const Canvas: FC<CanvasProps> = ({
   //HANDLING OPTIONS CHANGE
   useEffect(() => {
     const canvasHTML = canvasRef.current;
-    if (!canvasHTML || !canvas) return;
+    if (!canvasHTML) return;
 
     canvas.setCanvasProps(figureProps);
 
@@ -393,7 +402,8 @@ export const Canvas: FC<CanvasProps> = ({
 
     if (!canvas) {
       console.log("new canvas 2");
-      canvas = new CanvasClass(canvasHTML);
+      canvas = new CanvasClass(canvasHTML, id);
+      canvas.id = canvasId;
       dispatch(setCanvas(canvas));
     }
     // const context = canvas.getContext("2d");

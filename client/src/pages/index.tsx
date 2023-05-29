@@ -44,10 +44,9 @@ const Home = () => {
         (async () => {
           const list = await getList([]);
           console.log({ list });
-          try{
+          try {
             setCanvases(list.data.canvases);
-          }
-          catch(err) {
+          } catch (err) {
             console.log(err);
           }
         })();
