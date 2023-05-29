@@ -29,6 +29,23 @@ export class Img extends Shape {
   //   }`;
   // }
 
+  redrawImage(): void {
+    if (!this.canvas) return;
+    if (!this.start) return;
+    if (!this.image) return;
+
+    this.filters = this.canvas.options.imageFilters;
+
+    // const img = new ImgShape(
+    //     this.canvas,
+    //     this.start,
+    //     this.width,
+    //     this.height,
+    //     Object.assign(this.canvas.options),
+    //     this.i
+    // );
+    this.onDraw();
+  }
   toJSON(): string {
     return JSON.stringify({
       type: "Img",
