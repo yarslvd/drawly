@@ -75,6 +75,30 @@ const update = async (req, res) => {
   }
 };
 
+const getList = async (req, res) => {
+  try {
+    const canvases = await db.canvases.findAll({
+      include: {
+        model: db.participants,
+        as: "participants",
+        where: {
+          user_id: req.user.id,
+        },
+      },
+      attributes: ["id", "title", "preview"],
+    });
+
+    return res.status(StatusCodes.OK).json({
+      canvases,
+    });
+  } catch (error) {
+    console.log("Some error while getting canvases: ", error.message);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      error: "Some error while getting canvases: " + error.message,
+    });
+  }
+};
+
 const getCanvas = async (req, res) => {
   try {
     const canvasUUID = req.params.id;
@@ -149,6 +173,7 @@ const deleteCanvas = async (req, res) => {
 };
 
 module.exports = {
+  getList,
   getFirstCanvas,
   get: getCanvas,
   update,

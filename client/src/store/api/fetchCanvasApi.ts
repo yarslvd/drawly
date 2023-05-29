@@ -59,10 +59,17 @@ export const fetchCanvasApi = createApi({
         method: "DELETE",
       }),
     }),
+    getCanvasesList: build.mutation({
+      query: () => ({
+        url: `/`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
 export const {
+  useGetCanvasesListMutation,
   useUpdateCanvasMutation,
   useGetCanvasMutation,
   useGetFirstCanvasMutation,

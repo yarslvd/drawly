@@ -26,7 +26,7 @@ export class CanvasClass {
 
   //options
   options: FigurePropsTypes;
-  private id: any;
+  id: any;
 
   getContext2D(): CanvasRenderingContext2D | null {
     return this.context;
@@ -35,6 +35,7 @@ export class CanvasClass {
   redrawCanvas(): void {
     const ctx = this.context;
     if (this.canvasHTML == null || ctx == null) {
+      console.log("canvas is null");
       return;
     }
 
@@ -42,6 +43,7 @@ export class CanvasClass {
 
     this.layers.map((history) => {
       history.forEach((shape: Shape) => {
+        console.log("draw shape");
         shape.onDraw();
       });
     });
@@ -89,60 +91,66 @@ export class CanvasClass {
   }
 
   setLayersData(layers): void {
-    try {
-      for (let i = 0; i < layers.length; i++) {
-        for (let j = 0; j < layers[i].length; j++) {
-          console.log(layers[i][j]);
-          let shapeData = JSON.parse(layers[i][j]);
-          let shape: Shape;
-          switch (shapeData.type) {
-            case "BrushLine": {
-              const { type, points, ...rest } = shapeData;
-              shape = new BrushLine(this, points, rest);
-              break;
-            }
-            case "CurveLine": {
-              const { type, points, ...rest } = shapeData;
-              shape = new CurveLine(this, points, rest);
-              break;
-            }
-            case "Ellipse": {
-              const { type, start, width, height, ...rest } = shapeData;
-              shape = new Ellipse(this, start, width, height, rest);
-              break;
-            }
-            case "Img": {
-              const { type, start, width, height, ...rest } = shapeData;
-              shape = new Img(this, start, width, height, rest);
-              break;
-            }
-            case "Line": {
-              const { type, start, end, ...rest } = shapeData;
-              shape = new Line(this, start, end, rest);
-              break;
-            }
-            case "Rectangle": {
-              const { type, start, width, height, ...rest } = shapeData;
-              shape = new Rectangle(this, start, width, height, rest);
-              break;
-            }
-            case "Text": {
-              const { type, start, text, fontWeight, fontSize, color } =
-                shapeData;
-              shape = new Text(this, start, text, fontWeight, fontSize, color);
-              break;
-            }
-          }
-
-          this.layers[i].push(shape);
-        }
-        this.layers.push([]);
-      }
-
-      this.redrawCanvas();
-    } catch (error) {
-      console.log("Error setLayers:", error.message);
+    // try {
+    if (typeof layers == "string") {
+      layers = JSON.parse(layers);
     }
+    for (let i = 0; i < layers.length; i++) {
+      for (let j = 0; j < layers[i].length; j++) {
+        let shapeData = JSON.parse(layers[i][j]);
+        let shape: Shape;
+        console.log({ shapeData });
+        switch (shapeData.type) {
+          case "BrushLine": {
+            const { type, points, ...rest } = shapeData;
+            shape = new BrushLine(this, points, rest);
+            break;
+          }
+          case "CurveLine": {
+            const { type, points, ...rest } = shapeData;
+            shape = new CurveLine(this, points, rest);
+            break;
+          }
+          case "Ellipse": {
+            const { type, start, width, height, ...rest } = shapeData;
+            shape = new Ellipse(this, start, width, height, rest);
+            break;
+          }
+          case "Img": {
+            const { type, start, width, height, ...rest } = shapeData;
+            shape = new Img(this, start, width, height, rest);
+            break;
+          }
+          case "Line": {
+            const { type, start, end, ...rest } = shapeData;
+            shape = new Line(this, start, end, rest);
+            break;
+          }
+          case "Rectangle": {
+            const { type, start, width, height, ...rest } = shapeData;
+            shape = new Rectangle(this, start, width, height, rest);
+            break;
+          }
+          case "Text": {
+            const { type, start, text, fontWeight, fontSize, color } =
+              shapeData;
+            shape = new Text(this, start, text, fontWeight, fontSize, color);
+            break;
+          }
+        }
+
+        console.log("New shape", shape.name);
+        this.layers[i].push(shape);
+      }
+      console.log("New layer");
+      this.layers.push([]);
+    }
+
+    console.log("redraw");
+    this.redrawCanvas();
+    // } catch (error) {
+    //   console.log("Error setLayers:", error.message);
+    // }
   }
 
   constructor(canvasHTML: HTMLCanvasElement, id) {
