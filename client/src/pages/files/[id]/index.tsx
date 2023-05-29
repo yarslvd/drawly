@@ -54,7 +54,7 @@ export default function Home() {
                 <ToolBar tool={tool} setTool={setTool} />
                 <Menu />
                 <IconButton
-                    sx={{ top: '30px', left: '20px'}}
+                    sx={{ position: 'absolute', top: '30px', left: '20px'}}
                     onClick={() => router.push('/')}
                 >
                     <ArrowBackIcon sx={{ color: '#000',  width: '30px', height: '30px'}}/>
