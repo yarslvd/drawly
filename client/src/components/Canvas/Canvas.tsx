@@ -78,7 +78,7 @@ export const Canvas: FC<CanvasProps> = ({
 
   const [createCanvas] = useAddCanvasMutation();
   const [getCanvas] = useGetCanvasMutation();
-  const id = "6c14428c-f73b-42af-a928-8480317df238";
+  const id = null; //"6c14428c-f73b-42af-a928-8480317df238";
 
   //OBJECT WITH OPTIONS PROPS
   const figureProps: FigurePropsTypes = {
@@ -482,9 +482,11 @@ export const Canvas: FC<CanvasProps> = ({
 
   return (
     <>
-      <Button variant="contained" onClick={saveCanvas}>
-        Save
-      </Button>
+      {id && (
+        <Button variant="contained" onClick={saveCanvas}>
+          Save
+        </Button>
+      )}
       <canvas
         width={widthCanvas}
         height={heightCanvas}
