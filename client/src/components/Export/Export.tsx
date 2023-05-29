@@ -17,7 +17,7 @@ import { CanvasClass } from "@/data/Canvas";
 import { useSelector } from "react-redux";
 import { jsPDF } from "jspdf";
 
-import styles from './Export.module.scss';
+import styles from "./Export.module.scss";
 
 export const Export: FC = () => {
   const [type, setType] = useState(MimeTypes.PNG);
@@ -92,11 +92,11 @@ export const Export: FC = () => {
             <FormControl fullWidth size="small">
               <InputLabel id="demo-simple-select-label">Format</InputLabel>
               <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={type}
-                  label="Format"
-                  onChange={(event) => setType(event.target.value)}
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={type}
+                label="Format"
+                onChange={(event) => setType(event.target.value)}
               >
                 <MenuItem value={MimeTypes.PNG}>PNG</MenuItem>
                 <MenuItem value={MimeTypes.JPEG}>JPEG</MenuItem>
@@ -118,13 +118,13 @@ export const Export: FC = () => {
               ),
             }}
             size="small"
-            sx={{ width: '100%' }}
+            sx={{ width: "100%" }}
           />
 
           <Button
-              variant="outlined"
-              onClick={handleExport}
-              className={styles.exportButton}
+            variant="outlined"
+            onClick={handleExport}
+            className={styles.exportButton}
           >
             Export
           </Button>

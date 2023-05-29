@@ -20,13 +20,33 @@ import { Collapse } from "@mui/material";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import { CanvasClass } from "@/data/Canvas";
-import { Tools } from "@/data/Constants";
+import { MimeTypes, Tools } from "@/data/Constants";
 import { Shape } from "@/data/Shapes/Shape";
 import { Export } from "@/components/Export/Export";
 import { setSelectedShape } from "@/store/slices/dataSlice";
 import { TextEdit } from "@/components/TextEdit/TextEdit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import {useAddCanvasMutation, useUpdateCanvasMutation} from "@/store/api/fetchCanvasApi";
+import {
+  useAddCanvasMutation,
+  useUpdateCanvasMutation,
+} from "@/store/api/fetchCanvasApi";
+
+import imgbbUploader from "imgbb-uploader";
+
+const uploadImage = async (canvasHTML: HTMLCanvasElement) => {
+  try {
+    const options = {
+      apiKey: process.env.NEXT_PUBLIC_IMGBB_API_KEY, // MANDATORY
+      base64string: canvasHTML.toDataURL(MimeTypes.PNG).split(",")[1],
+    };
+    const response = await imgbbUploader(options);
+
+    console.log("Image uploaded successfully:", response);
+    return response.display_url;
+  } catch (error) {
+    console.error("Failed to upload image:", error.message);
+  }
+};
 
 export const Menu: FC = () => {
   const currentTool = useSelector((state) => state.data.tool);
@@ -72,16 +92,20 @@ export const Menu: FC = () => {
 
   const saveCanvas = async () => {
     console.log("save");
-    console.log(canvas);
+    const previewURL = await uploadImage(canvas!.canvasHTML!);
+    if (!canvas.id) {
+      console.log("create", { id: canvas.id });
+      await createCanvas({
+        canvas,
+        title: "canvas title",
+        preview: previewURL,
+      });
+      return;
+    }
 
-    // if (!id) {
-    //   console.log("create", { id });
-    //   await createCanvas({ canvas, title: "canvas title" });
-    //   return;
-    // }
-    //
-    // console.log("update", { id });
-    // await updateCanvas({ id, canvas });
+    console.log("update", { id: canvas.id });
+    uploadImage(canvas!.canvasHTML!);
+    await updateCanvas({ id: canvas.id, canvas, preview: previewURL });
   };
 
   const addLayer = () => {
@@ -169,9 +193,9 @@ export const Menu: FC = () => {
         <Export />
       </div>
       <Button
-          variant="contained"
-          className={styles.saveBtn}
-          onClick={saveCanvas}
+        variant="contained"
+        className={styles.saveBtn}
+        onClick={saveCanvas}
       >
         Save
       </Button>

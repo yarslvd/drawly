@@ -4,8 +4,67 @@ import { Container, Button } from "@mui/material";
 
 import styles from "./Home.module.scss";
 import { CanvasCard } from "@/components/CanvasCard/CanvasCard";
+import {
+  useAddCanvasMutation,
+  useGetCanvasesListMutation,
+} from "@/store/api/fetchCanvasApi";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAuthMe, selectIsAuthMe } from "@/store/slices/authSlice";
+import { useRouter } from "next/router";
+import { fetchAuthApi } from "@/store/api/fetchAuthApi";
+import Cookies from "js-cookie";
+
+const userToken = () => {
+  return Cookies.get("access_token") ? Cookies.get("access_token") : null;
+};
 
 const Home = () => {
+  const [canvases, setCanvases] = useState([]);
+
+  const router = useRouter();
+  const [getList] = useGetCanvasesListMutation();
+  const [addCanvas] = useAddCanvasMutation();
+
+  let { userInfo, error } = useSelector((state) => state.auth);
+
+  const dispatch = useDispatch();
+
+  const isAuth = useSelector(selectIsAuthMe);
+  console.log("isAuth", isAuth);
+
+  useEffect(() => {
+    const getMe = async () => {
+      try {
+        dispatch(fetchAuthMe(userToken()));
+        if (!isAuth) {
+          router.push("/login");
+        }
+
+        (async () => {
+          const list = await getList([]);
+          console.log({ list });
+          setCanvases(list.data.canvases);
+        })();
+      } catch (e) {
+        console.log("error while fetching me: ", e);
+      }
+    };
+    getMe();
+  }, []);
+
+  const handleCreateCanvas = async () => {
+    const res = await addCanvas({
+      canvas: { layers: [[]] },
+      title: "New canvas",
+      preview: "",
+    });
+
+    console.log({ res });
+
+    router.push("/canvas/" + res.data.canvas.id);
+  };
+
   return (
     <>
       <Head>
@@ -28,16 +87,18 @@ const Home = () => {
           <div className={styles.canvasContainer}>
             <div className={styles.heading}>
               <h1>Canvases</h1>
-              <Button variant="contained" className={styles.button}>
+              <Button
+                variant="contained"
+                className={styles.button}
+                onClick={handleCreateCanvas}
+              >
                 New
               </Button>
             </div>
             <div className={styles.cardContainer}>
-              <CanvasCard />
-              <CanvasCard />
-              <CanvasCard />
-              <CanvasCard />
-              <CanvasCard />
+              {canvases.map((canvas) => {
+                return <CanvasCard canvas={canvas} />;
+              })}
             </div>
           </div>
         </Container>

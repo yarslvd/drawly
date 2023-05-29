@@ -48,7 +48,7 @@ const Login = () => {
   useEffect(() => {
     if (userInfo) {
       localStorage.setItem("userInfo", JSON.stringify(userInfo));
-      router.push("/");
+      router.push("/home");
     }
   }, [userInfo]);
 

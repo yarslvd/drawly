@@ -12,7 +12,8 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS canvases (
     id UUID PRIMARY KEY,
     title VARCHAR(255) NOT NULL DEFAULT 'CANVAS',
-    content JSONB NOT NULL
+    content JSONB NOT NULL,
+    preview TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS participants (
