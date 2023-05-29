@@ -62,8 +62,8 @@ export const Canvas: FC<CanvasProps> = ({
   widthCanvas,
   heightCanvas,
   width,
+  _id
 }) => {
-  const router = useRouter();
   const dispatch = useDispatch();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [selectedTool, setSelectedTool] = useState<Tool | null>(null);
@@ -108,12 +108,17 @@ export const Canvas: FC<CanvasProps> = ({
   };
 
   useEffect(() => {
+    setId(_id);
+  }, [_id]);
+
+  useEffect(() => {
     const canvasHTML = canvasRef.current;
     if (!canvasHTML) return;
 
     if (!canvas) {
       console.log("new canvas 1");
-      canvas = new CanvasClass(canvasHTML);
+      canvas = new CanvasClass(canvasHTML, id);
+      console.log(id, canvas);
       canvas.setCanvasProps(figureProps);
 
       dispatch(setCanvas(canvas));
@@ -144,7 +149,7 @@ export const Canvas: FC<CanvasProps> = ({
         setId(canvasData.data.canvases.id);
       })();
     }
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     console.log({ userInfo, id });

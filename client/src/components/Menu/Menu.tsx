@@ -1,8 +1,7 @@
-import { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 
 import styles from "./Menu.module.scss";
 
-import ListSubheader from "@mui/material/ListSubheader";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -27,6 +26,7 @@ import { Export } from "@/components/Export/Export";
 import { setSelectedShape } from "@/store/slices/dataSlice";
 import { TextEdit } from "@/components/TextEdit/TextEdit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import {useAddCanvasMutation, useUpdateCanvasMutation} from "@/store/api/fetchCanvasApi";
 
 export const Menu: FC = () => {
   const currentTool = useSelector((state) => state.data.tool);
@@ -55,6 +55,8 @@ export const Menu: FC = () => {
 
   const canvas: CanvasClass = useSelector((state) => state.data.canvas);
   const history: Shape[] = useSelector((state) => state.data.canvas?.history);
+  const [createCanvas] = useAddCanvasMutation();
+  const [updateCanvas] = useUpdateCanvasMutation();
 
   // useEffect(() => {
   //   if(canvas?.layers)
@@ -67,6 +69,20 @@ export const Menu: FC = () => {
       setLayers([...canvas.layers]);
     }
   }, [canvas?.layers]);
+
+  const saveCanvas = async () => {
+    console.log("save");
+    console.log(canvas);
+
+    // if (!id) {
+    //   console.log("create", { id });
+    //   await createCanvas({ canvas, title: "canvas title" });
+    //   return;
+    // }
+    //
+    // console.log("update", { id });
+    // await updateCanvas({ id, canvas });
+  };
 
   const addLayer = () => {
     const newLayers = [...canvas.layers, []];
@@ -113,9 +129,6 @@ export const Menu: FC = () => {
         {(currentTool == "image" || selectedShape == "Img") && <MyImage />}
         {selectedShape == "Text" && <TextEdit />}
       </div>
-      <div>
-        <Export />
-      </div>
       <div className={styles.layers}>
         <div
           style={{
@@ -139,17 +152,6 @@ export const Menu: FC = () => {
             component="nav"
             aria-labelledby="nested-list-subheader"
           >
-            {/* <ListItemButton>
-            <ListItemIcon>
-              <Image
-                src="/assets/icons/tools/figure.png"
-                width={20}
-                height={20}
-              />
-              <ListItemText>Rectangle 1</ListItemText>
-            </ListItemIcon>
-            <ListItemText />
-          </ListItemButton> */}
             {layers &&
               layers.map((layer, index) => (
                 <NestedList
@@ -163,9 +165,16 @@ export const Menu: FC = () => {
           </List>
         </div>
       </div>
-      {/*<div className={styles.image}>*/}
-      {/*  <MyImage />*/}
-      {/*</div>*/}
+      <div>
+        <Export />
+      </div>
+      <Button
+          variant="contained"
+          className={styles.saveBtn}
+          onClick={saveCanvas}
+      >
+        Save
+      </Button>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 .container {
   width: 300px;
-  height: 700px;
+  height: 800px;
   background-color: #fcfcfc;
   position: absolute;
   right: 20px;
@@ -14,7 +14,12 @@
   cursor: default;
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 10px;
+
+  .saveBtn {
+    background-color: #2d2d2d;
+    padding: 10px 0;
+  }
 
   .options {
     background-color: #F4F4F4;

@@ -26,6 +26,7 @@ export class CanvasClass {
 
   //options
   options: FigurePropsTypes;
+  private id: any;
 
   getContext2D(): CanvasRenderingContext2D | null {
     return this.context;
@@ -140,7 +141,7 @@ export class CanvasClass {
     this.redrawCanvas();
   }
 
-  constructor(canvasHTML: HTMLCanvasElement) {
+  constructor(canvasHTML: HTMLCanvasElement, id) {
     this.canvasHTML = canvasHTML;
     this.context = canvasHTML.getContext("2d");
 
@@ -154,6 +155,7 @@ export class CanvasClass {
     this.history = this.layers[0];
     this.removedHistory = [];
     this.selectedShape = null;
+    this.id = id;
 
     this.selectedShapeDiv = new SelectedShape(this, 3);
   }
