@@ -114,8 +114,7 @@ export const Canvas: FC<CanvasProps> = ({
         // console.log(JSON.parse(canvasData.data.canvases.content));
         // console.log((JSON.parse(canvasData.data.canvases.content)[0][0]));
         // console.log(JSON.parse(JSON.parse(canvasData.data.canvases.content)[0][0]));
-
-        canvas.setLayersData(JSON.parse(canvasData.data.canvases.content));
+        //canvas.setLayersData(JSON.parse(canvasData.data.canvases.content));
       })();
     }
   }, []);

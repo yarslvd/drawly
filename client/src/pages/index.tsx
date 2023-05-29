@@ -12,6 +12,8 @@ export default function Home() {
   const [color, setColor] = useState("#000");
   const [width, setWidth] = useState(5);
 
+  console.log(process.env.API_URI);
+
   return (
     <>
       <Head>

@@ -1,0 +1,71 @@
+$base-dark-color: #1F1F1F;
+$base-lightgray-color: #F7F7F7;
+
+@mixin header-menu-text {
+  font-weight: 400;
+  font-size: 20px;
+  color: $base-dark-color;
+}
+
+@mixin flex-align-center {
+  display: flex;
+  align-items: center;
+}
+
+@mixin flex-justify-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+@mixin reset-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+@mixin reset-list-links {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+
+  a {
+    text-decoration: none;
+    color: #fff;
+  }
+}
+
+@mixin reset-link-dark {
+  text-decoration: none;
+  color: $base-dark-color;
+}
+
+@mixin reset-link-light {
+  text-decoration: none;
+  color: #fff;
+}
+
+@mixin default-btn {
+  padding: 10px 50px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 16px;
+  border-radius: 8px;
+  background-color: $base-dark-color;
+
+  &:hover {
+    background-color: $base-dark-color;
+  }
+}
+
+@mixin center-absolute {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@mixin heading-default {
+  font-size: 40px;
+  margin: 0;
+  margin-bottom: 20px;
+}

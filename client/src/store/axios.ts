@@ -20,13 +20,13 @@ instance.interceptors.request.use((config) => {
 });
 
 instance.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    console.log("redirected", error);
-    if (error.response.status === 401) {
-      window.location = "/login";
+    (response) => response,
+    (error) => {
+      console.log("redirected", error);
+      if (error.response.status === 401) {
+        window.location = "/login";
+      }
     }
-  }
 );
 
 export default instance;
