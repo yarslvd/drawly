@@ -73,8 +73,6 @@ export interface FigurePropsTypes {
   imageFilters: string;
 }
 
-let canvas: CanvasClass | null;
-
 export const Canvas: FC<CanvasProps> = ({
   tool,
   widthCanvas,
@@ -89,6 +87,8 @@ export const Canvas: FC<CanvasProps> = ({
   const [id, setId] = useState<number | null>(null);
 
   const isAuth = useSelector(selectIsAuthMe);
+
+  let canvas: CanvasClass | null;
 
   let { userInfo, error } = useSelector((state) => state.auth);
 
@@ -160,7 +160,7 @@ export const Canvas: FC<CanvasProps> = ({
     }
 
     console.log({ userInfo, id });
-    if (userInfo && !id && !canvasId) {
+    if (userInfo && !id && !canvasId && canvas) {
       (async () => {
         const canvasData = await getFirstCanvas([]);
         console.log("fetch first 1", { id, canvasId });
@@ -200,7 +200,7 @@ export const Canvas: FC<CanvasProps> = ({
   //HANDLING OPTIONS CHANGE
   useEffect(() => {
     const canvasHTML = canvasRef.current;
-    if (!canvasHTML) return;
+    if (!canvasHTML || !canvas) return;
 
     canvas.setCanvasProps(figureProps);
 
