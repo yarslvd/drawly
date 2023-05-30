@@ -568,23 +568,23 @@ export const Canvas: FC<CanvasProps> = ({
     };
   }, [scale]);
 
-  const saveCanvas = async () => {
-    console.log("save");
-    const previewURL = await uploadImage(canvas!.canvasHTML!);
-    if (!id) {
-      console.log("create", { id });
-      await createCanvas({
-        canvas,
-        title: "canvas title",
-        preview: previewURL,
-      });
-      return;
-    }
-
-    console.log("update", { id });
-    uploadImage(canvas!.canvasHTML!);
-    await updateCanvas({ id, canvas, preview: previewURL });
-  };
+  // const saveCanvas = async () => {
+  //   console.log("save");
+  //   const previewURL = await uploadImage(canvas!.canvasHTML!);
+  //   if (!id) {
+  //     console.log("create", { id });
+  //     await createCanvas({
+  //       canvas,
+  //       title: "canvas title",
+  //       preview: previewURL,
+  //     });
+  //     return;
+  //   }
+  //
+  //   console.log("update", { id });
+  //   uploadImage(canvas!.canvasHTML!);
+  //   await updateCanvas({ id, canvas, preview: previewURL });
+  // };
 
   return (
     <>

@@ -1,6 +1,7 @@
 import Head from "next/head";
 import Link from "next/link";
 import { Container, Button } from "@mui/material";
+import axios from '../store/axios';
 
 import styles from "../styles/Home.module.scss";
 import { CanvasCard } from "@/components/CanvasCard/CanvasCard";
@@ -70,6 +71,13 @@ const Home = () => {
     router.push("/canvas/" + res.data.canvas.id);
   };
 
+  const handleLogOut = () => {
+    console.log('log out');
+    Cookies.remove('access_token', { path: '/' });
+    Cookies.remove('refresh_token', { path: '/' });
+    window.location.reload();
+  }
+
   return (
       <>
         <Head>
@@ -86,7 +94,7 @@ const Home = () => {
               </Link>
               <div className={styles.menu}>
                 <Button>Settings</Button>
-                <Button>Logout</Button>
+                <Button onClick={handleLogOut}>Logout</Button>
               </div>
             </nav>
             <div className={styles.canvasContainer}>
