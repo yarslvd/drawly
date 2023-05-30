@@ -8,9 +8,9 @@ import { Menu } from "@/components/Menu/Menu";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAuthMe, selectIsAuthMe } from "@/store/slices/authSlice";
 import Cookies from "js-cookie";
-import {IconButton} from "@mui/material";
+import { IconButton } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
 
 const userToken = () => {
   return Cookies.get("access_token") ? Cookies.get("access_token") : null;
@@ -53,11 +53,11 @@ export default function Canvas() {
         <ToolBar tool={tool} setTool={setTool} />
         <Menu />
         <IconButton
-            sx={{ position: "absolute", top: "30px", left: "20px" }}
-            onClick={() => router.push("/")}
+          sx={{ position: "absolute", top: "30px", left: "20px" }}
+          onClick={() => router.push("/")}
         >
           <ArrowBackIcon
-              sx={{ color: "#000", width: "30px", height: "30px" }}
+            sx={{ color: "#000", width: "30px", height: "30px" }}
           />
         </IconButton>
         <div
